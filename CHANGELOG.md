@@ -8,6 +8,10 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- `git config --list --show-origin` and `--show-scope` (the scope, the
+  kind of origin and the file of each setting), `git diff --shortstat`
+  and `git ls-tree -l` (the size of each blob). The registry holds 241
+  commands through 692 definitions.
 - `go tool cover -func` (the coverage of each function and the total),
   `git status --porcelain=v2` (the branch headers, and each entry by
   kind with its modes and object names), and `git log --numstat`,
@@ -69,6 +73,10 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- `npm ls -g` and `npm ls -g --all` are read. The first line is the
+  global directory with no package name, so the project's `name` in
+  npm/ls and the root's `name` in npm/ls-all may be null, and both
+  schemas are version 2. Before, the output was refused with exit 4.
 - `go list -m -u all` is read: go/list-modules adds `update`, the newer
   version shown in brackets, `retracted` and `deprecated`, and the same
   three for the replacement. Before, the first line with any of them

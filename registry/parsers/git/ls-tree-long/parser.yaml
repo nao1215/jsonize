@@ -1,0 +1,30 @@
+# `git ls-tree -l` (--long) prints what git/ls-tree reads with the size
+# of each blob between the object name and the tab, right-aligned in a
+# column seven wide. A tree or a submodule commit has no size and prints
+# "-", which is null here.
+format: 1
+command: git
+variant: ls-tree-long
+description: git ls-tree -l, the mode, type, object, size and path of each entry
+metadata:
+  tags: [git, vcs]
+  compatible: [git]
+  references:
+    - https://git-scm.com/docs/git-ls-tree
+detect:
+  args:
+    all: [ls-tree]
+    any: ["-l", "--long"]
+  signature:
+    all:
+      # Every line of the window, as git/ls-tree asks, with the size.
+      - '\A(?:[0-7]{6} (?:blob|tree|commit) [0-9a-f]{40,64} +(?:[0-9]+|-)\t[^\n]+\n)*[0-7]{6} (?:blob|tree|commit) [0-9a-f]{40,64} +(?:[0-9]+|-)\t[^\n]+\n?\z'
+parse:
+  type: regex
+  pattern: '^(?P<mode>[0-7]{6}) (?P<type>[a-z]+) (?P<object>[0-9a-f]{40,64}) +(?P<size>[0-9]+|-)\t(?P<path>.*)$'
+fields:
+  mode: {required: true}
+  type: {required: true}
+  object: {required: true}
+  size: {type: int, null_if: ["-"]}
+  path: {required: true}

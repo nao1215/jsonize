@@ -1,0 +1,93 @@
+[
+  {
+    "scope": "global",
+    "origin_type": "file",
+    "origin": "/home/user/.gitconfig",
+    "name": "user.name",
+    "value": "Ada Lovelace"
+  },
+  {
+    "scope": "global",
+    "origin_type": "file",
+    "origin": "/home/user/.gitconfig",
+    "name": "user.email",
+    "value": "ada@example.com"
+  },
+  {
+    "scope": "global",
+    "origin_type": "file",
+    "origin": "/home/user/.gitconfig",
+    "name": "init.defaultbranch",
+    "value": "main"
+  },
+  {
+    "scope": "global",
+    "origin_type": "file",
+    "origin": "/home/user/.gitconfig",
+    "name": "alias.st",
+    "value": "status -sb"
+  },
+  {
+    "scope": "local",
+    "origin_type": "file",
+    "origin": ".git/config",
+    "name": "core.repositoryformatversion",
+    "value": "0"
+  },
+  {
+    "scope": "local",
+    "origin_type": "file",
+    "origin": ".git/config",
+    "name": "core.filemode",
+    "value": "true"
+  },
+  {
+    "scope": "local",
+    "origin_type": "file",
+    "origin": ".git/config",
+    "name": "core.bare",
+    "value": "false"
+  },
+  {
+    "scope": "local",
+    "origin_type": "file",
+    "origin": ".git/config",
+    "name": "core.logallrefupdates",
+    "value": "true"
+  },
+  {
+    "scope": "local",
+    "origin_type": "file",
+    "origin": ".git/config",
+    "name": "remote.origin.url",
+    "value": "../up"
+  },
+  {
+    "scope": "local",
+    "origin_type": "file",
+    "origin": ".git/config",
+    "name": "remote.origin.fetch",
+    "value": "+refs/heads/*:refs/remotes/origin/*"
+  },
+  {
+    "scope": "local",
+    "origin_type": "file",
+    "origin": ".git/config",
+    "name": "branch.main.remote",
+    "value": "origin"
+  },
+  {
+    "scope": "local",
+    "origin_type": "file",
+    "origin": ".git/config",
+    "name": "branch.main.merge",
+    "value": "refs/heads/main"
+  },
+  {
+    "scope": "command",
+    "origin_type": "command line",
+    "origin": null,
+    "name": "color.ui",
+    "value": "auto"
+  }
+]

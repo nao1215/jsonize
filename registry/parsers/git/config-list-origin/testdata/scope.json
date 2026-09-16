@@ -1,0 +1,86 @@
+[
+  {
+    "scope": "global",
+    "origin_type": null,
+    "origin": null,
+    "name": "user.name",
+    "value": "Ada Lovelace"
+  },
+  {
+    "scope": "global",
+    "origin_type": null,
+    "origin": null,
+    "name": "user.email",
+    "value": "ada@example.com"
+  },
+  {
+    "scope": "global",
+    "origin_type": null,
+    "origin": null,
+    "name": "init.defaultbranch",
+    "value": "main"
+  },
+  {
+    "scope": "global",
+    "origin_type": null,
+    "origin": null,
+    "name": "alias.st",
+    "value": "status -sb"
+  },
+  {
+    "scope": "local",
+    "origin_type": null,
+    "origin": null,
+    "name": "core.repositoryformatversion",
+    "value": "0"
+  },
+  {
+    "scope": "local",
+    "origin_type": null,
+    "origin": null,
+    "name": "core.filemode",
+    "value": "true"
+  },
+  {
+    "scope": "local",
+    "origin_type": null,
+    "origin": null,
+    "name": "core.bare",
+    "value": "false"
+  },
+  {
+    "scope": "local",
+    "origin_type": null,
+    "origin": null,
+    "name": "core.logallrefupdates",
+    "value": "true"
+  },
+  {
+    "scope": "local",
+    "origin_type": null,
+    "origin": null,
+    "name": "remote.origin.url",
+    "value": "../up"
+  },
+  {
+    "scope": "local",
+    "origin_type": null,
+    "origin": null,
+    "name": "remote.origin.fetch",
+    "value": "+refs/heads/*:refs/remotes/origin/*"
+  },
+  {
+    "scope": "local",
+    "origin_type": null,
+    "origin": null,
+    "name": "branch.main.remote",
+    "value": "origin"
+  },
+  {
+    "scope": "local",
+    "origin_type": null,
+    "origin": null,
+    "name": "branch.main.merge",
+    "value": "refs/heads/main"
+  }
+]

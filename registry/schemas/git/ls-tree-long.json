@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/git/ls-tree-long.json",
+  "title": "git/ls-tree-long",
+  "description": "git ls-tree -l, the mode, type, object, size and path of each entry",
+  "x-jsonize": {
+    "definition": "git/ls-tree-long",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "mode": {
+        "type": "string"
+      },
+      "type": {
+        "type": "string"
+      },
+      "object": {
+        "type": "string"
+      },
+      "size": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "path": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "mode",
+      "type",
+      "object",
+      "size",
+      "path"
+    ]
+  }
+}

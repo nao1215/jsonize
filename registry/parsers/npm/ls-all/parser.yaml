@@ -14,7 +14,9 @@
 # only passes through is two, "| " or "│ " or two spaces. Naming all of
 # them is what lets the depth be counted.
 #
-# The first line is the project with its directory. A package is
+# The first line is the project with its directory, or with -g the
+# global node_modules directory alone, whose name and version are null.
+# A package is
 # name@version, followed by what npm notes about the installed copy
 # (deduped where it is printed in full elsewhere, extraneous, invalid,
 # overridden), or "UNMET DEPENDENCY" in front and the requested range in
@@ -38,7 +40,7 @@ detect:
     all:
       # The project with its directory, then nothing but drawn lines.
       # --long puts the directory on a line of its own, and is refused.
-      - '\A@?[^@\s]+@\S*[ \t]+\S[^\n]*(?:\n(?:\| |  |│ )*(?:\+-- |`-- |├── |└── |├─┬ |└─┬ )[^\n]*)+\z'
+      - '\A(?:@?[^@\s]+@\S*[ \t]+\S|/|[A-Za-z]:\\)[^\n]*(?:\n(?:\| |  |│ )*(?:\+-- |`-- |├── |└── |├─┬ |└─┬ )[^\n]*)+\z'
       # A package drawn at the second level or deeper.
       - '^(?:\| |  |│ )+(?:\+-- |`-- |├── |└── |├─┬ |└─┬ )\S'
 input:
@@ -50,16 +52,17 @@ parse:
   indent: ["+-- ", "`-- ", "├── ", "└── ", "├─┬ ", "└─┬ ", "| ", "│ ", "  "]
   # A top-level line is the project with its directory; a line of any
   # other shape at the top is not part of the report.
-  root: '^@?[^@\s]+@\S*[ \t]+(?:/|[A-Za-z]:\\)'
+  root: '^(?:@?[^@\s]+@\S*[ \t]+)?(?:/|[A-Za-z]:\\)'
   node:
     parse:
       type: regex
       patterns:
         # The project. Outside a package npm prints no version.
         - '^(?P<name>@?[^@ \t]+)@(?P<version>\S*)[ \t]+(?P<path>(?:/|[A-Za-z]:\\).*?)(?P<state>)??[ \t]*$'
+        # The global directory, which -g prints with no name or version.
+        - '^(?P<name>)??(?P<version>)??(?P<path>(?:/|[A-Za-z]:\\).*?)(?P<state>)??[ \t]*$'
         - '^(?P<state>UNMET (?:OPTIONAL )?DEPENDENCY)[ \t]+(?P<name>@?[^@ \t]+)@(?P<version>\S+)(?P<path>)??[ \t]*$'
         - '^(?P<name>@?[^@ \t]+)@(?P<version>\S+)(?P<path>)??(?:[ \t]+(?P<state>.+?))?[ \t]*$'
     fields:
-      name: {required: true}
       # Empty on the project line outside a package.
       version: {null_if: [""]}

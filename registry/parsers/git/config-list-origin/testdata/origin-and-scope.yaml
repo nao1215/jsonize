@@ -1,0 +1,3 @@
+description: with both options each line has the scope, the origin and the setting, and a -c setting comes from the command line with no file
+source: 'git -c color.ui=auto config --list --show-origin --show-scope, git 2.53 with LC_ALL=C in a repository made for this fixture, with a home directory and a global configuration made for it (the people are not real); the home directory is written as /home/user'
+args: [-c, color.ui=auto, config, --list, --show-origin, --show-scope]

@@ -1,0 +1,4 @@
+/usr/local/lib
+└─┬ is-glob@4.0.3
+  └── is-extglob@2.1.1
+

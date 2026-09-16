@@ -1,0 +1,4 @@
+description: The same global tree in a UTF-8 locale, where a package with children is drawn with a branch.
+source: "captured with `npm ls -g --all --prefix DIR` (npm 10.9.4, node 22.22.1) on Ubuntu 26.04 with LANG=ja_JP.UTF-8, after `npm install -g --prefix DIR is-glob`; DIR replaced with /usr/local"
+os: linux
+args: [ls, -g, --all]

@@ -1,0 +1,21 @@
+{
+  "project": {
+    "name": null,
+    "version": null,
+    "path": "/home/user/.local/share/mise/installs/node/22.22.1/lib"
+  },
+  "dependencies": [
+    {
+      "name": "corepack",
+      "version": "0.34.6"
+    },
+    {
+      "name": "difit",
+      "version": "5.0.12"
+    },
+    {
+      "name": "npm",
+      "version": "10.9.4"
+    }
+  ]
+}

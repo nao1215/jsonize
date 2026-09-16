@@ -1,0 +1,34 @@
+# `git config --list --show-origin` puts where each setting came from in
+# front of it, and `--show-scope` the scope it belongs to; with both the
+# scope comes first. Each is followed by a tab. The origin is a kind and
+# a colon, then the file or blob name: "file:.git/config",
+# "blob:HEAD:.gitmodules", "standard input:" or "command line:" with
+# nothing after the colon. A setting without "=" is a key given with no
+# value, which git reads as true; its value is null.
+format: 1
+command: git
+variant: config-list-origin
+description: git config --list --show-origin and --show-scope, each setting with where it came from
+metadata:
+  tags: [git, vcs, config]
+  compatible: [git]
+  references:
+    - https://git-scm.com/docs/git-config#Documentation/git-config.txt---show-origin
+detect:
+  args:
+    all: [config]
+    any: ["--show-origin", "--show-scope"]
+  signature:
+    all:
+      # Every line the window holds is a scope or an origin or both, a
+      # tab, and a dotted name.
+      - '\A(?:(?:(?:system|global|local|worktree|command|unknown)\t(?:(?:file|blob|standard input|command line):[^\t\n]*\t)?|(?:file|blob|standard input|command line):[^\t\n]*\t)[A-Za-z0-9-]+\.[^\n=]+(?:=[^\n]*)?(?:\n|\z))+\z'
+parse:
+  type: regex
+  patterns:
+    - '^(?P<scope>system|global|local|worktree|command|unknown)\t(?P<origin_type>file|blob|standard input|command line):(?P<origin>[^\t]*)\t(?P<name>[^=]+)(?:=(?P<value>.*))?$'
+    - '^(?P<scope>system|global|local|worktree|command|unknown)\t(?P<origin_type>)??(?P<origin>)??(?P<name>[^=]+)(?:=(?P<value>.*))?$'
+    - '^(?P<scope>)??(?P<origin_type>file|blob|standard input|command line):(?P<origin>[^\t]*)\t(?P<name>[^=]+)(?:=(?P<value>.*))?$'
+fields:
+  origin: {null_if: [""]}
+  name: {required: true, regex: '(?P<name>[A-Za-z0-9-]+\..+)'}

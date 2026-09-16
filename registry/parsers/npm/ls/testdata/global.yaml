@@ -1,0 +1,4 @@
+description: With -g the first line is the global node_modules directory alone, so the project has no name or version.
+source: "captured with `npm ls -g` (npm 10.9.4, node 22.22.1 installed by mise) on Ubuntu 26.04 with LC_ALL=C; the home directory replaced with /home/user"
+os: linux
+args: [ls, -g]

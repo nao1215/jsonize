@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/git/config-list-origin.json",
+  "title": "git/config-list-origin",
+  "description": "git config --list --show-origin and --show-scope, each setting with where it came from",
+  "x-jsonize": {
+    "definition": "git/config-list-origin",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "scope": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "origin_type": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "origin": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "name": {
+        "type": "string"
+      },
+      "value": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "scope",
+      "origin_type",
+      "origin",
+      "name",
+      "value"
+    ]
+  }
+}

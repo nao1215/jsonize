@@ -1,0 +1,30 @@
+# `git diff --shortstat` prints only the last line of --stat: how many
+# files changed, and the lines inserted and deleted when there are any.
+# A count of zero is left out of the line, and is null here. A diff with
+# nothing in it prints nothing, and `jz run` exits 4 for it: the format
+# is one object, and there is no object to give.
+format: 1
+command: git
+variant: diff-shortstat
+description: git diff --shortstat, the number of changed files, insertions and deletions
+metadata:
+  tags: [git, vcs]
+  compatible: [git]
+  references:
+    - https://git-scm.com/docs/git-diff#Documentation/git-diff.txt---shortstat
+detect:
+  args:
+    all: [diff]
+    any: ["--shortstat"]
+    none: ["--stat", "--stat=", "--numstat", "--name-only", "--name-status", "-p", "-u", "--patch"]
+  signature:
+    all:
+      - '\A (?:[0-9]+) files? changed(?:, [0-9]+ insertions?\(\+\))?(?:, [0-9]+ deletions?\(-\))?\n?\z'
+parse:
+  type: regex
+  each: input
+  pattern: '\A (?P<files_changed>[0-9]+) files? changed(?:, (?P<insertions>[0-9]+) insertions?\(\+\))?(?:, (?P<deletions>[0-9]+) deletions?\(-\))?\n?\z'
+fields:
+  files_changed: {type: int, required: true}
+  insertions: {type: int}
+  deletions: {type: int}

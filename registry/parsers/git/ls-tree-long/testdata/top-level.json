@@ -1,0 +1,30 @@
+[
+  {
+    "mode": "040000",
+    "type": "tree",
+    "object": "18d7f03fc373247d21c35a240a65dbd91bbf5ba0",
+    "size": null,
+    "path": "d"
+  },
+  {
+    "mode": "100644",
+    "type": "blob",
+    "object": "8352675d67aed6625ece79af41c27fdb4ee2e867",
+    "size": 3,
+    "path": "logo.bin"
+  },
+  {
+    "mode": "100644",
+    "type": "blob",
+    "object": "587be6b4c3f93f93c489c0111bba5596147a26cb",
+    "size": 2,
+    "path": "new-name.txt"
+  },
+  {
+    "mode": "100644",
+    "type": "blob",
+    "object": "718f4d2ff533cf8ead8d3556cf43912bd245fbc4",
+    "size": 2,
+    "path": "topic.txt"
+  }
+]

@@ -1,0 +1,3 @@
+description: --show-scope alone puts the scope in front
+source: 'git config --list --show-scope, git 2.53 with LC_ALL=C in a repository made for this fixture, with a home directory and a global configuration made for it (the people are not real); the home directory is written as /home/user'
+args: [config, --list, --show-scope]

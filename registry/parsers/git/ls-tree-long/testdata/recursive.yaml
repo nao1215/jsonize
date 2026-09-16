@@ -1,0 +1,3 @@
+description: -r lists the blobs inside the subdirectory instead
+source: 'git ls-tree -r -l HEAD captured with LC_ALL=C from a repository made for this fixture with git 2.53 (the people are not real)'
+args: [ls-tree, -r, -l, HEAD]
