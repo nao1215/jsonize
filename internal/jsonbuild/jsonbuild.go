@@ -315,6 +315,9 @@ func split(pl *placement, use func(string) error) error {
 	if key == "" {
 		return use("the key is empty")
 	}
+	if strings.HasSuffix(key, "[]") {
+		return use(errDoubleAppend.Error())
+	}
 	pl.bare = true
 	pl.loc = []token{{name: key}}
 	if appends {
@@ -388,6 +391,11 @@ func readJSON(text string) (any, error) {
 
 // location reads the KEY of --string and --text-file: a JSON Pointer when
 // it starts with "/", otherwise a key with an optional trailing [].
+// errDoubleAppend refuses a key that ends in [] once the [] that appends
+// is taken off: a key holding [] at its end is what a plain argument
+// cannot name, so reading one as a key named "a[]" would be a guess.
+var errDoubleAppend = errors.New("a key cannot end in [], which appends; write such a key inside a := value")
+
 func location(loc string, array bool, form Form) ([]token, error) {
 	// A key or a pointer that ends in : is a := typed where = was meant,
 	// or the other way round, and either way a guess would be wrong.
@@ -410,6 +418,9 @@ func location(loc string, array bool, form Form) ([]token, error) {
 	key, appends := strings.CutSuffix(loc, "[]")
 	if key == "" {
 		return nil, errors.New("the key is empty")
+	}
+	if strings.HasSuffix(key, "[]") {
+		return nil, errDoubleAppend
 	}
 	tokens := []token{{name: key}}
 	if appends {
