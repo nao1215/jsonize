@@ -162,7 +162,7 @@ func (a *app) cmdConvert(args []string) int {
 	}
 	var reg *registry.Registry
 	if !hasInline {
-		if reg, code = a.loadRegistry(); code != 0 {
+		if reg, code = a.loadRegistryFor(namedParser(co.selects.parser)...); code != 0 {
 			return code
 		}
 	}

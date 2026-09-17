@@ -811,6 +811,8 @@ Layering (`JSONIZE_REGISTRY_PATH` → user registry → embedded) lets a user
 fix a parser locally today and ship it upstream tomorrow with no change
 in behaviour.
 
+A command that names its parser, `jz run COMMAND` or `--parser NAME`, reads only the built-in definitions that answer to the name: those in the name's directory and those that list it among their aliases. Reading all of them was most of what a short conversion cost, about 45 ms of a `jz --parser df` run on one core, against about 5 ms for the part the name needs. Detection reads every definition, since any of them could fit the text. When a registry of the user's own is present, or no definition answers to the name, every definition is read as before, so the names jz suggests and the warnings about a disable list stay what they were.
+
 ### No network, ever
 
 jz reads local directories and nothing else. A release carries both the

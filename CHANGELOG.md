@@ -8,6 +8,7 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- `jz run COMMAND` and `--parser NAME` read only the built-in definitions that answer to the name, not all 737. On a short `df -h` report pinned to one core, `jz --parser df` takes about 5 ms instead of 46 ms and `jz run df -h` about 6 ms instead of 47 ms. Detecting the format from the text still reads every definition. With a registry of your own, every definition is read as before.
 - Reading a csv allocates a quarter of what it did and takes about half the time: every record was read through a new 4 KB buffer, and one buffer now serves the whole input.
 - A table whose rows hold more than eight columns, such as `ps aux` or `top`, no longer builds a map for each row, and a process time such as `4:50` is added up in whole seconds unless it has a fraction. On 100,000 rows of `ps aux` jz takes about half the time and a third less memory.
 
