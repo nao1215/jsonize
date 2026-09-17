@@ -63,6 +63,17 @@ func BenchmarkKeyFilter(b *testing.B) {
 // the loading of several hundred definitions is most of the cost and the
 // reading of three lines is almost none of it.
 func BenchmarkConvert(b *testing.B) {
+	benchmarkConvert(b, nil)
+}
+
+// BenchmarkConvertNamed is BenchmarkConvert with --parser df, which reads
+// only the definitions that answer to df, the way `jz run df` does.
+func BenchmarkConvertNamed(b *testing.B) {
+	benchmarkConvert(b, []string{"--parser", "df"})
+}
+
+func benchmarkConvert(b *testing.B, args []string) {
+	b.Helper()
 	home := b.TempDir()
 	env := Env{
 		Stdout:          io.Discard,
@@ -77,7 +88,7 @@ func BenchmarkConvert(b *testing.B) {
 	b.ReportAllocs()
 	for b.Loop() {
 		env.Stdin = strings.NewReader(gnuDF)
-		if code := Main(nil, env); code != ExitOK {
+		if code := Main(args, env); code != ExitOK {
 			b.Fatalf("code=%d", code)
 		}
 	}

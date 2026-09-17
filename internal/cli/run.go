@@ -285,7 +285,17 @@ func (a *app) runChild(ctx context.Context, cmd runner.Command) (*runner.Result,
 // command has a parser and, when named, the variant, before anything is
 // executed. opts are jz's own options and command what follows them.
 func (a *app) runRegistry(sel *selectOptions, parser string, opts, command []string) (*registry.Registry, int) {
-	reg, code := a.loadRegistry()
+	names := []string{parser}
+	if sel.parser == "" {
+		// The wrapper hint asks after every argument that could be the
+		// command a wrapper runs, so their definitions are read too.
+		for _, arg := range command[1:] {
+			if !strings.HasPrefix(arg, "-") {
+				names = append(names, parserKey(arg))
+			}
+		}
+	}
+	reg, code := a.loadRegistryFor(names...)
 	if code != ExitOK {
 		return nil, code
 	}
