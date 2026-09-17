@@ -1,0 +1,153 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/nao1215/himorime/main/schema/himorime.schema.json
+#
+# jz against jc and jo on the same input, for the Benchmarks section of
+# website/content/compare.md. Not a CI gate: it needs jc, jo, jq and taskset
+# (Linux). `make bench-docs` runs it and rewrites that section.
+#
+# Every case is measured twice: with every core available, and pinned to
+# core 0 with taskset, which is closer to a machine or container limited to
+# one core. Starting taskset is part of the pinned figures.
+version: "1"
+
+suite:
+  name: jz, jc and jo
+  description: One process per call on the same input.
+
+build:
+  command: [go, build, -trimpath, -ldflags, "-s -w", -o, "${artifact}", ./cmd/jz]
+  cwd: ../..
+  env: {CGO_ENABLED: "0"}
+
+defaults:
+  warmup: 3
+  runs: 30
+  metrics:
+    cpu: true
+    memory: true
+
+benchmarks:
+  - name: df -h
+    description: The df -h report of this machine, from standard input.
+    setup: &df-setup
+      - command: "LC_ALL=C df -h > ${workdir}/df.txt"
+        shell: true
+      # Both tools must return the same number of records, so a tool that
+      # stops early is not measured as a fast one.
+      - command: "test $(${artifact} < ${workdir}/df.txt | jq length) -eq $(jc --df < ${workdir}/df.txt | jq length)"
+        shell: true
+    stdin: "${workdir}/df.txt"
+    baseline: jz-parser
+    commands:
+      jz-detected: {command: ["${artifact}"]}
+      jz-parser: {command: ["${artifact}", --parser, df]}
+      jc: {command: [jc, --df]}
+
+  - name: df -h, one core
+    setup: *df-setup
+    stdin: "${workdir}/df.txt"
+    baseline: jz-parser
+    commands:
+      jz-detected: {command: [taskset, -c, "0", "${artifact}"]}
+      jz-parser: {command: [taskset, -c, "0", "${artifact}", --parser, df]}
+      jc: {command: [taskset, -c, "0", jc, --df]}
+
+  - name: running df -h
+    description: jz run df -h and jc df -h, which start df themselves.
+    setup: &run-df-setup
+      - command: "test $(${artifact} run df -h | jq length) -eq $(jc df -h | jq length)"
+        shell: true
+    baseline: jz
+    commands:
+      jz: {command: ["${artifact}", run, df, -h]}
+      jc: {command: [jc, df, -h]}
+
+  - name: running df -h, one core
+    setup: *run-df-setup
+    baseline: jz
+    commands:
+      jz: {command: [taskset, -c, "0", "${artifact}", run, df, -h]}
+      jc: {command: [taskset, -c, "0", jc, df, -h]}
+
+  - name: ps aux, 100k rows
+    description: The ps aux table of this machine, its rows repeated to 100 000.
+    setup: &ps-setup
+      - command: "LC_ALL=C ps aux | awk -v n=100000 'NR == 1 { print; next } { a[++m] = $0 } END { for (i = 0; i < n; i++) print a[i % m + 1] }' > ${workdir}/ps.txt"
+        shell: true
+      - command: "test $(${artifact} < ${workdir}/ps.txt | jq length) -eq $(jc --ps < ${workdir}/ps.txt | jq length)"
+        shell: true
+    stdin: "${workdir}/ps.txt"
+    baseline: jz-parser
+    metrics:
+      throughput:
+        work: {value: 100000, unit: records}
+    commands:
+      jz-detected: {command: ["${artifact}"]}
+      jz-parser: {command: ["${artifact}", --parser, ps]}
+      jc: {command: [jc, --ps]}
+
+  - name: ps aux, 100k rows, one core
+    setup: *ps-setup
+    stdin: "${workdir}/ps.txt"
+    baseline: jz-parser
+    metrics:
+      throughput:
+        work: {value: 100000, unit: records}
+    commands:
+      jz-detected: {command: [taskset, -c, "0", "${artifact}"]}
+      jz-parser: {command: [taskset, -c, "0", "${artifact}", --parser, ps]}
+      jc: {command: [taskset, -c, "0", jc, --ps]}
+
+  - name: CSV, 100k rows
+    description: A generated CSV of 100 000 rows, one field quoted because it holds a comma; read whole and streamed.
+    setup: &csv-setup
+      - command: "awk 'BEGIN { print \"id,name,city,score\"; split(\"Tokyo|Osaka|\\\"New York, NY\\\"\", c, \"|\"); for (i = 0; i < 100000; i++) printf \"%d,user%d,%s,0.%06d\\n\", i, i, c[i % 3 + 1], (i * 7919) % 1000000 }' > ${workdir}/data.csv"
+        shell: true
+      - command: "test $(${artifact} --format csv < ${workdir}/data.csv | jq length) -eq $(jc --csv < ${workdir}/data.csv | jq length)"
+        shell: true
+      - command: "test $(${artifact} --format csv --stream < ${workdir}/data.csv | wc -l) -eq $(jc --csv-s < ${workdir}/data.csv | wc -l)"
+        shell: true
+    stdin: "${workdir}/data.csv"
+    baseline: jz
+    metrics:
+      throughput:
+        work: {value: 100000, unit: records}
+    commands:
+      jz: {command: ["${artifact}", --format, csv]}
+      jc: {command: [jc, --csv]}
+      jz-stream: {command: ["${artifact}", --format, csv, --stream]}
+      jc-stream: {command: [jc, --csv-s]}
+
+  - name: CSV, 100k rows, one core
+    setup: *csv-setup
+    stdin: "${workdir}/data.csv"
+    baseline: jz
+    metrics:
+      throughput:
+        work: {value: 100000, unit: records}
+    commands:
+      jz: {command: [taskset, -c, "0", "${artifact}", --format, csv]}
+      jc: {command: [taskset, -c, "0", jc, --csv]}
+      jz-stream: {command: [taskset, -c, "0", "${artifact}", --format, csv, --stream]}
+      jc-stream: {command: [taskset, -c, "0", jc, --csv-s]}
+
+  - name: object from arguments
+    description: An object of five values, and a nested object of two paths.
+    setup: &new-setup
+      # Both must build the same JSON.
+      - command: "${artifact} new name=api replicas:=3 debug:=false 'tags[]=web' 'tags[]=prod' | jq -cS . > ${workdir}/jz.json && jo name=api replicas=3 debug=false 'tags[]=web' 'tags[]=prod' | jq -cS . > ${workdir}/jo.json && cmp ${workdir}/jz.json ${workdir}/jo.json"
+        shell: true
+    baseline: jz-new
+    commands:
+      jz-new: {command: ["${artifact}", new, name=api, "replicas:=3", "debug:=false", "tags[]=web", "tags[]=prod"]}
+      jo: {command: [jo, name=api, replicas=3, debug=false, "tags[]=web", "tags[]=prod"]}
+      jz-new-path: {command: ["${artifact}", new, --path, /metadata/labels/app=api, --path, "/spec/replicas:=3"]}
+      jo-nested: {command: [jo, -d., metadata.labels.app=api, spec.replicas=3]}
+
+  - name: object from arguments, one core
+    setup: *new-setup
+    baseline: jz-new
+    commands:
+      jz-new: {command: [taskset, -c, "0", "${artifact}", new, name=api, "replicas:=3", "debug:=false", "tags[]=web", "tags[]=prod"]}
+      jo: {command: [taskset, -c, "0", jo, name=api, replicas=3, debug=false, "tags[]=web", "tags[]=prod"]}
+      jz-new-path: {command: [taskset, -c, "0", "${artifact}", new, --path, /metadata/labels/app=api, --path, "/spec/replicas:=3"]}
+      jo-nested: {command: [taskset, -c, "0", jo, -d., metadata.labels.app=api, spec.replicas=3]}

@@ -8,7 +8,7 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
-- Benchmarks measure whole runs of jz with [himorime](https://github.com/nao1215/himorime) from `bench/himorime.yaml`: start-up, format detection, 100 000-row tables, csv and JSON Lines files, `--stream` and `jz new`, for latency, CPU time, peak RSS and throughput. A pull request is compared with its base on the same runner and fails on a confident regression. `make bench` and `make bench-compare` run the suite; the benchstat comparison and `bench/baseline.txt` are gone.
+- Performance is measured only with [himorime](https://github.com/nao1215/himorime). `bench/himorime.yaml` runs jz as a pipeline does, one process per call: start-up, detection with and without a named parser, text no definition reads, registries of 26 to 1000 extra definitions and `--define`, 100 000-row `ps`, `df`, `mount` and `env` output, every data format, csv key selection, `--stream`, `-p` and `jz new`, for latency, CPU time, peak RSS and throughput. A pull request is compared with its base on the same runner and fails on a confident regression. `bench/compare/himorime.yaml` measures jz against jc and jo, and `make bench-docs` rewrites the tables of the comparison page from it. The Go benchmark functions, `bench/baseline.txt`, the benchstat comparison and `scripts/compare_bench.sh` are gone.
 
 ## [0.7.1]
 
