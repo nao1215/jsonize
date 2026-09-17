@@ -428,6 +428,9 @@ func Duration(s, layout string) (any, error) {
 	if t == "" {
 		return nil, &Error{Type: typeDuration, Input: s, Cause: errors.New("empty value")}
 	}
+	if n, ok := wholeClock(t, layout); ok {
+		return n, nil
+	}
 	secs, err := parseDuration(t, layout)
 	if err != nil {
 		return nil, &Error{Type: typeDuration, Input: s, Cause: err}
@@ -590,6 +593,61 @@ func parseClock(t, layout string) (*big.Rat, error) {
 		}
 	}
 	return total, nil
+}
+
+// wholeClock reads the clock readings ps and top print in every row,
+// "4:50", "01:02:03" and "3-04:05:06", when every part is whole, and
+// reports false for anything else, which parseDuration then reads. It
+// gives the same number parseDuration does, without the exact
+// arithmetic a fraction needs: a column of a hundred thousand rows spent
+// most of its time there. A reading it declines is not thereby refused.
+func wholeClock(t, layout string) (int64, bool) {
+	var days int64
+	if i := strings.IndexByte(t, '-'); i >= 0 {
+		d, ok := smallWhole(t[:i])
+		if !ok {
+			return 0, false
+		}
+		days, t = d, t[i+1:]
+	}
+	first, rest, ok := strings.Cut(t, ":")
+	if !ok {
+		return 0, false
+	}
+	second, third, three := strings.Cut(rest, ":")
+	a, okA := smallWhole(first)
+	b, okB := smallWhole(second)
+	if !okA || !okB || b >= 60 {
+		return 0, false
+	}
+	var secs int64
+	switch {
+	case three:
+		c, okC := smallWhole(third)
+		if !okC || c >= 60 {
+			return 0, false
+		}
+		secs = a*3600 + b*60 + c
+	case layout == LayoutHourMinute:
+		secs = a*3600 + b*60
+	default:
+		secs = a*60 + b
+	}
+	secs += days * 86400
+	if secs > 1<<53 {
+		return 0, false
+	}
+	return secs, true
+}
+
+// smallWhole reads one to twelve digits, few enough that no sum of
+// them times a day overflows.
+func smallWhole(s string) (int64, bool) {
+	if s == "" || len(s) > 12 || !allDigits(s) {
+		return 0, false
+	}
+	n, err := strconv.ParseInt(s, 10, 64)
+	return n, err == nil
 }
 
 // clockUnitName names a part of a clock reading by its length in

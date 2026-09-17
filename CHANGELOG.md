@@ -4,6 +4,13 @@ All notable changes to this project are documented here. The format is
 based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the
 project follows [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Changed
+
+- Reading a csv allocates a quarter of what it did and takes about half the time: every record was read through a new 4 KB buffer, and one buffer now serves the whole input.
+- A table whose rows hold more than eight columns, such as `ps aux` or `top`, no longer builds a map for each row, and a process time such as `4:50` is added up in whole seconds unless it has a fraction. On 100,000 rows of `ps aux` jz takes about half the time and a third less memory.
+
 ## [0.7.0]
 
 The registry reads 270 commands through 737 definitions, up from 227

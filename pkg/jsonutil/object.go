@@ -34,8 +34,10 @@ type Object struct {
 }
 
 // indexAt is how many members an object holds before it keeps an index
-// of them.
-const indexAt = 8
+// of them. A row of ps aux or top has eleven or twelve columns, and a
+// map for each of those rows cost more memory than the row's values and
+// more time than scanning a few dozen short keys does.
+const indexAt = 32
 
 // NewObject returns an empty ordered object.
 func NewObject() *Object {
