@@ -173,11 +173,13 @@ func FuzzDuration(f *testing.F) {
 	for _, s := range []string{
 		"3-04:05:06", "04:05", "13 days, 4:30", "45 min", "1h2m3s", "13:42m",
 		"", ":", "-", "1e400s", "99999999999999999999d", "0.00s", "1-2-3:4",
+		"0:60", "999999999999:59", "1-", "-1:00", "00:00:00", "104249991374-00:00:00",
 	} {
 		f.Add(s)
 	}
 	f.Fuzz(func(t *testing.T, s string) {
-		for _, layout := range []string{LayoutHourMinute, LayoutMinuteSecond} {
+		for _, layout := range []string{LayoutHourMinute, LayoutMinuteSecond, ""} {
+			sameAsExact(t, s, layout)
 			v, err := Duration(s, layout)
 			if err != nil {
 				continue
@@ -196,6 +198,50 @@ func FuzzDuration(f *testing.F) {
 			}
 		}
 	})
+}
+
+// sameAsExact checks that a reading wholeClock takes gives the number the
+// exact reading gives, since Duration returns the first without asking
+// the second.
+func sameAsExact(t *testing.T, s, layout string) {
+	t.Helper()
+	fast, ok := wholeClock(strings.TrimSpace(s), layout)
+	if !ok {
+		return
+	}
+	exact, err := parseDuration(strings.TrimSpace(s), layout)
+	if err != nil {
+		t.Fatalf("wholeClock(%q, %q) = %d; the exact reading refuses it: %v", s, layout, fast, err)
+	}
+	if !exact.IsInt() || exact.Num().Int64() != fast {
+		t.Fatalf("wholeClock(%q, %q) = %d; the exact reading gives %s", s, layout, fast, exact.RatString())
+	}
+}
+
+// Every clock reading made of small parts, with and without days, is
+// read the same by the whole-number path and the exact one, and the
+// readings the whole-number path is written to decline reach the exact
+// one.
+func TestWholeClockMatchesExact(t *testing.T) {
+	t.Parallel()
+	parts := []string{"0", "00", "5", "09", "59", "60", "61", "99", "123", "999999999999", "1000000000000", "", "1.5", "x"}
+	for _, layout := range []string{LayoutHourMinute, LayoutMinuteSecond, ""} {
+		for _, a := range parts {
+			for _, b := range parts {
+				sameAsExact(t, a+":"+b, layout)
+				for _, c := range parts {
+					sameAsExact(t, a+":"+b+":"+c, layout)
+					sameAsExact(t, c+"-"+a+":"+b, layout)
+					sameAsExact(t, c+"-"+a+":"+b+":00", layout)
+				}
+			}
+		}
+	}
+	for _, s := range []string{"1:2:3:4", "1-2-3:4", "-1:00", "13:42m", "13 days, 4:30", "1:30.5", "3-04", "104249991375-00:00:00"} {
+		if n, ok := wholeClock(s, LayoutMinuteSecond); ok {
+			t.Errorf("wholeClock(%q) = %d; it is written to leave that to the exact reading", s, n)
+		}
+	}
 }
 
 func TestStripANSI(t *testing.T) {

@@ -98,6 +98,42 @@ func BenchmarkParseTableWhitespaceLarge(b *testing.B) {
 	benchParse(b, benchDef(b, dfDef), dfInputRows(100000))
 }
 
+// psInputRows renders rows the way ps aux prints them: eleven columns,
+// more than the few a df row has, and a process time in each row.
+func psInputRows(n int) []byte {
+	var buf bytes.Buffer
+	buf.WriteString("USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND\n")
+	for i := 0; i < n; i++ {
+		fmt.Fprintf(&buf, "user%-7d %4d %4.1f %4.1f %6d %5d ?        Ss   09:14   %d:%02d /usr/bin/daemon --id %d\n", i%100, i, float64(i%1000)/10, float64(i%100)/10, 20000+i, 1000+i, i%600, i%60, i)
+	}
+	return buf.Bytes()
+}
+
+const psDef = `
+format: 1
+command: ps
+variant: bsd
+parse:
+  type: table
+  header:
+    columns: [user, pid, cpu_percent, mem_percent, vsz, rss, tty, stat, start, time, command]
+fields:
+  pid: {type: int}
+  cpu_percent: {type: float}
+  mem_percent: {type: float}
+  vsz: {type: int}
+  rss: {type: int}
+  tty: {null_if: ["?"]}
+  time: {type: duration, layout: mm:ss}
+`
+
+// BenchmarkParseTableWideLarge reads a table whose rows hold more keys
+// than a df row and convert a duration in each, which is where an object
+// per row and the conversions of a row show.
+func BenchmarkParseTableWideLarge(b *testing.B) {
+	benchParse(b, benchDef(b, psDef), psInputRows(100000))
+}
+
 func BenchmarkParseTableAlignedLarge(b *testing.B) {
 	benchParse(b, benchDef(b, alignedDef), dfInputRows(100000))
 }

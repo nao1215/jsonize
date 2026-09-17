@@ -1,6 +1,7 @@
 package engine
 
 import (
+	"bufio"
 	"encoding/csv"
 	"errors"
 	"fmt"
@@ -41,8 +42,9 @@ func (r *run) parseCSV(p *definition.Parse, fields map[string]*definition.Field,
 		cols = p.Header.Columns
 	}
 	out := make([]any, 0, len(lines))
+	var src csvSource
 	for _, rec := range records {
-		rows, err := readCSV(rec.text, p)
+		rows, err := src.read(rec.text, p)
 		if err != nil {
 			ln, msg := csvFailure(rec, err)
 			return nil, r.errorf(ln, "", "%s", msg)
@@ -308,12 +310,28 @@ func csvColumns(p *definition.Parse, header []string) []string {
 	return out
 }
 
-// readCSV reads one record with the definition's delimiter.
-func readCSV(text string, p *definition.Parse) ([][]string, error) {
+// csvSource is the reader a csv is read through, one record at a time.
+// It is kept for the whole input because csv.NewReader wraps what it is
+// given in a buffer of its own unless that is a large enough buffer
+// already, and a buffer for each of a hundred thousand records was most
+// of what reading the file allocated.
+type csvSource struct {
+	text strings.Reader
+	buf  *bufio.Reader
+}
+
+// read reads one record with the definition's delimiter.
+func (c *csvSource) read(text string, p *definition.Parse) ([][]string, error) {
 	if err := bareCarriageReturn(text, csvDelimiter(p)); err != nil {
 		return nil, err
 	}
-	cr := csv.NewReader(strings.NewReader(text))
+	c.text.Reset(text)
+	if c.buf == nil {
+		c.buf = bufio.NewReader(&c.text)
+	} else {
+		c.buf.Reset(&c.text)
+	}
+	cr := csv.NewReader(c.buf)
 	cr.Comma = csvDelimiter(p)
 	// A CSV of command output is not required to be rectangular, and the
 	// row builder is what reports a row that does not fit its header.

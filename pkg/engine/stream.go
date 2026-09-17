@@ -209,9 +209,11 @@ type streamer struct {
 	// csvPending holds the lines of a record a quoted value has not
 	// finished yet, which csvQuote follows; csvCols is the header once it
 	// has been read, and csvHeader the record it was read from.
+	// csvSource reads each finished record.
 	csvPending []string
 	csvPendNum int
 	csvQuote   csvQuote
+	csvSource  csvSource
 	csvCols    []string
 	csvHeader  []string
 	csvChecked bool
@@ -652,7 +654,7 @@ func (s *streamer) flushCSV() error {
 // emitCSV reads one finished record, taking the first one as the header
 // unless the definition named the columns.
 func (s *streamer) emitCSV(rec line) error {
-	rows, err := readCSV(rec.text, s.p)
+	rows, err := s.csvSource.read(rec.text, s.p)
 	if err != nil {
 		ln, msg := csvFailure(rec, err)
 		return s.errorf(ln, "", "%s", msg)
