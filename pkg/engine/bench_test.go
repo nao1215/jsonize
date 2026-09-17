@@ -10,8 +10,8 @@ import (
 )
 
 // Benchmarks use synthetic but format-faithful df/mount/env inputs so that
-// results are reproducible on any machine. Compare runs with
-// `make bench` and `make bench-compare` (benchstat).
+// results are reproducible on any machine. They are for profiling one
+// function; whole runs of jz are measured by bench/himorime.yaml.
 
 func benchDef(b *testing.B, src string) *definition.Definition {
 	b.Helper()

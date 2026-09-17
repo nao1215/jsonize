@@ -1,0 +1,142 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/nao1215/himorime/main/schema/himorime.schema.json
+#
+# jz measured end to end with himorime (https://github.com/nao1215/himorime):
+# the process a pipeline starts, from its first instruction to its exit.
+#
+#   make bench          measure the working tree
+#   make bench-compare  compare main with the working tree
+#
+# On a pull request, .github/workflows/bench.yml runs `himorime ci bench`:
+# the base of the pull request and its head are built and measured in
+# interleaved rounds on the same runner. See bench/README.md.
+version: "1"
+
+suite:
+  name: jz
+  description: Start-up, format detection, large tables, data formats, --stream and jz new.
+
+build:
+  command: [go, build, -trimpath, -o, "${artifact}", ./cmd/jz]
+  cwd: ..
+
+defaults:
+  warmup: 2
+  runs: 20
+  metrics:
+    cpu: true
+    memory: true
+  regression:
+    confidence: 0.95
+    latency:
+      max_percent: 10
+      min_difference: 1ms
+    cpu:
+      max_percent: 15
+      min_difference: 2ms
+    memory:
+      max_percent: 15
+      min_difference: 2MiB
+
+benchmarks:
+  - name: version
+    description: Starting jz and exiting, with no registry loaded.
+    tags: [smoke]
+    commands:
+      jz:
+        command: ["${artifact}", version]
+
+  - name: detect df
+    description: >-
+      A short df -h report with no parser named: the built-in registry is
+      loaded and every signature is checked. This is what `df -h | jz` pays.
+    tags: [smoke]
+    setup:
+      - command: |
+          printf '%s\n' \
+            'Filesystem      Size  Used Avail Use% Mounted on' \
+            'tmpfs            13G  5.8M   13G   1% /run' \
+            '/dev/nvme1n1p2  1.8T  1.6T  145G  92% /' \
+            'tmpfs            31G  954M   30G   4% /dev/shm' \
+            '/dev/nvme0n1p1  1.9T  982G  800G  56% /media/data' > ${workdir}/df.txt
+        shell: true
+    stdin: "${workdir}/df.txt"
+    baseline: detected
+    commands:
+      detected:
+        command: ["${artifact}"]
+      named:
+        command: ["${artifact}", --parser, df]
+
+  - name: ps table 100k rows
+    description: A ps aux table of 100 000 processes, read whole and read with --stream.
+    setup:
+      - command: |
+          awk 'BEGIN {
+            print "USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND"
+            for (i = 1; i <= 100000; i++)
+              printf "root     %7d  0.0  0.0  27948 13124 ?        Ss   Aug24   4:50 /usr/lib/systemd/systemd --switched-root --system\n", i
+          }' > ${workdir}/ps.txt
+        shell: true
+    stdin: "${workdir}/ps.txt"
+    metrics:
+      throughput:
+        work: {value: 100000, unit: records}
+    commands:
+      whole:
+        command: ["${artifact}", --parser, ps]
+      stream:
+        command: ["${artifact}", --parser, ps, --stream]
+
+  - name: csv 100k rows
+    description: A CSV file of 100 000 rows with a typed column, and the same file narrowed with --extract.
+    setup:
+      - command: |
+          awk 'BEGIN {
+            print "id,name,age,email,city"
+            for (i = 1; i <= 100000; i++)
+              printf "%d,user%d,%d,user%d@example.com,Tokyo\n", i, i, 20 + i % 50, i
+          }' > ${workdir}/users.csv
+        shell: true
+    metrics:
+      throughput:
+        work: {file_size: "${workdir}/users.csv", unit: bytes}
+    commands:
+      read:
+        command: ["${artifact}", --file, "${workdir}/users.csv", --type, age=int]
+      extract:
+        command: ["${artifact}", --file, "${workdir}/users.csv", --extract, id, --extract, email]
+
+  - name: jsonl 100k records
+    description: JSON Lines read as a document and written back one record per line.
+    setup:
+      - command: |
+          awk 'BEGIN {
+            for (i = 1; i <= 100000; i++)
+              printf "{\"id\":%d,\"host\":\"web%d\",\"tags\":[\"a\",\"b\"],\"ok\":true}\n", i, i % 16
+          }' > ${workdir}/events.jsonl
+        shell: true
+    stdin: "${workdir}/events.jsonl"
+    metrics:
+      throughput:
+        work: {value: 100000, unit: records}
+    commands:
+      read:
+        command: ["${artifact}", --format, jsonl]
+      stream:
+        command: ["${artifact}", --format, jsonl, --stream]
+
+  - name: jz new
+    description: An object built from arguments, and the same fixed values attached to 100 000 records with --each.
+    setup:
+      - command: |
+          awk 'BEGIN {
+            for (i = 1; i <= 100000; i++)
+              printf "{\"id\":%d}\n", i
+          }' > ${workdir}/ids.jsonl
+        shell: true
+    stdin: "${workdir}/ids.jsonl"
+    commands:
+      arguments:
+        command: ["${artifact}", new, --path, /meta/host=web, name=api, "replicas:=3", "tags:=[\"a\",\"b\"]"]
+      each:
+        command: ["${artifact}", new, --each, host=web, "sample:=@-"]
