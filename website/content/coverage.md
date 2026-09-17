@@ -271,76 +271,25 @@ which colon is the separator.
 
 ## Compared with jc
 
-This section compares what the two read. The options, the other
-differences and timings, together with jo, are on
-[Compared with jc and jo](../compare/).
+This section compares what the two read. The options, the other differences and timings, together with jo, are on [Compared with jc and jo](../compare/).
 
-[jc](https://github.com/kellyjonbrazil/jc) converts many of the same
-commands, so it is a second opinion on what a text holds. The comparison
-below was made against jc 1.25.7 (git 8290734, MIT licence). No jc
-code or fixture is copied into this repository: the fixtures here were
-captured or quoted independently, and jc is used as a tool to run against
-them.
+[jc](https://github.com/kellyjonbrazil/jc) converts many of the same commands, so it is a second opinion on what a text holds. The comparison below was made against jc 1.25.7 (git 8290734, MIT licence). No jc code or fixture is copied into this repository: the fixtures here were captured or quoted independently, and jc is used as a tool to run against them.
 
-`scripts/compare_jc.py` runs both over the same saved input and reports,
-per fixture, whether each produced JSON, how many records, and which
-words of the input reached a leaf value of each result. It needs jc
-installed (`python3 -m pip install jc`) and nothing else in this
-repository depends on it. It compares against the input rather than
-between the two documents on purpose: the two name and nest their keys
-differently, and normalising that away would also hide a value one of them
-dropped.
+`scripts/compare_jc.py` runs both over the same saved input and reports, per fixture, whether each produced JSON, how many records, and which words of the input reached a leaf value of each result. It needs jc installed (`python3 -m pip install jc`) and nothing else in this repository depends on it. It compares against the input rather than between the two documents on purpose: the two name and nest their keys differently, and normalising that away would also hide a value one of them dropped.
 
-`--refused` turns the harness around and runs it over the fixtures a
-definition is written to refuse: text of a neighbouring format, a row cut
-short, a line the definition never looked at. The counts here are those
-of the run that was made, and the registry has grown since. There were
-47 such fixtures with a jc parser to compare against. jz refused 46 of
-them, jc read 34. The one jz read is `wc -lwcL` output given to `jz
---parser wc --variant posix`, where the fourth count and a file name
-beginning with a number are the same text and the arguments are the only
-thing that separates them; `jz run wc -lwcL` refuses it on the argument.
+`--refused` turns the harness around and runs it over the fixtures a definition is written to refuse: text of a neighbouring format, a row cut short, a line the definition never looked at. The counts here are those of the run that was made, and the registry has grown since. There were 47 such fixtures with a jc parser to compare against. jz refused 46 of them, jc read 34. The one jz read is `wc -lwcL` output given to `jz --parser wc --variant posix`, where the fourth count and a file name beginning with a number are the same text and the arguments are the only thing that separates them; `jz run wc -lwcL` refuses it on the argument.
 
-Over the 380 fixtures a definition was written to read, jz read all of
-them and jc refused 30. The refusals are a file system name containing a
-space (`df`), every `ip address` fixture, an `ls -l` of a directory with
-nothing in it, the headerless and raw forms of `lsblk`, most `ss` forms,
-`pidstat`, `swapon`, an empty zip listing, `who` with an ISO time, and
-the `systeminfo` excerpt.
+Over the 380 fixtures a definition was written to read, jz read all of them and jc refused 30. The refusals are a file system name containing a space (`df`), every `ip address` fixture, an `ls -l` of a directory with nothing in it, the headerless and raw forms of `lsblk`, most `ss` forms, `pidstat`, `swapon`, an empty zip listing, `who` with an ISO time, and the `systeminfo` excerpt.
 
 Where both read a text, the differences worth knowing are these.
 
-- A rounded number. `df -h` prints `13G`; jc reports `13958643712` and jz
-  reports `"13G"`. The command rounded the value and did not record what
-  it rounded, so the exact figure is not in the text; two rows whose
-  sizes both round to `13G` come back from jc as the same number.
-- A value made of parts. dig's `;; SERVER: 127.0.0.53#53(127.0.0.53)
-  (UDP)` is one string in jc and three keys in jz (`server`,
-  `server_name`, `protocol`). Both carry the information.
-- A converted value. jz turns `Use% 7%` into `7`, `TIME 00:02:57` into
-  `177` seconds and a timestamp with an offset into RFC 3339, so the
-  original spelling is not in the output. jc keeps more of them as
-  printed.
-- A legend read as data. `systemctl list-units` closes with a legend
-  explaining LOAD, ACTIVE and SUB; jc returns those lines as units, jz
-  names them in `input.ignore` and returns the one unit the listing had.
-- Several replies. `dig a.com A b.com MX` is two replies; jz reads both
-  under one banner, jc reads both, and a text made of two whole dig runs
-  pasted together is refused by jz because a run has one banner.
+- A rounded number. `df -h` prints `13G`; jc reports `13958643712` and jz reports `"13G"`. The command rounded the value and did not record what it rounded, so the exact figure is not in the text; two rows whose sizes both round to `13G` come back from jc as the same number.
+- A value made of parts. dig's `;; SERVER: 127.0.0.53#53(127.0.0.53) (UDP)` is one string in jc and three keys in jz (`server`, `server_name`, `protocol`). Both carry the information.
+- A converted value. jz turns `Use% 7%` into `7`, `TIME 00:02:57` into `177` seconds and a timestamp with an offset into RFC 3339, so the original spelling is not in the output. jc keeps more of them as printed.
+- A legend read as data. `systemctl list-units` closes with a legend explaining LOAD, ACTIVE and SUB; jc returns those lines as units, jz names them in `input.ignore` and returns the one unit the listing had.
+- Several replies. `dig a.com A b.com MX` is two replies; jz reads both under one banner, jc reads both, and a text made of two whole dig runs pasted together is refused by jz because a run has one banner.
 
-Formats jc reads that jz does not, and which stay out of scope for now:
-shell and string values (`jwt`, `url`, `semver`, `path`, `timestamp`,
-`email_address`), structured file formats that already have readers
-everywhere (`xml`, `toml`, `plist`, `x509_*`; jz reads `yaml`, `json`,
-`csv` and `jsonl` files as data, by extension), and a set of
-commands with no definition here yet (`traceroute`, `iptables`,
-`iwconfig`, `dmidecode`, `mdadm`, `ntpq`, `find`, `finger`,
-`tune2fs`, `ufw`, `zpool status`, `zpool iostat`, `net user`, `net localgroup`, `dir`). The
-string and file formats are a different job from reading what a command
-printed: a JWT or a URL is not a command's output, and an XML or TOML
-reader is the tool for a file that already has a grammar. Adding them would make the count of formats larger without
-making the thing jz is for any better, which is why they are listed here
-rather than written.
+Formats jc reads that jz does not, and which stay out of scope for now: shell and string values (`jwt`, `url`, `semver`, `path`, `timestamp`, `email_address`), structured file formats that already have readers everywhere (`xml`, `toml`, `plist`, `x509_*`; jz reads `yaml`, `json`, `csv` and `jsonl` files as data, by extension), and a set of commands with no definition here yet (`traceroute`, `iptables`, `iwconfig`, `dmidecode`, `mdadm`, `ntpq`, `find`, `finger`, `tune2fs`, `ufw`, `zpool status`, `zpool iostat`, `net user`, `net localgroup`, `dir`). The string and file formats are a different job from reading what a command printed: a JWT or a URL is not a command's output, and an XML or TOML reader is the tool for a file that already has a grammar. Adding them would make the count of formats larger without making the thing jz is for any better, which is why they are listed here rather than written.
 
 ### Use cases from jc's articles
 

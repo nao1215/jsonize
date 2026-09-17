@@ -209,10 +209,7 @@ and 2025; other display languages and code pages are not checked.
 
 ## Compared with jc and jo
 
-[jc](https://github.com/kellyjonbrazil/jc) converts command output, file
-formats and strings, and [jo](https://github.com/jpmens/jo) builds JSON
-from arguments. jz overlaps with part of each. Both are older, packaged
-by the major distributions, and the better choice for some jobs.
+[jc](https://github.com/kellyjonbrazil/jc) converts command output, file formats and strings, and [jo](https://github.com/jpmens/jo) builds JSON from arguments. jz overlaps with part of each. Both are older, packaged by the major distributions, and the better choice for some jobs.
 
 | | jc 1.25.7 | jo 1.9 | jz v0.7.0 |
 |---|---|---|---|
@@ -227,32 +224,19 @@ by the major distributions, and the better choice for some jobs.
 | Library | Python | no | Go |
 | Runtime | Python 3.6+ and three packages, or a prebuilt binary | one C binary, 39 KB stripped | one static Go binary, 15 MB stripped |
 
-Measured on one machine and pinned to one core, jc read `df -h`, a
-100,000-row `ps aux` and a whole CSV faster than jz and with less memory.
-With all 32 threads jz was faster on the first two, using more CPU time
-than jc. Streaming a CSV, jz was faster and held less memory in both
-settings. jo built an object in about a third of the time `jz new` took on all
-cores, and in about half pinned to one.
-The [comparison page](https://nao1215.github.io/jsonize/compare/) has the
-full tables, the measurements and how to repeat them.
+Measured on one machine and pinned to one core, jc read `df -h`, a 100,000-row `ps aux` and a whole CSV faster than jz and with less memory. With all 32 threads jz was faster on the first two, using more CPU time than jc. Streaming a CSV, jz was faster and held less memory in both settings. jo built an object in about a third of the time `jz new` took on all cores, and in about half pinned to one. The [comparison page](https://nao1215.github.io/jsonize/compare/) has the full tables, the measurements and how to repeat them.
 
 ## What jsonize does not do
 
 - It does not query, sort, aggregate, or reshape JSON. Use `jq` for that.
-- It does not replace a command's native JSON output. Prefer native
-  output when available.
-- It does not parse arbitrary free-form text. Input must match a known
-  or explicitly defined format.
-- It does not guess when input is ambiguous. Specify `--parser`, or
-  conversion fails.
+- It does not replace a command's native JSON output. Prefer native output when available.
+- It does not parse arbitrary free-form text. Input must match a known or explicitly defined format.
+- It does not guess when input is ambiguous. Specify `--parser`, or conversion fails.
 - It does not silently discard input that it cannot parse.
-- It does not fetch parser definitions or access the network during
-  conversion.
-- It does not invoke a shell for `jz run`; shell syntax is interpreted
-  only when you explicitly run a shell.
+- It does not fetch parser definitions or access the network during conversion.
+- It does not invoke a shell for `jz run`; shell syntax is interpreted only when you explicitly run a shell.
 
-Lines a definition names as not data, such as headings, `total` lines and
-comments, are left out without a message; `--explain` counts them.
+Lines a definition names as not data, such as headings, `total` lines and comments, are left out without a message; `--explain` counts them.
 
 ## Adding a parser
 
