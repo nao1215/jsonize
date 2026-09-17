@@ -79,6 +79,7 @@ the [install page](install/).
 - [Cookbook](cookbook/): copyable recipes by task, each run by the test suite.
 - [Usage](usage/): every source of JSON, every option, streams and the exit codes.
 - [Parsers](parsers/): the commands and variants jz reads, with their JSON Schemas.
+- [Compared with jc and jo](compare/): what each of the three does, and timings on the same input.
 - [Write a parser](write-a-parser/): add a definition for a command jz does not know.
 - [Definition format](definition-format/): the reference for the YAML.
 - [Design](design/): why jz refuses rather than guesses.

@@ -271,6 +271,10 @@ which colon is the separator.
 
 ## Compared with jc
 
+This section compares what the two read. The options, the other
+differences and timings, together with jo, are on
+[Compared with jc and jo](../compare/).
+
 [jc](https://github.com/kellyjonbrazil/jc) converts many of the same
 commands, so it is a second opinion on what a text holds. The comparison
 below was made against jc 1.25.7 (git 8290734, MIT licence). No jc
