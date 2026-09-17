@@ -81,64 +81,20 @@ jo's guess saves writing `:=`. A value that looks like a number loses its spelli
 
 ## Benchmarks
 
-These are the timings of one process per call, measured with `scripts/compare_bench.sh`. They measure time, CPU time and peak memory only, not whether the JSON is correct.
+These are the timings of one process per call, measured with [himorime](https://github.com/nao1215/himorime) from `bench/compare/himorime.yaml` and written into this page by `make bench-docs`. They measure time, CPU time and peak memory only, not whether the JSON is correct.
 
-### Environment
+jz is built as the release is built (`CGO_ENABLED=0`, `-trimpath`, `-ldflags "-s -w"`) from the commit named under the tables. jc 1.25.7 is installed from PyPI; its prebuilt binaries were not measured. jo 1.9 is built with meson and stripped.
 
-- AMD Ryzen AI Max+ 395 (16 cores, 32 threads), Ubuntu 26.04.1, Linux 7.0
-- hyperfine 1.20.0, 3 warm-up runs and 60 measured runs each, no shell
-- jc 1.25.7 from PyPI in a virtual environment on CPython 3.12.12; jc's prebuilt binaries were not measured
-- jo 1.9 built with meson and GCC 15.2, stripped
-- jz v0.7.1 built with Go 1.26.6, as the release is built (`CGO_ENABLED=0`, `-trimpath`, `-ldflags "-s -w"`), from the code the release was made from (the release commit changes only documentation)
+The `df -h` and `ps aux` input is captured on the machine that runs the suite, and `ps aux` is repeated to 100,000 rows. The CSV has 100,000 generated rows, a third of them with a quoted field that holds a comma. Before measuring, a setup step checks that both tools return the same number of records, and that `jz new` and jo build the same JSON.
 
-The `df -h` and `ps aux` input was captured on the same machine. `ps aux` was repeated to 100,000 rows. The CSV has 100,000 generated rows. Before timing, the script checks that both tools returned the same number of records.
+jz has three ways to read command output, and they cost different amounts. Detecting the format (`COMMAND | jz`, `jz-detected` below) reads all built-in definitions, because any of them could fit the text. Naming the parser (`--parser NAME`, `jz-parser`) and running the command (`jz run COMMAND`) read only the definitions that answer to that name. jc always reads only the parser it is given.
 
-jz has three ways to read command output, and they cost different amounts. Detecting the format (`COMMAND | jz`) reads all 737 built-in definitions, because any of them could fit the text. Naming the parser (`--parser NAME`) and running the command (`jz run COMMAND`) read only the definitions that answer to that name. jc always reads only the parser it is given.
+jz loads its definitions and reads large input on several threads, and jc runs on one. Each case is measured twice: with every core available, and pinned to one core with `taskset -c 0` (the rows ending in "one core"). The pinned figure is closer to what a machine or container limited to one core sees. Starting `taskset` is part of the pinned figures, which is most of the pinned time of jo and `jz new`.
 
-jz loads its definitions and reads large input on several threads, and jc runs on one. Each case was run twice: with every core available, and pinned to one core with `taskset -c 0`. The pinned figure is closer to what a machine or container limited to one core sees. Starting `taskset` adds a fraction of a millisecond, which is most of the pinned figure for jo and `jz new`.
+In the tables, Relative is a command's median time divided by that of the jz command its case compares against: `jz-parser` for command output, and the only jz command otherwise. CPU time is user plus system time. Peak RSS is the largest resident set size of the process.
 
-### Time
-
-CPU time is user plus system time.
-
-| Input | Command | All cores | CPU time, all cores | One core |
-|---|---|---|---|---|
-| `df -h`, 11 rows | `jz` (detected) | 31.7 ms ± 1.9 | 186 ms | 57.2 ms ± 4.2 |
-| | `jz --parser df` | 5.6 ms ± 0.4 | 8 ms | 5.1 ms ± 0.8 |
-| | `jc --df` | 39.2 ms ± 4.3 | 39 ms | 34.0 ms ± 0.8 |
-| running `df -h` | `jz run df -h` | 5.9 ms ± 0.5 | 8 ms | 5.9 ms ± 0.5 |
-| | `jc df -h` | 74.1 ms ± 4.5 | 74 ms | 67.2 ms ± 1.8 |
-| `ps aux`, 100,000 rows | `jz` (detected) | 206.8 ms ± 7.1 | 472 ms | 277.3 ms ± 22.9 |
-| | `jz --parser ps` | 175.6 ms ± 6.0 | 261 ms | 205.1 ms ± 5.1 |
-| | `jc --ps` | 454.0 ms ± 9.0 | 454 ms | 442.7 ms ± 5.1 |
-| CSV, 100,000 rows | `jz --format csv` | 91.7 ms ± 4.0 | 133 ms | 113.2 ms ± 2.1 |
-| | `jc --csv` | 156.9 ms ± 6.9 | 157 ms | 153.5 ms ± 2.8 |
-| CSV, 100,000 rows, streamed | `jz --format csv --stream` | 112.6 ms ± 5.1 | 136 ms | 111.0 ms ± 1.8 |
-| | `jc --csv-s` | 271.0 ms ± 6.9 | 271 ms | 280.0 ms ± 31.0 |
-| object of five values | `jz new` | 1.1 ms ± 0.2 | 1.2 ms | 0.9 ms ± 0.1 |
-| | `jo` | 0.3 ms ± 0.0 | 0.3 ms | 0.6 ms ± 0.1 |
-| nested object | `jz new --path` | 1.2 ms ± 0.1 | 1.2 ms | 1.4 ms ± 0.6 |
-| | `jo -d.` | 0.4 ms ± 0.1 | 0.3 ms | 0.7 ms ± 0.1 |
-
-### Peak memory
-
-Maximum resident set size from GNU time, the median of five runs:
-
-| Input | Command | All cores | One core |
-|---|---|---|---|
-| `df -h` | `jz` (detected) | 30.8 MiB | 30.9 MiB |
-| | `jz --parser df` | 14.9 MiB | 14.1 MiB |
-| | `jc --df` | 20.9 MiB | 21.4 MiB |
-| `ps aux`, 100,000 rows | `jz` (detected) | 222.3 MiB | 236.1 MiB |
-| | `jc --ps` | 220.5 MiB | 221.8 MiB |
-| CSV, 100,000 rows | `jz --format csv` | 66.9 MiB | 82.1 MiB |
-| | `jc --csv` | 90.5 MiB | 90.6 MiB |
-| CSV, 100,000 rows, streamed | `jz --format csv --stream` | 10.9 MiB | 10.4 MiB |
-| | `jc --csv-s` | 20.2 MiB | 20.2 MiB |
-| object of five values | `jz new` | 5.1 MiB | 4.8 MiB |
-| | `jo` | 1.9 MiB | 1.9 MiB |
-
-Repeated runs of the script moved the jz figures for the 100,000-row inputs by up to about 20 MiB, so a difference of a few MiB, as for `ps aux`, is within that variation.
+<!-- himorime:begin benchmarks -->
+<!-- himorime:end benchmarks -->
 
 ### Reading the figures
 

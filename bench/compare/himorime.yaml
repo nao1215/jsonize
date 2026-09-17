@@ -18,6 +18,14 @@ build:
   cwd: ../..
   env: {CGO_ENABLED: "0"}
 
+report:
+  versions:
+    go: [go, version]
+    jc: [jc, -v]
+    jo: [jo, -v]
+    jq: [jq, --version]
+    taskset: [taskset, --version]
+
 defaults:
   warmup: 3
   runs: 30
@@ -26,6 +34,21 @@ defaults:
     memory: true
 
 benchmarks:
+  - name: start-up
+    description: Printing the version, which reads no input.
+    baseline: jz
+    commands:
+      jz: {command: ["${artifact}", version]}
+      jc: {command: [jc, -v]}
+      jo: {command: [jo, -v]}
+
+  - name: start-up, one core
+    baseline: jz
+    commands:
+      jz: {command: [taskset, -c, "0", "${artifact}", version]}
+      jc: {command: [taskset, -c, "0", jc, -v]}
+      jo: {command: [taskset, -c, "0", jo, -v]}
+
   - name: df -h
     description: The df -h report of this machine, from standard input.
     setup: &df-setup
