@@ -207,6 +207,37 @@ what Windows commands print. `ipconfig`, `ipconfig /all` and
 `systeminfo` are read, and CI runs them on English Windows Server 2022
 and 2025; other display languages and code pages are not checked.
 
+## Compared with jc and jo
+
+[jc](https://github.com/kellyjonbrazil/jc) converts command output, file formats and strings, and [jo](https://github.com/jpmens/jo) builds JSON from arguments. jz overlaps with part of each. Both are older, packaged by the major distributions, and the better choice for some jobs.
+
+| | jc 1.25.7 | jo 1.9 | jz v0.7.0 |
+|---|---|---|---|
+| Command output | 236 parsers in all, 19 of them streaming; named, or taken from the command name | no | 737 definitions under 270 names; detected from the text, generic formats need `--parser` |
+| Commands only one of jc and jz reads | `traceroute`, `iptables`, `dmidecode`, `wg`, `ufw`, `pacman`, ... | no | `systemd-*` tools, `lsfd`, `lsns`, `journalctl`, `sar`, `docker`, ... |
+| File formats | CSV, TSV, INI, YAML, TOML, XML, plist, X.509, ... | no | CSV, TSV, LTSV, JSON, JSON Lines, YAML; INI with `--parser` |
+| Strings (URL, JWT, IP address, timestamp, ...) | yes | no | no |
+| JSON from arguments | no | yes; value types are guessed | `jz new`; `=` is a string, `:=` is JSON |
+| Input that does not fit | many parsers return an empty or partial result with status 0, others exit 100 | not applicable | refused with exit status 3 or 4 |
+| Adding a parser | Python plugin | not applicable | YAML definition, checked by `jz test` |
+| Output | JSON or YAML | JSON | JSON |
+| Library | Python | no | Go |
+| Runtime | Python 3.6+ and three packages, or a prebuilt binary | one C binary, 39 KB stripped | one static Go binary, 15 MB stripped |
+
+Measured on one machine and pinned to one core, jc read `df -h`, a 100,000-row `ps aux` and a whole CSV faster than jz and with less memory. With all 32 threads jz was faster on the first two, using more CPU time than jc. Streaming a CSV, jz was faster and held less memory in both settings. jo built an object in about a third of the time `jz new` took on all cores, and in about half pinned to one. The [comparison page](https://nao1215.github.io/jsonize/compare/) has the full tables, the measurements and how to repeat them.
+
+## What jsonize does not do
+
+- It does not query, sort, aggregate, or reshape JSON. Use `jq` for that.
+- It does not replace a command's native JSON output. Prefer native output when available.
+- It does not parse arbitrary free-form text. Input must match a known or explicitly defined format.
+- It does not guess when input is ambiguous. Specify `--parser`, or conversion fails.
+- It does not silently discard input that it cannot parse.
+- It does not fetch parser definitions or access the network during conversion.
+- It does not invoke a shell for `jz run`; shell syntax is interpreted only when you explicitly run a shell.
+
+Lines a definition names as not data, such as headings, `total` lines and comments, are left out without a message; `--explain` counts them.
+
 ## Adding a parser
 
 Add a YAML definition, a captured `.txt` fixture and its `.yaml` capture

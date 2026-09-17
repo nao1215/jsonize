@@ -55,6 +55,11 @@ pageRef = "/coverage"
 weight = 35
 
 [[menus.main]]
+name = "Compared"
+pageRef = "/compare"
+weight = 37
+
+[[menus.main]]
 name = "Design"
 pageRef = "/design"
 weight = 60
