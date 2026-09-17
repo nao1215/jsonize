@@ -10,6 +10,10 @@
 #
 #   JZ=./jz JC=/path/to/jc JO=/path/to/jo scripts/compare_bench.sh [OUTDIR]
 #
+# Command output is timed three ways where jz has them: detected from
+# the text, with the parser named, and with jz running the command, since
+# a named parser reads only its own definitions and detection reads all.
+#
 # The inputs are made on the spot: `df -h` and `ps aux` as this machine
 # prints them, `ps aux` repeated to 100 000 rows, and a generated CSV of
 # 100 000 rows. Before timing, the record counts of both tools are checked
@@ -57,6 +61,7 @@ same() {
 }
 
 same df "$JZ < df.txt" "$JC --df < df.txt"
+same run-df "$JZ run df -h" "$JC df -h"
 same ps-100k "$JZ < ps-100k.txt" "$JC --ps < ps-100k.txt"
 same csv-100k "$JZ --format csv < data-100k.csv" "$JC --csv < data-100k.csv"
 same csv-100k-stream "$JZ --format csv --stream < data-100k.csv" "$JC --csv-s < data-100k.csv"
@@ -99,7 +104,10 @@ hf() {
 hf df.txt "jz (detected)" "$JZ"
 hf df.txt "jz --parser df" "$JZ --parser df"
 hf df.txt "jc --df" "$JC --df"
+hf - "jz run df -h" "$JZ run df -h"
+hf - "jc df -h" "$JC df -h"
 hf ps-100k.txt "jz (detected)" "$JZ"
+hf ps-100k.txt "jz --parser ps" "$JZ --parser ps"
 hf ps-100k.txt "jc --ps" "$JC --ps"
 hf data-100k.csv "jz --format csv" "$JZ --format csv"
 hf data-100k.csv "jc --csv" "$JC --csv"
@@ -135,6 +143,7 @@ rss() {
 }
 
 rss df.txt "jz (detected)" "$JZ"
+rss df.txt "jz --parser df" "$JZ --parser df"
 rss df.txt "jc --df" "$JC --df"
 rss ps-100k.txt "jz (detected)" "$JZ"
 rss ps-100k.txt "jc --ps" "$JC --ps"

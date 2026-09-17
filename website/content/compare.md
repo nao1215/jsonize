@@ -10,7 +10,7 @@ The versions compared are jc 1.25.7 (released 2026-06-18, MIT licence), jo 1.9 (
 
 ## In short
 
-- Use jc when you need a Python library, the Ansible filter, YAML output, line slicing, or input jz does not read: XML, TOML, plist and X.509 files; strings such as URLs, JWTs, timestamps and IP addresses; commands jz has no definition for, such as `traceroute`, `iptables`, `dmidecode`, `wg`, `ufw`, `acpi`, `mdadm`, `ntpq`, `pacman`, `find`, `finger` and `zpool status`; and more `/proc` files. Pinned to one core, jc also read a `df -h` report, a large `ps aux` table and a whole CSV faster than jz in the benchmarks below (only slightly for `ps aux`), and held less memory.
+- Use jc when you need a Python library, the Ansible filter, YAML output, line slicing, or input jz does not read: XML, TOML, plist and X.509 files; strings such as URLs, JWTs, timestamps and IP addresses; commands jz has no definition for, such as `traceroute`, `iptables`, `dmidecode`, `wg`, `ufw`, `acpi`, `mdadm`, `ntpq`, `pacman`, `find`, `finger` and `zpool status`; and more `/proc` files. When jz has to detect the format of a short output, jc was faster on one core and held less memory in the benchmarks below.
 - Use jo when you need the smallest and fastest program for building JSON, type guessing (`n=1` becomes a number and `a=$(jo b=1)` nests an object without extra syntax), base64 file contents, or adding keys to an existing JSON document.
 - Use jz when you want the format detected from the text instead of named, input that does not fit refused rather than read partly, parsers defined in YAML without code, or command output, data files and argument-built JSON from one binary.
 
@@ -89,9 +89,11 @@ These are the timings of one process per call, measured with `scripts/compare_be
 - hyperfine 1.20.0, 3 warm-up runs and 60 measured runs each, no shell
 - jc 1.25.7 from PyPI in a virtual environment on CPython 3.12.12; jc's prebuilt binaries were not measured
 - jo 1.9 built with meson and GCC 15.2, stripped
-- jz v0.7.0 built with Go 1.26.6 as the release is built (`CGO_ENABLED=0`, `-trimpath`, `-ldflags "-s -w"`)
+- jz built from the main branch after v0.7.0 with Go 1.26.6, as the release is built (`CGO_ENABLED=0`, `-trimpath`, `-ldflags "-s -w"`). It includes performance changes that are not in a release yet and are listed under Unreleased in the changelog: a named parser reads only its own definitions, and csv and wide tables are read with fewer allocations. The feature tables above describe v0.7.0, which these changes do not alter.
 
 The `df -h` and `ps aux` input was captured on the same machine. `ps aux` was repeated to 100,000 rows. The CSV has 100,000 generated rows. Before timing, the script checks that both tools returned the same number of records.
+
+jz has three ways to read command output, and they cost different amounts. Detecting the format (`COMMAND | jz`) reads all 737 built-in definitions, because any of them could fit the text. Naming the parser (`--parser NAME`) and running the command (`jz run COMMAND`) read only the definitions that answer to that name. jc always reads only the parser it is given.
 
 jz loads its definitions and reads large input on several threads, and jc runs on one. Each case was run twice: with every core available, and pinned to one core with `taskset -c 0`. The pinned figure is closer to what a machine or container limited to one core sees. Starting `taskset` adds a fraction of a millisecond, which is most of the pinned figure for jo and `jz new`.
 
@@ -101,19 +103,22 @@ CPU time is user plus system time.
 
 | Input | Command | All cores | CPU time, all cores | One core |
 |---|---|---|---|---|
-| `df -h`, 11 rows | `jz` (detected) | 31.1 ms ± 2.2 | 180 ms | 56.0 ms ± 1.5 |
-| | `jz --parser df` | 19.0 ms ± 0.7 | 146 ms | 42.9 ms ± 1.2 |
-| | `jc --df` | 39.0 ms ± 4.6 | 39 ms | 37.5 ms ± 3.4 |
-| `ps aux`, 100,000 rows | `jz` (detected) | 368.2 ms ± 11.3 | 870 ms | 473.7 ms ± 12.5 |
-| | `jc --ps` | 464.1 ms ± 8.3 | 464 ms | 460.8 ms ± 5.7 |
-| CSV, 100,000 rows | `jz --format csv` | 155.9 ms ± 6.5 | 351 ms | 214.0 ms ± 5.8 |
-| | `jc --csv` | 159.0 ms ± 6.7 | 159 ms | 151.6 ms ± 1.8 |
-| CSV, 100,000 rows, streamed | `jz --format csv --stream` | 158.9 ms ± 15.9 | 239 ms | 139.6 ms ± 3.5 |
-| | `jc --csv-s` | 270.8 ms ± 10.2 | 271 ms | 270.8 ms ± 20.5 |
-| object of five values | `jz new` | 1.1 ms ± 0.2 | 1.1 ms | 0.9 ms ± 0.1 |
-| | `jo` | 0.3 ms ± 0.1 | 0.2 ms | 0.5 ms ± 0.2 |
-| nested object | `jz new --path` | 1.0 ms ± 0.2 | 1.1 ms | 0.9 ms ± 0.1 |
-| | `jo -d.` | 0.4 ms ± 0.1 | 0.3 ms | 0.6 ms ± 0.1 |
+| `df -h`, 11 rows | `jz` (detected) | 31.7 ms ± 1.9 | 186 ms | 57.2 ms ± 4.2 |
+| | `jz --parser df` | 5.6 ms ± 0.4 | 8 ms | 5.1 ms ± 0.8 |
+| | `jc --df` | 39.2 ms ± 4.3 | 39 ms | 34.0 ms ± 0.8 |
+| running `df -h` | `jz run df -h` | 5.9 ms ± 0.5 | 8 ms | 5.9 ms ± 0.5 |
+| | `jc df -h` | 74.1 ms ± 4.5 | 74 ms | 67.2 ms ± 1.8 |
+| `ps aux`, 100,000 rows | `jz` (detected) | 206.8 ms ± 7.1 | 472 ms | 277.3 ms ± 22.9 |
+| | `jz --parser ps` | 175.6 ms ± 6.0 | 261 ms | 205.1 ms ± 5.1 |
+| | `jc --ps` | 454.0 ms ± 9.0 | 454 ms | 442.7 ms ± 5.1 |
+| CSV, 100,000 rows | `jz --format csv` | 91.7 ms ± 4.0 | 133 ms | 113.2 ms ± 2.1 |
+| | `jc --csv` | 156.9 ms ± 6.9 | 157 ms | 153.5 ms ± 2.8 |
+| CSV, 100,000 rows, streamed | `jz --format csv --stream` | 112.6 ms ± 5.1 | 136 ms | 111.0 ms ± 1.8 |
+| | `jc --csv-s` | 271.0 ms ± 6.9 | 271 ms | 280.0 ms ± 31.0 |
+| object of five values | `jz new` | 1.1 ms ± 0.2 | 1.2 ms | 0.9 ms ± 0.1 |
+| | `jo` | 0.3 ms ± 0.0 | 0.3 ms | 0.6 ms ± 0.1 |
+| nested object | `jz new --path` | 1.2 ms ± 0.1 | 1.2 ms | 1.4 ms ± 0.6 |
+| | `jo -d.` | 0.4 ms ± 0.1 | 0.3 ms | 0.7 ms ± 0.1 |
 
 ### Peak memory
 
@@ -121,24 +126,25 @@ Maximum resident set size from GNU time, the median of five runs:
 
 | Input | Command | All cores | One core |
 |---|---|---|---|
-| `df -h` | `jz` (detected) | 29.9 MiB | 30.3 MiB |
-| | `jc --df` | 21.3 MiB | 21.3 MiB |
-| `ps aux`, 100,000 rows | `jz` (detected) | 339.4 MiB | 372.0 MiB |
-| | `jc --ps` | 237.0 MiB | 238.1 MiB |
-| CSV, 100,000 rows | `jz --format csv` | 94.3 MiB | 109.3 MiB |
-| | `jc --csv` | 90.3 MiB | 90.5 MiB |
-| CSV, 100,000 rows, streamed | `jz --format csv --stream` | 12.4 MiB | 10.0 MiB |
-| | `jc --csv-s` | 19.9 MiB | 20.2 MiB |
-| object of five values | `jz new` | 5.0 MiB | 4.8 MiB |
+| `df -h` | `jz` (detected) | 30.8 MiB | 30.9 MiB |
+| | `jz --parser df` | 14.9 MiB | 14.1 MiB |
+| | `jc --df` | 20.9 MiB | 21.4 MiB |
+| `ps aux`, 100,000 rows | `jz` (detected) | 222.3 MiB | 236.1 MiB |
+| | `jc --ps` | 220.5 MiB | 221.8 MiB |
+| CSV, 100,000 rows | `jz --format csv` | 66.9 MiB | 82.1 MiB |
+| | `jc --csv` | 90.5 MiB | 90.6 MiB |
+| CSV, 100,000 rows, streamed | `jz --format csv --stream` | 10.9 MiB | 10.4 MiB |
+| | `jc --csv-s` | 20.2 MiB | 20.2 MiB |
+| object of five values | `jz new` | 5.1 MiB | 4.8 MiB |
 | | `jo` | 1.9 MiB | 1.9 MiB |
 
-Repeated runs of the script moved the jz figures for the 100,000-row inputs by up to about 20 MiB, so a difference of a few MiB, as for the whole CSV on all cores, is within that variation.
+Repeated runs of the script moved the jz figures for the 100,000-row inputs by up to about 20 MiB, so a difference of a few MiB, as for `ps aux`, is within that variation.
 
 ### Reading the figures
 
-- Pinned to one core, jc was faster than jz for `df -h` and a whole CSV, and slightly faster for `ps aux`. With all 32 threads, jz was faster for `df -h` and `ps aux` and took about the same time for a whole CSV, because it spreads the work over the threads. In each of these cases jz used more CPU time than jc.
-- jz held more memory than jc for `df -h` and `ps aux`, more still for `ps aux` when pinned to one core, about the same for a whole CSV on all cores, and more for it on one core.
-- Streaming a CSV, jz was faster than jc on both core settings and held less memory.
-- Most of jz's time on short input is loading its definitions, about 16 ms on this machine in the `LoadEmbedded` Go benchmark. Detecting the format from the text adds about 12 ms over naming the parser. jc loads only the parser it is given.
+- With the parser named, or with jz running the command, jz read a short `df -h` report in about 5 to 6 ms and jc in 34 to 74 ms. Pinned to one core, `jc -v`, which reads no input, took 30.9 ms on the same machine, so most of jc's time there is starting Python and loading jc.
+- When jz detects the format of a short output, jc was faster on one core (34.0 ms against 57.2 ms) and held less memory (21 MiB against 31 MiB). On all 32 threads jz was slightly faster, using almost five times the CPU time. Detection reads every built-in definition, which costs about 16 ms on this machine in the `LoadEmbedded` Go benchmark, and then compiles the signatures it checks.
+- On 100,000 rows of `ps aux` and on a whole CSV, jz was faster than jc on both core settings, detected or named. It held about the same memory as jc for `ps aux` and less for the CSV.
+- Streaming a CSV, jz was faster than jc on both core settings and held about half the memory.
 - jo was about three times as fast as `jz new` on all cores, 1.5 to 2 times as fast pinned to one core, and held less memory. Both finish in about a millisecond, so the difference matters when a script starts the program thousands of times.
 - These results come from one machine and one run of the script, and jc's figures depend on the Python version. Run `RUNS=60 JZ=... JC=... JO=... scripts/compare_bench.sh` to measure another machine.

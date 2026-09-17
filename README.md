@@ -224,7 +224,7 @@ and 2025; other display languages and code pages are not checked.
 | Library | Python | no | Go |
 | Runtime | Python 3.6+ and three packages, or a prebuilt binary | one C binary, 39 KB stripped | one static Go binary, 15 MB stripped |
 
-Measured on one machine and pinned to one core, jc read `df -h`, a 100,000-row `ps aux` and a whole CSV faster than jz and with less memory. With all 32 threads jz was faster on the first two, using more CPU time than jc. Streaming a CSV, jz was faster and held less memory in both settings. jo built an object in about a third of the time `jz new` took on all cores, and in about half pinned to one. The [comparison page](https://nao1215.github.io/jsonize/compare/) has the full tables, the measurements and how to repeat them.
+Measured on one machine with jz built from main after v0.7.0: with the parser named or with `jz run`, jz read a short `df -h` report in about 5 ms and jc in 34 to 74 ms. When jz detects the format of a short output, jc was faster on one core (34 ms against 57 ms) and held less memory. On 100,000 rows of `ps aux` and on a CSV, jz was faster on both core settings. jo built an object in about a third of the time `jz new` took on all cores, and in about half pinned to one. The [comparison page](https://nao1215.github.io/jsonize/compare/) has the full tables, the measurements and how to repeat them.
 
 ## What jsonize does not do
 
