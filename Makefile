@@ -76,6 +76,10 @@ bench: ## Measure jz with the himorime suite in bench/ (requires himorime on PAT
 bench-compare: ## Compare main with the working tree on the himorime suite (BASE=main)
 	himorime compare --against $${BASE:-main} bench
 
+.PHONY: bench-docs
+bench-docs: ## Measure jz against jc and jo and rewrite the Benchmarks section of website/content/compare.md (needs himorime, jc, jo, jq, taskset)
+	himorime run --format markdown --output website/content/compare.md --section benchmarks bench/compare
+
 .PHONY: e2e
 e2e: build ## Run the atago end-to-end suite (requires atago on PATH)
 	bash ./scripts/run_e2e.sh

@@ -923,3 +923,38 @@ func TestWindowFollowsTheCandidates(t *testing.T) {
 		}
 	}
 }
+
+func FuzzSelect(f *testing.F) {
+	fsys := fstest.MapFS{
+		"parsers/x/a/parser.yaml": {Data: []byte("format: 1\ncommand: x\nvariant: a\ndetect: {os: [linux], signature: {all: ['^A']}}\nparse: {type: kv}\n")},
+		"parsers/x/b/parser.yaml": {Data: []byte("format: 1\ncommand: x\nvariant: b\ndetect: {args: {any: ['-b']}, signature: {none: ['^A'], all: ['B']}}\nparse: {type: kv}\n")},
+		"parsers/y/c/parser.yaml": {Data: []byte("format: 1\ncommand: y\nvariant: c\nparse: {type: kv}\n")},
+	}
+	reg, err := registry.Load(registry.Source{Name: "fuzz", FS: fsys})
+	if err != nil {
+		f.Fatal(err)
+	}
+	f.Add("A\n", "linux", "-b", "x", "a")
+	f.Add("B\n", "", "", "", "")
+	f.Add("\xff\xfe", "darwin", "-bx", "y", "c")
+	f.Add("", "", "", "zzz", "")
+	f.Fuzz(func(t *testing.T, input, goos, arg, parser, variant string) {
+		ctx := Context{Parser: parser, Variant: variant, OS: goos, Args: []string{arg}, Input: []byte(input)}
+		res, err := Select(reg, ctx)
+		switch {
+		case err != nil && res != nil:
+			t.Fatal("both a result and an error")
+		case err == nil && res.Entry == nil:
+			t.Fatal("nil entry without an error")
+		case err == nil && parser != "" && res.Entry.Def.Command != parser:
+			t.Fatalf("--parser %q returned %s", parser, res.Entry.Def.ID())
+		case err == nil && variant != "" && res.Entry.Def.Variant != variant:
+			t.Fatalf("--variant %q returned %s", variant, res.Entry.Def.ID())
+		}
+		// Detection without hints must never pick a definition that has
+		// no signature: it cannot be identified from text.
+		if res, err := Select(reg, Context{Input: []byte(input)}); err == nil && res.Entry.Def.Detect.Signature.IsZero() {
+			t.Fatalf("selected the signature-less %s from text alone", res.Entry.Def.ID())
+		}
+	})
+}
