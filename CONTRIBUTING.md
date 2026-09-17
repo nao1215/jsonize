@@ -72,9 +72,11 @@ the exact form of the command produce numbers.
    A scenario that needs a command the CI image lacks is installed by
    `.github/workflows/e2e.yml`, not gated on the command being there;
    only a scenario that needs a device may skip, in `hardware_linux`.
-5. If a change affects performance, run `make bench` and
-   `make bench-compare`; commit an updated `bench/baseline.txt` only when
-   the change is intentional.
+5. If a change affects performance, run `make bench-compare`, which
+   measures main and your working tree with
+   [himorime](https://github.com/nao1215/himorime) (`go install
+   github.com/nao1215/himorime@latest`). CI runs the same comparison on
+   every pull request; see `bench/README.md`.
 6. Write commit messages in the Conventional Commits style
    (`feat:`, `fix:`, `parser:`, `docs:`, `test:`, `chore:`).
 

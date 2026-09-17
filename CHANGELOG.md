@@ -4,6 +4,12 @@ All notable changes to this project are documented here. The format is
 based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the
 project follows [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Changed
+
+- Benchmarks measure whole runs of jz with [himorime](https://github.com/nao1215/himorime) from `bench/himorime.yaml`: start-up, format detection, 100 000-row tables, csv and JSON Lines files, `--stream` and `jz new`, for latency, CPU time, peak RSS and throughput. A pull request is compared with its base on the same runner and fails on a confident regression. `make bench` and `make bench-compare` run the suite; the benchstat comparison and `bench/baseline.txt` are gone.
+
 ## [0.7.1]
 
 A performance release with no change to what jz reads or writes. `jz run COMMAND` and `--parser NAME` read only the definitions that answer to the name, so a short conversion with a named parser takes about a tenth of the time it did, and csv files and tables with many columns are read in about half the time with less memory. The documentation site has a page comparing jz with jc and jo, with the benchmark script that produced its figures.

@@ -1,47 +1,45 @@
 # Benchmarks
 
-`baseline.txt` is the reference `go test -bench` output committed with the
-code. It was recorded with:
+`himorime.yaml` measures jz the way a pipeline runs it: one process per
+call, from start to exit. [himorime](https://github.com/nao1215/himorime)
+builds jz, runs each command in interleaved rounds, and reports latency,
+CPU time, peak RSS and, for the large inputs, throughput.
 
-```
-go test -run '^$' -bench . -benchmem -count 3 ./internal/... ./pkg/...
-```
-
-on an AMD Ryzen AI Max+ 395 (32 threads), Linux, Go 1.26. Absolute numbers
-depend on the machine; what matters is the ratio between a new run and
-the baseline on the same machine:
-
-```
-make bench            # writes bench/new.txt (COUNT=6 by default)
-make bench-compare    # benchstat bench/baseline.txt bench/new.txt
+```console
+$ go install github.com/nao1215/himorime@latest
+$ make bench            # himorime run bench
+$ make bench-compare    # himorime compare --against main bench
 ```
 
-Refresh the baseline only for an intentional change, in the same commit,
-with the machine noted here. It is for this machine and no other: a
-comparison against it on another one measures the two machines. CI does
-not use it, and compares a pull request's base against its head, both run
-on the runner that is comparing them. Inputs are synthetic but format-faithful
-(`df`, `mount`, `env` at 10 and 100 000 rows), so results are
-reproducible without external fixtures.
+`make bench-compare` checks main out into a temporary Git worktree, builds
+it and your working tree, and measures both in the same rounds, so a
+background job slows both revisions instead of one. `BASE=v0.3.0 make
+bench-compare` compares against another revision.
 
-| Benchmark | Measures |
-|-----------|----------|
-| `LoadRegistry/definitions=N` | indexing a synthetic registry of N definitions, the cost a jz start that detects the format pays; N is 26, 500 and 1000, so the curve shows how the cost grows with the size of a registry, and the official one, a few hundred definitions (`jz list` names them), falls inside it |
-| `LoadEmbedded` | loading the official registry as it is built into jz, which is what `df -h \| jz` pays before reading any text |
-| `LoadAndValidate`, `ValidateNested` | decoding and validating one definition |
-| `Detect/definitions=N` | `COMMAND \| jz` over the same synthetic sizes: every signature is evaluated because no parser was named |
-| `DetectWithParser`, `DetectWithVariant` | `--parser` and `--variant`, which narrow the scan to one command or one definition |
-| `DetectNoMatch` | the worst case, where every candidate is evaluated and rejected |
-| `DetectLargeInput` | detection over a 1 MB input, to show the cost follows the signature window and not the input size |
-| `ParseTable*`, `ParseRegex*`, `ParseKV*` | the engine on small and large inputs |
-| `EncodeJSON*` | JSON generation (compact and pretty) |
-| `StreamTableLarge` | `--stream` over the input `ParseTableWhitespaceLarge` reads whole, so the two are a pair |
-| `ReadCSV`, `Read/*` | the data formats `--format` and a file's extension name |
-| `PlanBuild*`, `FixedEach` | `jz new`: the arguments read into a plan and built, and the part `--each` does per record |
-| `KeyFilter` | `--extract` and `--exclude`, against no key option at all |
-| `Convert` | one whole run of jz on a short df report, which is what a pipeline pays for each `\| jz` |
-| `ConvertNamed` | the same run with `--parser df`, which reads only the definitions that answer to df, as `jz run df` does |
+On a pull request, `.github/workflows/bench.yml` runs `himorime ci bench`
+the same way, with the base of the pull request as the base, on one
+runner. The job fails when a command is slower, uses more CPU time or more
+memory than the base beyond the tolerance in `himorime.yaml` with 95%
+confidence. A difference too close to call is reported as inconclusive and
+does not fail the job. The comparison is on the job summary page.
 
-Detection is a two-stage design: cheap signature matching over the first
-lines picks exactly one definition, and only that definition then parses
-the whole input. No definition is ever fully applied speculatively.
+The inputs are generated before measuring, so no fixture is committed:
+
+| Benchmark | Commands | Measures |
+|-----------|----------|----------|
+| `version` | `jz version` | starting jz, with no registry loaded |
+| `detect df` | `jz`, `jz --parser df` on a short `df -h` report | detecting the format among every built-in definition, against reading only the definitions of df, which is also what `jz run df` does |
+| `ps table 100k rows` | `jz --parser ps`, the same with `--stream` | a large table read whole and read record by record; peak RSS shows what `--stream` does not hold |
+| `csv 100k rows` | `jz --file users.csv --type age=int`, the same with `--extract` | a data file with a typed column, and key selection |
+| `jsonl 100k records` | `jz --format jsonl`, the same with `--stream` | JSON Lines read as one document and passed through |
+| `jz new` | `jz new` with arguments, `jz new --each` over 100 000 records | building an object from arguments, and attaching fixed values to each record of a stream |
+
+Numbers from different machines are not comparable; compare revisions on
+one machine, as `make bench-compare` and CI do.
+
+The `Benchmark*` functions in the `bench_test.go` files measure single
+functions (registry loading, detection, the engine, JSON encoding) for
+profiling with `go test -bench`. They are not part of the comparison.
+
+`scripts/compare_bench.sh` is a different measurement: jz against jc and jo
+on the same input, for the comparison page of the documentation.

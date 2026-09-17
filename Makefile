@@ -16,7 +16,7 @@ install: ## Install jz into $(go env GOPATH)/bin
 
 .PHONY: clean
 clean: ## Remove build and test artifacts
-	rm -rf dist cover.out cover.html bench/new.txt
+	rm -rf dist cover.out cover.html
 
 .PHONY: fmt
 fmt: ## Format Go code with gofmt
@@ -69,12 +69,12 @@ fuzz: ## Run every fuzz target briefly (FUZZTIME=10s)
 	done
 
 .PHONY: bench
-bench: ## Run benchmarks (COUNT=6) and store the result in bench/new.txt
-	go test -run '^$$' -bench . -benchmem -count $${COUNT:-6} ./internal/... ./pkg/... | tee bench/new.txt
+bench: ## Measure jz with the himorime suite in bench/ (requires himorime on PATH)
+	himorime run bench
 
 .PHONY: bench-compare
-bench-compare: ## Compare bench/new.txt against bench/baseline.txt with benchstat
-	go run golang.org/x/perf/cmd/benchstat@v0.0.0-20260908200009-22c9c6c9d4da bench/baseline.txt bench/new.txt
+bench-compare: ## Compare main with the working tree on the himorime suite (BASE=main)
+	himorime compare --against $${BASE:-main} bench
 
 .PHONY: e2e
 e2e: build ## Run the atago end-to-end suite (requires atago on PATH)
