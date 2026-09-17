@@ -4,7 +4,13 @@ All notable changes to this project are documented here. The format is
 based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the
 project follows [Semantic Versioning](https://semver.org/).
 
-## [Unreleased]
+## [0.7.1]
+
+A performance release with no change to what jz reads or writes. `jz run COMMAND` and `--parser NAME` read only the definitions that answer to the name, so a short conversion with a named parser takes about a tenth of the time it did, and csv files and tables with many columns are read in about half the time with less memory. The documentation site has a page comparing jz with jc and jo, with the benchmark script that produced its figures.
+
+### Added
+
+- A comparison with jc 1.25.7 and jo 1.9 on the documentation site and in the README: what each reads and builds, where each is the better choice, what jsonize does not do, and timings and peak memory measured on all cores and on one core with `scripts/compare_bench.sh`, including the cases where jc or jo is faster.
 
 ### Changed
 

@@ -6,7 +6,7 @@ toc: true
 
 Two established tools cover most of what jz does. [jc](https://github.com/kellyjonbrazil/jc) converts the output of commands, file formats and strings to JSON. [jo](https://github.com/jpmens/jo) builds JSON from shell arguments. jz does a part of each: `COMMAND | jz` overlaps with jc, and `jz new` overlaps with jo. This page lists the differences as they stand and does not rank the tools. Each one is the better choice for some jobs.
 
-The versions compared are jc 1.25.7 (released 2026-06-18, MIT licence), jo 1.9 (released 2022-11-04, GPL-2.0-or-later) and jz v0.7.0 (released 2026-09-17, MIT licence). jc has been developed since 2019 and jo since 2016. jz's first commit was in September 2026. jc and jo are packaged by the major Linux distributions and Homebrew. jz is installed with `go install`, a Homebrew tap, the AUR, or the packages on its release page. No code or fixture from either tool is copied into this repository.
+The versions compared are jc 1.25.7 (released 2026-06-18, MIT licence), jo 1.9 (released 2022-11-04, GPL-2.0-or-later) and jz v0.7.1 (released 2026-09-17, MIT licence). jc has been developed since 2019 and jo since 2016. jz's first commit was in September 2026. jc and jo are packaged by the major Linux distributions and Homebrew. jz is installed with `go install`, a Homebrew tap, the AUR, or the packages on its release page. No code or fixture from either tool is copied into this repository.
 
 ## In short
 
@@ -28,7 +28,7 @@ A definition can still name lines that are not data, such as headings, `total` l
 
 ## Command output: jc and jz
 
-| | jc 1.25.7 | jz v0.7.0 |
+| | jc 1.25.7 | jz v0.7.1 |
 |---|---|---|
 | Choosing the parser | named on every call (`jc --df`), or taken from the command name (`jc df -h`) | detected from the text; `--parser` narrows it, and some generic formats are read only when named |
 | What is read | 236 parsers, 19 of them streaming versions of others: commands, `/proc` files, file formats and strings | 737 definitions under 270 names: commands, plus `/etc` and `/proc` files and the generic `csv`, `ini`, `kv` and `table` layouts; no string parsers |
@@ -52,7 +52,7 @@ The output of the two differs in key names, in which values are converted, and i
 
 ## JSON from arguments: jo and jz new
 
-| | jo 1.9 | jz new (v0.7.0) |
+| | jo 1.9 | jz new (v0.7.1) |
 |---|---|---|
 | Value types | guessed: a number, `true`, `false`, `null`, and a JSON object or array become JSON values; `-s`, `-n`, `-b` force a type per word, and `-B` turns off the `true`/`false`/`null` guess | not guessed: `key=value` is always a string, `key:=json` is always JSON |
 | Nesting the output of another call | `a=$(jo b=1)` | `a:=$(jz new b=1)` |
@@ -89,7 +89,7 @@ These are the timings of one process per call, measured with `scripts/compare_be
 - hyperfine 1.20.0, 3 warm-up runs and 60 measured runs each, no shell
 - jc 1.25.7 from PyPI in a virtual environment on CPython 3.12.12; jc's prebuilt binaries were not measured
 - jo 1.9 built with meson and GCC 15.2, stripped
-- jz built from the main branch after v0.7.0 with Go 1.26.6, as the release is built (`CGO_ENABLED=0`, `-trimpath`, `-ldflags "-s -w"`). It includes performance changes that are not in a release yet and are listed under Unreleased in the changelog: a named parser reads only its own definitions, and csv and wide tables are read with fewer allocations. The feature tables above describe v0.7.0, which these changes do not alter.
+- jz v0.7.1 built with Go 1.26.6, as the release is built (`CGO_ENABLED=0`, `-trimpath`, `-ldflags "-s -w"`), from the code the release was made from (the release commit changes only documentation)
 
 The `df -h` and `ps aux` input was captured on the same machine. `ps aux` was repeated to 100,000 rows. The CSV has 100,000 generated rows. Before timing, the script checks that both tools returned the same number of records.
 
