@@ -33,7 +33,7 @@ jobs:
           go-version-file: go.mod
       - uses: nao1215/setup-himorime@b2896dee554ef31ea979f0388d9be22779ce73a2 # v0.1.1
         with:
-          version: v0.1.2
+          version: v0.2.0
       # The comparison with jc and jo needs those tools and is run by hand
       # (make bench-docs); it must still be a valid suite.
       - name: Validate the comparison suite
