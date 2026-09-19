@@ -46,6 +46,7 @@ import (
 	"unicode/utf8"
 
 	"github.com/nao1215/jsonize/internal/datafile"
+	"github.com/nao1215/jsonize/internal/limits"
 	"github.com/nao1215/jsonize/pkg/engine"
 	"github.com/nao1215/jsonize/pkg/jsonutil"
 )
@@ -137,6 +138,9 @@ type Sources struct {
 	// MaxValues bounds the values one document holds, the files it is made
 	// of together (0 = engine.DefaultMaxValues).
 	MaxValues int
+	// MaxDepth bounds the arrays and objects one document nests, including
+	// the containers its locations make (0 = limits.MaxDepth).
+	MaxDepth int
 }
 
 func (s Sources) maxValues() int {
@@ -144,6 +148,13 @@ func (s Sources) maxValues() int {
 		return engine.DefaultMaxValues
 	}
 	return s.MaxValues
+}
+
+func (s Sources) maxDepth() int {
+	if s.MaxDepth <= 0 {
+		return limits.MaxDepth
+	}
+	return s.MaxDepth
 }
 
 // kind is what an argument's value is made from.
@@ -646,6 +657,9 @@ func (p *Plan) Build(src Sources) (any, error) {
 		if err != nil {
 			return nil, err
 		}
+		if err := checkDepth(pl, v, src.maxDepth()); err != nil {
+			return nil, err
+		}
 		values[i] = v
 		if n += countValues(v, src.maxValues()); n > src.maxValues() {
 			return nil, tooManyValues(src.maxValues())
@@ -685,12 +699,13 @@ type Fixed struct {
 	// counted is the values every document holds before its record's, and
 	// max the most a document may hold.
 	counted, max int
+	depth        int
 }
 
 // Fixed reads the files the plan names, in the order the arguments gave
 // them, and leaves standard input unread.
 func (p *Plan) Fixed(src Sources) (*Fixed, error) {
-	f := &Fixed{plan: p, values: make([]any, len(p.places)), slot: -1, counted: p.root.containers(), max: src.maxValues()}
+	f := &Fixed{plan: p, values: make([]any, len(p.places)), slot: -1, counted: p.root.containers(), max: src.maxValues(), depth: src.maxDepth()}
 	for i, pl := range p.places {
 		if pl.kind >= fileText && pl.text == "-" {
 			f.slot = i
@@ -698,6 +713,9 @@ func (p *Plan) Fixed(src Sources) (*Fixed, error) {
 		}
 		v, err := value(pl, src)
 		if err != nil {
+			return nil, err
+		}
+		if err := checkDepth(pl, v, f.depth); err != nil {
 			return nil, err
 		}
 		f.values[i] = v
@@ -714,6 +732,9 @@ func (p *Plan) Fixed(src Sources) (*Fixed, error) {
 func (f *Fixed) With(v any) (any, error) {
 	values := f.values
 	if f.slot >= 0 {
+		if err := checkDepth(f.plan.places[f.slot], v, f.depth); err != nil {
+			return nil, err
+		}
 		if f.counted+countValues(v, f.max) > f.max {
 			return nil, tooManyValues(f.max)
 		}
@@ -721,6 +742,61 @@ func (f *Fixed) With(v any) (any, error) {
 		values[f.slot] = v
 	}
 	return f.plan.root.make(values), nil
+}
+
+// checkDepth counts the containers a location makes around its value and
+// the containers held by the value itself. A value read from a file is
+// bounded while it is read, but its outer location can still take the
+// completed document past the same bound.
+func checkDepth(pl *placement, v any, limit int) error {
+	outside := len(pl.loc)
+	if outside > limit || valueDepth(v, limit-outside) > limit-outside {
+		return &engine.ParseError{Msg: fmt.Sprintf("the document nests deeper than %d levels", limit)}
+	}
+	return nil
+}
+
+// valueDepth is the greatest number of arrays and objects around a scalar.
+// It stops once past limit because callers only need to know that it is too
+// deep.
+func valueDepth(v any, limit int) int {
+	switch t := v.(type) {
+	case []any:
+		if limit <= 0 {
+			return 1
+		}
+		deepest := 1
+		for _, child := range t {
+			depth := 1 + valueDepth(child, limit-1)
+			if depth > deepest {
+				deepest = depth
+			}
+			if deepest > limit {
+				break
+			}
+		}
+		return deepest
+	case *jsonutil.Object:
+		if t == nil {
+			return 0
+		}
+		if limit <= 0 {
+			return 1
+		}
+		deepest := 1
+		for _, m := range t.Members() {
+			depth := 1 + valueDepth(m.Value, limit-1)
+			if depth > deepest {
+				deepest = depth
+			}
+			if deepest > limit {
+				break
+			}
+		}
+		return deepest
+	default:
+		return 0
+	}
 }
 
 // containers counts the objects and arrays the arguments' locations make
