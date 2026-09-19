@@ -10,6 +10,10 @@ project follows [Semantic Versioning](https://semver.org/).
 
 - Performance is measured only with [himorime](https://github.com/nao1215/himorime). `bench/himorime.yaml` runs jz as a pipeline does, one process per call: start-up, detection with and without a named parser, text no definition reads, registries of 26 to 1000 extra definitions and `--define`, 100 000-row `ps`, `df`, `mount` and `env` output, every data format, csv key selection, `--stream`, `-p` and `jz new`, for latency, CPU time, peak RSS and throughput. A pull request is compared with its base on the same runner and fails on a confident regression. `bench/compare/himorime.yaml` measures jz against jc and jo, and `make bench-docs` rewrites the tables of the comparison page from it. The Go benchmark functions, `bench/baseline.txt`, the benchstat comparison and `scripts/compare_bench.sh` are gone.
 
+### Fixed
+
+- `jz new --path` could build a document nested past the 1000-level limit that the same document read as JSON or YAML refused. The completed document, including containers made by a location and values read from files or `--each`, is now held to that limit with exit 3 and no output.
+
 ## [0.7.1]
 
 A performance release with no change to what jz reads or writes. `jz run COMMAND` and `--parser NAME` read only the definitions that answer to the name, so a short conversion with a named parser takes about a tenth of the time it did, and csv files and tables with many columns are read in about half the time with less memory. The documentation site has a page comparing jz with jc and jo, with the benchmark script that produced its figures.

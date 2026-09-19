@@ -57,6 +57,7 @@ func TestNewFailures(t *testing.T) {
 		// same text in a file is exit 3, and so is this.
 		{"a key given twice inside a JSON value", []string{"new", `a:={"k":1,"k":2}`}, ExitParse, `the value after := cannot be written: the key "k" is given twice in one object`},
 		{"a JSON value that nests too deep", []string{"new", "a:=" + strings.Repeat("[", 1001) + strings.Repeat("]", 1001)}, ExitParse, "the value after := cannot be written: arrays and objects nest deeper than 1000"},
+		{"paths make a document that nests too deep", []string{"new", "--path", strings.Repeat("/a", 1001) + "=x"}, ExitParse, "the document nests deeper than 1000 levels"},
 		{"an option after the arguments", []string{"new", "a=1", "-p"}, ExitUsage, "options come before the arguments"},
 		{"yaml output", []string{"new", "-p", "--yaml"}, ExitUsage, "--yaml was removed"},
 		{"an unknown option", []string{"new", "--stream"}, ExitUsage, "unknown option --stream"},

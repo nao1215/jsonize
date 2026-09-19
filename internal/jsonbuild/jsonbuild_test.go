@@ -662,6 +662,39 @@ func TestDocumentValueLimit(t *testing.T) {
 	}
 }
 
+// A document made by locations has the same nesting limit as a document
+// read from JSON or YAML. The containers a location makes and the value it
+// places count together, including the record placed by --each.
+func TestDocumentDepthLimit(t *testing.T) {
+	t.Parallel()
+	src := files(t, "")
+	src.MaxDepth = 3
+	if v, err := build([]Arg{ptr("/a/b/c=x")}, false, src); err != nil || encode(t, v) != `{"a":{"b":{"c":"x"}}}` {
+		t.Errorf("at the limit: %v %v", v, err)
+	}
+	if _, err := build([]Arg{ptr("/a/b/c/d=x")}, false, src); err == nil || !strings.Contains(err.Error(), "nests deeper than 3") {
+		t.Errorf("past the limit: %v", err)
+	}
+	if _, err := buildObject([]string{"a:=[[[1]]]"}, src); err == nil || !strings.Contains(err.Error(), "nests deeper than 3") {
+		t.Errorf("a nested value past the completed document limit: %v", err)
+	}
+
+	p, err := Parse([]Arg{ptr("/a/b:=@-")}, false)
+	if err != nil {
+		t.Fatal(err)
+	}
+	f, err := p.Fixed(src)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := f.With([]any{int64(1)}); err != nil {
+		t.Errorf("a record at the limit: %v", err)
+	}
+	if _, err := f.With([]any{[]any{int64(1)}}); err == nil || !strings.Contains(err.Error(), "nests deeper than 3") {
+		t.Errorf("a record past the limit: %v", err)
+	}
+}
+
 // Input past the byte limit is a parse failure on every path, the way it
 // is when jz reads its standard input or a file with --file.
 func TestByteLimitIsAParseFailure(t *testing.T) {
