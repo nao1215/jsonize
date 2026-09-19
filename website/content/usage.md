@@ -252,6 +252,9 @@ $ jz new --array web :=1 :=null
 - Nothing is guessed: `version=007` is `"007"`; use `:=` for numbers.
 - A key given twice is refused unless it ends in `[]`, and so is a key
   given both with and without `[]`.
+- The completed document may nest arrays and objects 1000 levels deep.
+  This includes containers made by `--path` around values read from files
+  or standard input. A document past the limit is exit 3 and is not written.
 - Quote an argument whose key ends in `[]`. zsh, which is the default
   shell on macOS, reads the brackets as a pattern and refuses the word
   with `no matches found` before jz sees it.
