@@ -1,0 +1,4 @@
+description: The same index with rename detection disabled, producing separate creation and deletion lines.
+source: captured with LC_ALL=C and `git diff --cached --summary --no-renames` from a repository created for this fixture with git 2.53
+os: linux
+args: [diff, "--cached", "--summary", "--no-renames"]

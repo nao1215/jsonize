@@ -1,0 +1,4 @@
+description: Untracked file and directory reported without removing either.
+source: captured with LC_ALL=C and `git clean -nd` from a repository created for this fixture with git 2.53
+os: linux
+args: [clean, "-n", "-d"]

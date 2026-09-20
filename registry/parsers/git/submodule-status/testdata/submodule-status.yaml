@@ -1,0 +1,4 @@
+description: An initialized submodule at the commit recorded by the superproject.
+source: captured with LC_ALL=C and `git submodule status` from repositories created for this fixture with git 2.53; the submodule used a local file URL and fixed names and dates
+os: linux
+args: [submodule, status]

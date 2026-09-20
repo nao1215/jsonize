@@ -1,0 +1,4 @@
+description: Path filtering preserves the same line-ending columns.
+source: captured with LC_ALL=C and `git ls-files --eol '*.txt'` from a repository created for this fixture with git 2.53
+os: linux
+args: [ls-files, "--eol", "*.txt"]

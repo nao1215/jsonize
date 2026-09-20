@@ -1,0 +1,4 @@
+description: The same submodule after deinitialization.
+source: captured with LC_ALL=C and `git submodule status` after `git submodule deinit -f` in repositories created for this fixture with git 2.53; the submodule used a local file URL and fixed names and dates
+os: linux
+args: [submodule, status]

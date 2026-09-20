@@ -1,0 +1,25 @@
+# Dry-run mode reports each path without deleting it. `-d` lets an
+# untracked directory appear as one path, and `-x` includes ignored paths.
+# A nested repository is reported separately because clean skips it.
+format: 1
+command: git
+variant: clean-dry-run
+description: git clean -n, paths that a clean would remove or skip
+metadata:
+  tags: [git, vcs]
+  compatible: [git]
+  references:
+    - https://git-scm.com/docs/git-clean
+detect:
+  args:
+    all: [clean]
+    any: ["-n", "--dry-run"]
+  signature:
+    all:
+      - '\A(?:Would (?:remove|skip repository) [^\n]+(?:\n|\z))+\z'
+parse:
+  type: regex
+  pattern: '^Would (?P<action>remove|skip repository) (?P<path>.+)$'
+fields:
+  action: {required: true}
+  path: {required: true}

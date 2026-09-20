@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/git/clean-dry-run.json",
+  "title": "git/clean-dry-run",
+  "description": "git clean -n, paths that a clean would remove or skip",
+  "x-jsonize": {
+    "definition": "git/clean-dry-run",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "action": {
+        "type": "string",
+        "enum": [
+          "remove",
+          "skip repository"
+        ]
+      },
+      "path": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "action",
+      "path"
+    ]
+  }
+}

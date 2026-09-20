@@ -1,0 +1,56 @@
+[
+  {
+    "index_eol": "lf",
+    "worktree_eol": "lf",
+    "attributes": null,
+    "path": ".gitattributes"
+  },
+  {
+    "index_eol": "lf",
+    "worktree_eol": "lf",
+    "attributes": null,
+    "path": ".gitignore"
+  },
+  {
+    "index_eol": "-text",
+    "worktree_eol": "-text",
+    "attributes": "-text",
+    "path": "binary.dat"
+  },
+  {
+    "index_eol": "lf",
+    "worktree_eol": "crlf",
+    "attributes": "text eol=crlf",
+    "path": "crlf.txt"
+  },
+  {
+    "index_eol": "lf",
+    "worktree_eol": "lf",
+    "attributes": null,
+    "path": "delete me.txt"
+  },
+  {
+    "index_eol": "lf",
+    "worktree_eol": "lf",
+    "attributes": null,
+    "path": "line-feed.txt"
+  },
+  {
+    "index_eol": "lf",
+    "worktree_eol": "lf",
+    "attributes": null,
+    "path": "mode.sh"
+  },
+  {
+    "index_eol": "lf",
+    "worktree_eol": "lf",
+    "attributes": null,
+    "path": "rename old.txt"
+  },
+  {
+    "index_eol": "lf",
+    "worktree_eol": "lf",
+    "attributes": null,
+    "path": "second.txt"
+  }
+]

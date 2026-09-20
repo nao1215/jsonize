@@ -1,0 +1,4 @@
+description: Creation, deletion, executable-bit change and an exact rename.
+source: captured with LC_ALL=C and `git diff --cached --summary -M` from a repository created for this fixture with git 2.53
+os: linux
+args: [diff, "--cached", "--summary", "-M"]

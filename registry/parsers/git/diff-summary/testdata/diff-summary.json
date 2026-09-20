@@ -1,0 +1,24 @@
+[
+  {
+    "action": "create",
+    "mode": "100644",
+    "path": "created file.txt"
+  },
+  {
+    "action": "delete",
+    "mode": "100644",
+    "path": "delete me.txt"
+  },
+  {
+    "action": "mode_change",
+    "old_mode": "100644",
+    "new_mode": "100755",
+    "path": "mode.sh"
+  },
+  {
+    "action": "rename",
+    "old_path": "rename old.txt",
+    "new_path": "rename new.txt",
+    "similarity": 100
+  }
+]

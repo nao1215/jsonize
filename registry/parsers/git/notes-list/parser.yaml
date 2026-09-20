@@ -1,0 +1,25 @@
+# `git notes list` prints the notes object name and the object it annotates.
+# Both names use the repository's object format, 40 hexadecimal characters
+# for SHA-1 and 64 for SHA-256.
+format: 1
+command: git
+variant: notes-list
+description: git notes list, note objects and the objects they annotate
+metadata:
+  tags: [git, vcs]
+  compatible: [git]
+  references:
+    - https://git-scm.com/docs/git-notes#Documentation/git-notes.txt-list
+detect:
+  auto_detect: false
+  args:
+    all: [notes, list]
+  signature:
+    all:
+      - '\A(?:(?:[0-9a-f]{40}|[0-9a-f]{64}) (?:[0-9a-f]{40}|[0-9a-f]{64})(?:\n|\z))+\z'
+parse:
+  type: regex
+  pattern: '^(?P<note>(?:[0-9a-f]{40}|[0-9a-f]{64})) (?P<object>(?:[0-9a-f]{40}|[0-9a-f]{64}))$'
+fields:
+  note: {required: true}
+  object: {required: true}

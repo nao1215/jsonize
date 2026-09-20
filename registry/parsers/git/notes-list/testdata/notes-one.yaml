@@ -1,0 +1,4 @@
+description: One note in a named notes ref.
+source: captured with LC_ALL=C and `git notes --ref=review list` from a repository created for this fixture with git 2.53; names, messages and dates were fixed and the people are not real
+os: linux
+args: [notes, "--ref=review", list]

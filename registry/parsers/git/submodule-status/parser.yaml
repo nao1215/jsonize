@@ -1,0 +1,35 @@
+# The marker before the object name describes the checkout: a space means
+# it matches the recorded commit, `-` means it is not initialized, `+`
+# means it is at another commit and `U` means it has merge conflicts.
+# An initialized checkout can append a description in parentheses.
+format: 1
+command: git
+variant: submodule-status
+description: git submodule status, recorded commits and checkout states
+metadata:
+  tags: [git, vcs]
+  compatible: [git]
+  references:
+    - https://git-scm.com/docs/git-submodule#Documentation/git-submodule.txt-status--cached--recursive--ltpathgt82308203
+detect:
+  args:
+    all: [submodule, status]
+  signature:
+    all:
+      - '\A[ +\-U][0-9a-f]{40,64} [^\n]+'
+parse:
+  type: regex
+  patterns:
+    - pattern: '^ (?P<commit>[0-9a-f]{40,64}) (?P<path>.+?)(?: \((?P<description>[^\n]*)\))?$'
+      values: {state: current}
+    - pattern: '^-(?P<commit>[0-9a-f]{40,64}) (?P<path>.+)$'
+      values: {state: uninitialized}
+    - pattern: '^\+(?P<commit>[0-9a-f]{40,64}) (?P<path>.+?)(?: \((?P<description>[^\n]*)\))?$'
+      values: {state: modified}
+    - pattern: '^U(?P<commit>[0-9a-f]{40,64}) (?P<path>.+)$'
+      values: {state: conflicted}
+fields:
+  state: {required: true}
+  commit: {required: true}
+  path: {required: true}
+  description: {}

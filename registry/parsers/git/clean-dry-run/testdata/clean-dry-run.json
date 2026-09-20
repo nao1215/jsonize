@@ -1,0 +1,10 @@
+[
+  {
+    "action": "remove",
+    "path": "scratch dir/"
+  },
+  {
+    "action": "remove",
+    "path": "scratch file.txt"
+  }
+]

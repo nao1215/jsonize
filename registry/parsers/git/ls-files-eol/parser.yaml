@@ -1,0 +1,26 @@
+# `git ls-files --eol` prints the line-ending classification in the index,
+# in the worktree, and from attributes, then a tab and the path. Attribute
+# text can contain spaces, so the tab is the stable path separator.
+format: 1
+command: git
+variant: ls-files-eol
+description: git ls-files --eol, line-ending information for tracked paths
+metadata:
+  tags: [git, vcs]
+  compatible: [git]
+  references:
+    - https://git-scm.com/docs/git-ls-files#Documentation/git-ls-files.txt---eol
+detect:
+  args:
+    all: [ls-files, "--eol"]
+  signature:
+    all:
+      - '\Ai/(?:none|lf|crlf|mixed|-text)[ \t]+w/(?:none|lf|crlf|mixed|-text)[ \t]+attr/'
+parse:
+  type: regex
+  pattern: '^i/(?P<index_eol>none|lf|crlf|mixed|-text)[ \t]+w/(?P<worktree_eol>none|lf|crlf|mixed|-text)[ \t]+attr/(?P<attributes>.*?)[ ]*\t(?P<path>.+)$'
+fields:
+  index_eol: {required: true}
+  worktree_eol: {required: true}
+  attributes: {null_if: [""]}
+  path: {required: true}
