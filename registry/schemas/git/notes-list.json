@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/git/notes-list.json",
+  "title": "git/notes-list",
+  "description": "git notes list, note objects and the objects they annotate",
+  "x-jsonize": {
+    "definition": "git/notes-list",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "note": {
+        "type": "string"
+      },
+      "object": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "note",
+      "object"
+    ]
+  }
+}

@@ -1,0 +1,4 @@
+description: LF, CRLF and binary worktree files with attributes shown.
+source: captured with LC_ALL=C and `git ls-files --eol` from a repository created for this fixture with git 2.53
+os: linux
+args: [ls-files, "--eol"]

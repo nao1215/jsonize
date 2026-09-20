@@ -1,0 +1,10 @@
+[
+  {
+    "action": "remove",
+    "path": "scratch.txt"
+  },
+  {
+    "action": "skip repository",
+    "path": "vendor/module"
+  }
+]

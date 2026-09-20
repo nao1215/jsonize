@@ -486,6 +486,110 @@ scenarios:
             json:
               - { path: "$[1].message.lines[0]", equals: 'add notes, two lines' }
 
+  - name: jz run reads Git inspection and dry-run reports
+    steps:
+      - run:
+          command: git init -q ${workdir}/inspect
+      - assert:
+          exit_code: 0
+      - fixture:
+          file: inspect/old.txt
+          content: |
+            old
+      - fixture:
+          file: inspect/remove.txt
+          content: |
+            remove
+      - run:
+          command: git -C ${workdir}/inspect add old.txt remove.txt
+      - assert:
+          exit_code: 0
+      - run:
+          command: git -C ${workdir}/inspect -c user.name=jz -c user.email=jz@example.test commit -q -m "base files"
+      - assert:
+          exit_code: 0
+      - run:
+          command: git -C ${workdir}/inspect -c user.name=jz -c user.email=jz@example.test notes add -m reviewed HEAD
+      - assert:
+          exit_code: 0
+      - run:
+          command: git -C ${workdir}/inspect mv old.txt new.txt
+      - assert:
+          exit_code: 0
+      - run:
+          command: git -C ${workdir}/inspect rm -q remove.txt
+      - assert:
+          exit_code: 0
+      - fixture:
+          file: inspect/created.txt
+          content: |
+            created
+      - run:
+          command: git -C ${workdir}/inspect add created.txt
+      - assert:
+          exit_code: 0
+      - fixture:
+          file: inspect/scratch.txt
+          content: |
+            scratch
+      - run:
+          command: jz run --explain git -C ${workdir}/inspect diff --cached --summary -M
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose git/diff-summary from embedded"
+          stdout:
+            json:
+              - { path: "$[?(@.action == 'create')].path", equals: created.txt }
+              - { path: "$[?(@.action == 'delete')].path", equals: remove.txt }
+              - { path: "$[?(@.action == 'rename')].old_path", equals: old.txt }
+              - { path: "$[?(@.action == 'rename')].new_path", equals: new.txt }
+      - run:
+          command: jz run --explain git -C ${workdir}/inspect clean -nd
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose git/clean-dry-run from embedded"
+          stdout:
+            json:
+              - { path: "$", length: 1 }
+              - { path: "$[0].path", equals: scratch.txt }
+      - run:
+          command: jz run --explain git -C ${workdir}/inspect ls-files --eol
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose git/ls-files-eol from embedded"
+          stdout:
+            json:
+              - { path: "$[?(@.path == 'created.txt')].index_eol", equals: lf }
+              - { path: "$[?(@.path == 'new.txt')].worktree_eol", equals: lf }
+      - run:
+          command: jz run --explain git -C ${workdir}/inspect notes list
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose git/notes-list from embedded"
+          stdout:
+            json:
+              - { path: "$", length: 1 }
+              - { path: "$[0].note", matches: "^[0-9a-f]{40,64}$" }
+              - { path: "$[0].object", matches: "^[0-9a-f]{40,64}$" }
+      - fixture:
+          file: submodule.txt
+          from: "${specdir}/../../registry/parsers/git/submodule-status/testdata/submodule-uninitialized.txt"
+      - run:
+          command: jz --explain --parser git
+          stdin: {file: submodule.txt}
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose git/submodule-status from embedded"
+          stdout:
+            json:
+              - { path: "$[0].state", equals: uninitialized }
+              - { path: "$[0].path", equals: "deps/child module" }
+
   # A setting in the repository's or the user's configuration changes what
   # git log --oneline prints without an argument jz could see: with
   # log.decorate the first subject would carry the branch names. jz runs
@@ -523,4 +627,3 @@ scenarios:
           stdout:
             json:
               - { path: "$[?(@.name == 'log.decorate')].value", equals: short }
-

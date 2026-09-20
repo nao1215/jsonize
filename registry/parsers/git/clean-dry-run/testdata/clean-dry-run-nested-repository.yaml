@@ -1,0 +1,4 @@
+description: An untracked file is removable while a nested repository is skipped.
+source: captured with LC_ALL=C and git clean -ndx from a repository containing a nested repository with git 2.53
+os: linux
+args: [clean, "-n", "-d", "-x"]

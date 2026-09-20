@@ -1,0 +1,9 @@
+i/lf    w/lf    attr/                 	.gitattributes
+i/lf    w/lf    attr/                 	.gitignore
+i/-text w/-text attr/-text            	binary.dat
+i/lf    w/crlf  attr/text eol=crlf    	crlf.txt
+i/lf    w/lf    attr/                 	delete me.txt
+i/lf    w/lf    attr/                 	line-feed.txt
+i/lf    w/lf    attr/                 	mode.sh
+i/lf    w/lf    attr/                 	rename old.txt
+i/lf    w/lf    attr/                 	second.txt

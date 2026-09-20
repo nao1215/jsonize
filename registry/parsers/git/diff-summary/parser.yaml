@@ -1,0 +1,34 @@
+# `git diff --summary` reports file creations, deletions, mode changes,
+# renames and copies. Paths can contain spaces. Rename and copy lines put
+# the old and new paths around ` => ` and finish with a similarity score.
+format: 1
+command: git
+variant: diff-summary
+description: git diff --summary, file creation, deletion, mode and path changes
+metadata:
+  tags: [git, vcs]
+  compatible: [git]
+  references:
+    - https://git-scm.com/docs/git-diff#Documentation/git-diff.txt---summary
+detect:
+  args:
+    all: [diff, "--summary"]
+  signature:
+    all:
+      - '\A (?:create mode|delete mode|mode change|rename |copy )'
+parse:
+  type: regex
+  patterns:
+    - pattern: '^ (?P<action>create|delete) mode (?P<mode>[0-7]{6}) (?P<path>.+)$'
+    - pattern: '^ mode change (?P<old_mode>[0-7]{6}) => (?P<new_mode>[0-7]{6}) (?P<path>.+)$'
+      values: {action: mode_change}
+    - pattern: '^ (?P<action>rename|copy) (?P<old_path>.+) => (?P<new_path>.+) \((?P<similarity>[0-9]{1,3})%\)$'
+fields:
+  action: {required: true}
+  mode: {}
+  old_mode: {}
+  new_mode: {}
+  path: {}
+  old_path: {}
+  new_path: {}
+  similarity: {type: int}

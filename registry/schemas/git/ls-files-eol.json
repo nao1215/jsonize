@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/git/ls-files-eol.json",
+  "title": "git/ls-files-eol",
+  "description": "git ls-files --eol, line-ending information for tracked paths",
+  "x-jsonize": {
+    "definition": "git/ls-files-eol",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "index_eol": {
+        "type": "string",
+        "enum": [
+          "-text",
+          "crlf",
+          "lf",
+          "mixed",
+          "none"
+        ]
+      },
+      "worktree_eol": {
+        "type": "string",
+        "enum": [
+          "-text",
+          "crlf",
+          "lf",
+          "mixed",
+          "none"
+        ]
+      },
+      "attributes": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "path": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "index_eol",
+      "worktree_eol",
+      "attributes",
+      "path"
+    ]
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/git/diff-summary.json",
+  "title": "git/diff-summary",
+  "description": "git diff --summary, file creation, deletion, mode and path changes",
+  "x-jsonize": {
+    "definition": "git/diff-summary",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "action": {
+        "type": "string",
+        "enum": [
+          "copy",
+          "create",
+          "delete",
+          "mode_change",
+          "rename"
+        ]
+      },
+      "mode": {
+        "type": "string"
+      },
+      "path": {
+        "type": "string"
+      },
+      "old_mode": {
+        "type": "string"
+      },
+      "new_mode": {
+        "type": "string"
+      },
+      "old_path": {
+        "type": "string"
+      },
+      "new_path": {
+        "type": "string"
+      },
+      "similarity": {
+        "type": "integer"
+      }
+    },
+    "required": [
+      "action"
+    ]
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/git/submodule-status.json",
+  "title": "git/submodule-status",
+  "description": "git submodule status, recorded commits and checkout states",
+  "x-jsonize": {
+    "definition": "git/submodule-status",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "state": {
+        "type": "string",
+        "enum": [
+          "conflicted",
+          "current",
+          "modified",
+          "uninitialized"
+        ]
+      },
+      "commit": {
+        "type": "string"
+      },
+      "path": {
+        "type": "string"
+      },
+      "description": {
+        "type": [
+          "string",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "state",
+      "commit",
+      "path"
+    ]
+  }
+}
