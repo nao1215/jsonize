@@ -1,0 +1,9 @@
+source: >-
+  captured on Ubuntu 26.04 with rsync 3.4.1, LC_ALL=C rsync -a --stats
+  src/ dst/ over two scratch directories holding only files made for this
+  fixture
+description: >-
+  a first run that creates every entry, with counts past three digits so
+  that the group separators are covered
+os: linux
+args: ["-a", "--stats", "src/", "dst/"]

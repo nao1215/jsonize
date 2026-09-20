@@ -2352,3 +2352,77 @@ scenarios:
             json:
               - { path: "$.pid", equals: 1 }
               - { path: "$.affinity_mask", matches: "^[0-9a-f]+$" }
+
+  # rsync --stats on the real binary: a source tree whose name holds a
+  # space and shell metacharacters, so that a step which passed the
+  # arguments through a shell would fail here rather than in production.
+  - name: rsync --stats lands on the transfer counts
+    only: {os: linux}
+    steps:
+      - fixture:
+          file: "back up [1]/notes.txt"
+          content: |
+            one
+            two
+      - fixture:
+          file: "back up [1]/sub/report.txt"
+          content: |
+            three
+      - run:
+          command: jz run --explain rsync -a --stats "${workdir}/back up [1]/" "${workdir}/copy/"
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose rsync/stats from embedded"
+          stdout:
+            json:
+              - { path: "$.files", equals: 4 }
+              - { path: "$.files_by_type.reg", equals: 2 }
+              - { path: "$.files_by_type.dev", equals: null }
+              - { path: "$.regular_files_transferred", equals: 2 }
+              - { path: "$.total_file_size", equals: 14 }
+              - { path: "$.dry_run", equals: false }
+              - { path: "$.speedup", gt: 0 }
+      # A second run copies nothing, and the dry run marks itself.
+      - run:
+          command: jz run rsync -a --stats --dry-run "${workdir}/back up [1]/" "${workdir}/copy/"
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$.regular_files_transferred", equals: 0 }
+              - { path: "$.dry_run", equals: true }
+      # A source that is not there: rsync still prints its block, with
+      # every count at zero, and says what went wrong on standard error.
+      # jz hands the block over and comes back with rsync's own status, so
+      # the caller learns of the failure from the status and not from the
+      # JSON, which reads like a transfer that moved nothing.
+      - run:
+          command: jz run rsync -a --stats "${workdir}/missing/" "${workdir}/copy2/"
+      - assert:
+          exit_code: 23
+          stderr:
+            contains: "No such file or directory"
+          stdout:
+            json:
+              - { path: "$.files", equals: 0 }
+              - { path: "$.regular_files_transferred", equals: 0 }
+      # An option rsync does not have: it prints its usage on standard
+      # error and nothing on standard output, and jz passes the status on
+      # rather than turning an empty standard output into one of its own
+      # exit codes.
+      - run:
+          command: jz run rsync -a --stats --no-such-option "${workdir}/back up [1]/" "${workdir}/copy4/"
+      - assert:
+          exit_code: 1
+          stderr:
+            contains: "unknown option"
+          stdout: {empty: true}
+      # -v puts the file list in front of the counts, which no variant
+      # reads, and that is a conversion failure rather than a failure of
+      # rsync: it copied the tree.
+      - run:
+          command: jz run rsync -av --stats "${workdir}/back up [1]/" "${workdir}/copy3/"
+      - assert:
+          exit_code: 4
+          stdout: {empty: true}

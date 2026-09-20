@@ -1,0 +1,9 @@
+source: >-
+  captured on Ubuntu 26.04 with rsync 3.4.1, LC_ALL=C rsync -a --stats
+  --dry-run --delete src/ dst/ over two scratch directories holding only
+  files made for this fixture
+description: >-
+  a dry run, where nothing is created or deleted, the two counts print no
+  breakdown, and the last line ends in (DRY RUN)
+os: linux
+args: ["-a", "--stats", "--dry-run", "--delete", "src/", "dst/"]

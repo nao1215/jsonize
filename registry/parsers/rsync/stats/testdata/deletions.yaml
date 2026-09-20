@@ -1,0 +1,9 @@
+source: >-
+  captured on Ubuntu 26.04 with rsync 3.4.1, LC_ALL=C rsync -a --stats
+  --delete src/ dst/ over two scratch directories holding only files made
+  for this fixture
+description: >-
+  a run that deletes one file, so that the deleted count carries a
+  breakdown of its own
+os: linux
+args: ["-a", "--stats", "--delete", "src/", "dst/"]

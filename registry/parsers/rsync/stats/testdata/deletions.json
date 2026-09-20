@@ -1,0 +1,39 @@
+{
+  "files": 6,
+  "files_by_type": {
+    "reg": 3,
+    "dir": 2,
+    "link": 1,
+    "dev": null,
+    "special": null
+  },
+  "created_files": 5,
+  "created_files_by_type": {
+    "reg": 3,
+    "dir": 1,
+    "link": 1,
+    "dev": null,
+    "special": null
+  },
+  "deleted_files": 1,
+  "deleted_files_by_type": {
+    "reg": 1,
+    "dir": null,
+    "link": null,
+    "dev": null,
+    "special": null
+  },
+  "regular_files_transferred": 3,
+  "total_file_size": 3000023,
+  "total_transferred_file_size": 3000018,
+  "literal_data": 3000018,
+  "matched_data": 0,
+  "file_list_size": 0,
+  "file_list_generation_time": 0.001,
+  "file_list_transfer_time": 0,
+  "total_bytes_sent": 3001053,
+  "total_bytes_received": 105,
+  "bytes_per_second": 6002316,
+  "speedup": 1,
+  "dry_run": false
+}

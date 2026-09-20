@@ -1,0 +1,10 @@
+source: >-
+  captured on Ubuntu 26.04 with rsync 3.4.1, LC_ALL=C rsync -av --stats
+  src/ dst/ over two scratch directories holding only files made for this
+  fixture; the destination path was replaced with /srv/backup/nightly
+description: >-
+  -v puts the file list in front of the block, which this definition does
+  not read
+os: linux
+args: ["-av", "--stats", "src/", "dst/"]
+expect_error: 'does not describe this input'

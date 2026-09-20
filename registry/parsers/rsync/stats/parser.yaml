@@ -1,0 +1,134 @@
+# `rsync --stats` closes a transfer with a block of labelled counts and
+# then the two summary lines rsync prints on its own: how many bytes went
+# each way and at what rate, and the size of the whole tree with the
+# speedup. The block is a fixed list of labels in a fixed order, which is
+# why it is read by one expression over the whole text rather than as
+# key/value lines: the labels hold spaces, and a key with a space in it
+# cannot carry a type.
+#
+# Each blank line inside the expression is one newline of the output.
+#
+# rsync writes a count of more than three digits with a separator between
+# each group of three, and which character that is follows the decimal
+# point of the locale. jz runs the command with LC_ALL=C, where the
+# decimal point is a period and the separator is therefore a comma, and
+# the expression reads that shape and the plain digits of
+# --no-human-readable. Output from a locale that writes the two the other
+# way round is refused rather than read as other numbers. Two or more -h
+# options round the counts to units of 1000 or 1024 ("2.86M bytes"), and
+# such a report is refused as well: a rounded size names no particular
+# number of bytes.
+#
+# The sizes in the two summary lines are the counts the block already
+# gave (the bytes sent and received, and the total file size), so they
+# are matched where they stand rather than read a second time under
+# another name. What the summary adds is the rate, the speedup and the
+# "(DRY RUN)" mark, and those are what it contributes.
+#
+# "Number of files", "Number of created files" and "Number of deleted
+# files" each carry the breakdown by kind that rsync prints in
+# parentheses, and a kind of which there are none is not printed at all,
+# so a kind the text leaves out is null rather than zero. A line with no
+# parentheses (a count of zero) leaves the whole breakdown null.
+#
+# -v, -i, --progress and --out-format put lines in front of the block,
+# --info= and --debug= add reports of their own, and -q prints nothing;
+# those are left to the variants that read them, or refused.
+format: 1
+command: rsync
+variant: stats
+description: rsync --stats transfer counts and summary
+metadata:
+  tags: [files, transfer, sync]
+  compatible: [rsync 3.1.0 and later]
+  references:
+    - https://download.samba.org/pub/rsync/rsync.1
+detect:
+  args:
+    all: ["--stats"]
+    none: ["-h", "--human-readable", "-v", "--verbose", "-q", "--quiet", "-i", "--itemize-changes", "--progress", "-P", "--out-format=", "--info=", "--debug=", "--list-only"]
+  signature:
+    # The leading blank line and the one before the summary are part of
+    # the report, so the window holds two more lines than the fifteen
+    # that carry text.
+    window: 24
+    all:
+      - '\A\n?Number of files: (?:\d{1,3}(?:,\d{3})+|\d+)(?: \((?:reg|dir|link|dev|special): [^)\n]*\))?\n'
+      - '(?m)^Total transferred file size: (?:\d{1,3}(?:,\d{3})+|\d+) bytes$'
+      - '(?m)^total size is (?:\d{1,3}(?:,\d{3})+|\d+)  speedup is (?:\d{1,3}(?:,\d{3})+|\d+)\.\d+(?: \(DRY RUN\))?$'
+parse:
+  type: regex
+  each: input
+  pattern: '\ANumber of files: (?P<files>(?:\d{1,3}(?:,\d{3})+|\d+))(?: \((?P<files_by_type>[^)\n]*)\))?
+
+    Number of created files: (?P<created_files>(?:\d{1,3}(?:,\d{3})+|\d+))(?: \((?P<created_files_by_type>[^)\n]*)\))?
+
+    Number of deleted files: (?P<deleted_files>(?:\d{1,3}(?:,\d{3})+|\d+))(?: \((?P<deleted_files_by_type>[^)\n]*)\))?
+
+    Number of regular files transferred: (?P<regular_files_transferred>(?:\d{1,3}(?:,\d{3})+|\d+))
+
+    Total file size: (?P<total_file_size>(?:\d{1,3}(?:,\d{3})+|\d+)) bytes
+
+    Total transferred file size: (?P<total_transferred_file_size>(?:\d{1,3}(?:,\d{3})+|\d+)) bytes
+
+    Literal data: (?P<literal_data>(?:\d{1,3}(?:,\d{3})+|\d+)) bytes
+
+    Matched data: (?P<matched_data>(?:\d{1,3}(?:,\d{3})+|\d+)) bytes
+
+    File list size: (?P<file_list_size>(?:\d{1,3}(?:,\d{3})+|\d+))
+
+    File list generation time: (?P<file_list_generation_time>(?:\d{1,3}(?:,\d{3})+|\d+)\.\d+) seconds
+
+    File list transfer time: (?P<file_list_transfer_time>(?:\d{1,3}(?:,\d{3})+|\d+)\.\d+) seconds
+
+    Total bytes sent: (?P<total_bytes_sent>(?:\d{1,3}(?:,\d{3})+|\d+))
+
+    Total bytes received: (?P<total_bytes_received>(?:\d{1,3}(?:,\d{3})+|\d+))
+
+    sent (?:\d{1,3}(?:,\d{3})+|\d+) bytes  received (?:\d{1,3}(?:,\d{3})+|\d+) bytes  (?P<bytes_per_second>(?:\d{1,3}(?:,\d{3})+|\d+)\.\d+) bytes/sec
+
+    total size is (?:\d{1,3}(?:,\d{3})+|\d+)  speedup is (?P<speedup>(?:\d{1,3}(?:,\d{3})+|\d+)\.\d+)(?P<dry_run>(?: \(DRY RUN\))?)\z'
+fields:
+  files: {type: int, group_separator: ",", required: true}
+  created_files: {type: int, group_separator: ","}
+  deleted_files: {type: int, group_separator: ","}
+  regular_files_transferred: {type: int, group_separator: ","}
+  total_file_size: {type: int, group_separator: ","}
+  total_transferred_file_size: {type: int, group_separator: ","}
+  literal_data: {type: int, group_separator: ","}
+  matched_data: {type: int, group_separator: ","}
+  file_list_size: {type: int, group_separator: ","}
+  file_list_generation_time: {type: float, group_separator: ","}
+  file_list_transfer_time: {type: float, group_separator: ","}
+  total_bytes_sent: {type: int, group_separator: ","}
+  total_bytes_received: {type: int, group_separator: ","}
+  bytes_per_second: {type: float, group_separator: ","}
+  speedup: {type: float, group_separator: ","}
+  dry_run: {type: bool, true_values: ["(DRY RUN)"], false_values: [""]}
+  files_by_type:
+    type: object
+    regex: '(?:reg: (?P<reg>(?:\d{1,3}(?:,\d{3})+|\d+)))?(?:(?:, )?dir: (?P<dir>(?:\d{1,3}(?:,\d{3})+|\d+)))?(?:(?:, )?link: (?P<link>(?:\d{1,3}(?:,\d{3})+|\d+)))?(?:(?:, )?dev: (?P<dev>(?:\d{1,3}(?:,\d{3})+|\d+)))?(?:(?:, )?special: (?P<special>(?:\d{1,3}(?:,\d{3})+|\d+)))?'
+    fields:
+      reg: {type: int, group_separator: ","}
+      dir: {type: int, group_separator: ","}
+      link: {type: int, group_separator: ","}
+      dev: {type: int, group_separator: ","}
+      special: {type: int, group_separator: ","}
+  created_files_by_type:
+    type: object
+    regex: '(?:reg: (?P<reg>(?:\d{1,3}(?:,\d{3})+|\d+)))?(?:(?:, )?dir: (?P<dir>(?:\d{1,3}(?:,\d{3})+|\d+)))?(?:(?:, )?link: (?P<link>(?:\d{1,3}(?:,\d{3})+|\d+)))?(?:(?:, )?dev: (?P<dev>(?:\d{1,3}(?:,\d{3})+|\d+)))?(?:(?:, )?special: (?P<special>(?:\d{1,3}(?:,\d{3})+|\d+)))?'
+    fields:
+      reg: {type: int, group_separator: ","}
+      dir: {type: int, group_separator: ","}
+      link: {type: int, group_separator: ","}
+      dev: {type: int, group_separator: ","}
+      special: {type: int, group_separator: ","}
+  deleted_files_by_type:
+    type: object
+    regex: '(?:reg: (?P<reg>(?:\d{1,3}(?:,\d{3})+|\d+)))?(?:(?:, )?dir: (?P<dir>(?:\d{1,3}(?:,\d{3})+|\d+)))?(?:(?:, )?link: (?P<link>(?:\d{1,3}(?:,\d{3})+|\d+)))?(?:(?:, )?dev: (?P<dev>(?:\d{1,3}(?:,\d{3})+|\d+)))?(?:(?:, )?special: (?P<special>(?:\d{1,3}(?:,\d{3})+|\d+)))?'
+    fields:
+      reg: {type: int, group_separator: ","}
+      dir: {type: int, group_separator: ","}
+      link: {type: int, group_separator: ","}
+      dev: {type: int, group_separator: ","}
+      special: {type: int, group_separator: ","}

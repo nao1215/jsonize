@@ -1,0 +1,17 @@
+
+Number of files: 6 (reg: 3, dir: 2, link: 1)
+Number of created files: 6 (reg: 3, dir: 2, link: 1)
+Number of deleted files: 0
+Number of regular files transferred: 3
+Total file size: 2.86M bytes
+Total transferred file size: 2.86M bytes
+Literal data: 2.86M bytes
+Matched data: 0 bytes
+File list size: 0
+File list generation time: 0.001 seconds
+File list transfer time: 0.000 seconds
+Total bytes sent: 2.86M
+Total bytes received: 87
+
+sent 2.86M bytes  received 87 bytes  5.72M bytes/sec
+total size is 2.86M  speedup is 1.00

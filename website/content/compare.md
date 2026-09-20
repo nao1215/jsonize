@@ -31,7 +31,7 @@ A definition can still name lines that are not data, such as headings, `total` l
 | | jc 1.25.7 | jz v0.8.0 |
 |---|---|---|
 | Choosing the parser | named on every call (`jc --df`), or taken from the command name (`jc df -h`) | detected from the text; `--parser` narrows it, and some generic formats are read only when named |
-| What is read | 236 parsers, 19 of them streaming versions of others: commands, `/proc` files, file formats and strings | 742 definitions under 270 names: commands, plus `/etc` and `/proc` files and the generic `csv`, `ini`, `kv` and `table` layouts; no string parsers |
+| What is read | 236 parsers, 19 of them streaming versions of others: commands, `/proc` files, file formats and strings | 743 definitions under 270 names: commands, plus `/etc` and `/proc` files and the generic `csv`, `ini`, `kv` and `table` layouts; no string parsers |
 | Commands only one of the two reads | `traceroute`, `iptables`, `dmidecode`, `wg`, `ufw`, `acpi`, `mdadm`, `ntpq`, `pacman`, `find`, `finger`, `zpool status`, ... | `systemd-*` tools, `lsfd`, `lsns`, `journalctl`, `sar`, `docker`, `sensors`, `smartctl`, ... |
 | The two counts | one jc parser can cover several layouts of a command | one jz definition reads one layout, so the two counts are not comparable |
 | File formats | CSV, TSV, INI, YAML, TOML, XML, plist, X.509, and more | CSV, TSV, LTSV, JSON, JSON Lines and YAML, also gzip or bzip2 compressed; INI with `--parser ini`; plain text as one string, lines, or NUL-separated records |
