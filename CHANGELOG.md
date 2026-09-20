@@ -4,7 +4,9 @@ All notable changes to this project are documented here. The format is
 based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the
 project follows [Semantic Versioning](https://semver.org/).
 
-## [Unreleased]
+## [0.8.0]
+
+This release adds five Git inspection reports, holds every document built by `jz new` to the same nesting limit as documents jz reads, and replaces the in-process Go benchmarks with whole-command himorime suites that cover latency, CPU time, peak memory and throughput.
 
 ### Added
 
