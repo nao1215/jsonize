@@ -9,9 +9,8 @@
 # one core. Starting taskset is part of the pinned figures.
 version: "1"
 
-suite:
-  name: jz, jc and jo
-  description: One process per call on the same input.
+name: jz, jc and jo
+description: One process per call on the same input.
 
 build:
   command: [go, build, -trimpath, -ldflags, "-s -w", -o, "${artifact}", ./cmd/jz]
