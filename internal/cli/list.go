@@ -561,6 +561,9 @@ func describeField(f *definition.Field) string {
 	if f.TrimPrefix != "" {
 		s += fmt.Sprintf(" trim_prefix=%q", f.TrimPrefix)
 	}
+	if f.GroupSeparator != "" {
+		s += fmt.Sprintf(" group_separator=%q", f.GroupSeparator)
+	}
 	if f.Required {
 		s += " required"
 	}

@@ -1120,6 +1120,7 @@ func validateFieldKeys(v *validator, path string, f *Field) {
 	if f.EffectiveType() != FieldBool && (len(f.True) > 0 || len(f.False) > 0) {
 		v.add(path, "true_values/false_values are only valid for type bool")
 	}
+	validateGroupSeparator(v, path, f)
 	switch f.EffectiveType() {
 	case FieldTime:
 	case FieldDuration:
@@ -1144,6 +1145,32 @@ func validateFieldKeys(v *validator, path string, f *Field) {
 	}
 	if f.Required && f.WhenMissing == MissingOmit {
 		v.add(path, "required and when_missing: omit are contradictory")
+	}
+}
+
+// validateGroupSeparator checks the character a format writes between
+// groups of three digits. It has to be one character that is not part of
+// a number, and on a float field it may not be the decimal point: the
+// same value would then be two numbers.
+func validateGroupSeparator(v *validator, path string, f *Field) {
+	if f.GroupSeparator == "" {
+		return
+	}
+	switch f.EffectiveType() {
+	case FieldInt, FieldFloat:
+	default:
+		v.add(path+".group_separator", "is only valid for type int and type float")
+		return
+	}
+	if utf8.RuneCountInString(f.GroupSeparator) != 1 {
+		v.add(path+".group_separator", "is one character, the one the format writes between groups of three digits")
+		return
+	}
+	if strings.ContainsAny(f.GroupSeparator, "0123456789+-") {
+		v.add(path+".group_separator", "%q is part of a number and cannot separate its digits", f.GroupSeparator)
+	}
+	if f.EffectiveType() == FieldFloat && f.GroupSeparator == "." {
+		v.add(path+".group_separator", "\".\" is the decimal point of a float field")
 	}
 }
 

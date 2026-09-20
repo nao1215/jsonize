@@ -142,9 +142,13 @@ func (r *run) convertScalar(name, s string, f *definition.Field, ln int) (any, e
 	case definition.FieldString:
 		return s, nil
 	case definition.FieldInt:
-		v, err := convert.Int(s)
+		t, ok := convert.Ungroup(s, f.GroupSeparator)
+		if !ok {
+			return nil, r.errorf(ln, name, "value %q is not digits grouped by %q", truncate(s, 80), f.GroupSeparator)
+		}
+		v, err := convert.Int(t)
 		if errors.Is(err, strconv.ErrRange) {
-			if n, ok := wideInt(s); ok {
+			if n, ok := wideInt(t); ok {
 				return n, nil
 			}
 		}
@@ -153,7 +157,11 @@ func (r *run) convertScalar(name, s string, f *definition.Field, ln int) (any, e
 		}
 		return v, nil
 	case definition.FieldFloat:
-		v, err := convert.Float(s)
+		t, ok := convert.Ungroup(s, f.GroupSeparator)
+		if !ok {
+			return nil, r.errorf(ln, name, "value %q is not digits grouped by %q", truncate(s, 80), f.GroupSeparator)
+		}
+		v, err := convert.Float(t)
 		if err != nil {
 			return nil, wrap(err)
 		}

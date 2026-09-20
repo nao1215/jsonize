@@ -831,6 +831,7 @@ fields:
 | `type` | all | `string` (default), `int`, `float`, `bool`, `time`, `duration`, `array`, `object`. An `int` is written with every digit it was printed with, past 64 bits too (`18446744073709551612`), less a `+` and the zeros in front |
 | `trim_prefix`, `trim_suffix` | all | removed before conversion; without them a string value keeps its whitespace exactly as the parser produced it |
 | `null_if` | all | values (after trimming) that become `null`; they are printed words for no value, so they become `null` in a `required` field too |
+| `group_separator` | int, float | the one character the format writes between groups of three digits (`3,000,023`), removed before the number is read |
 | `required` | all | a value that is missing or empty is an error |
 | `when_missing` | all | `null` (default) or `omit` the key when the value is missing |
 | `layout` | time | the [Go reference layout](https://pkg.go.dev/time#pkg-constants) the timestamp is written in; required, and it has to state a year unless `year: assumed` says the format prints none |
@@ -885,6 +886,21 @@ names two different files. Such a value is refused with a `regex`. tree
 is one: tree 2 writes a space in a name as `\ ` and tree 1 prints it as
 it is, and the text does not say which printed it, so its names are kept
 as printed.
+
+`group_separator` is for a format that writes a long number in groups of
+three digits, as `rsync --stats` does (`Total file size: 3,000,023
+bytes`). The separator is removed only where the digits are grouped by
+it: a leading group of one to three digits, then groups of exactly
+three, and at most a fraction after them. Anywhere else it is an error,
+so a value of another shape is refused rather than turned into a number
+by dropping characters.
+
+Write it only where the format decides the character rather than the
+locale of whoever ran the command. `tasklist`, `systeminfo` and `scc`
+print a count with the separator their user's locale chose, and nothing
+in the text says which character that is; those counts stay the strings
+they were printed as, because the same text would otherwise name two
+different numbers.
 
 There is no type that turns `955M` or `1.8T` into bytes. A size printed
 with a unit is rounded to fit the column (`df -h`, `ls -lh`, `free -h`),

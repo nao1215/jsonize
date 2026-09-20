@@ -644,6 +644,14 @@ type Field struct {
 	// TrimPrefix / TrimSuffix are removed before conversion.
 	TrimPrefix string `yaml:"trim_prefix,omitempty"`
 	TrimSuffix string `yaml:"trim_suffix,omitempty"`
+	// GroupSeparator is the character a format puts between groups of
+	// three digits ("3,000,023"), removed before an int or a float is
+	// read. Writing it is a statement that the format decides the
+	// character rather than the locale of whoever ran the command: a
+	// count printed with the separator of the user's locale stays the
+	// string it was printed as, since the same text then names two
+	// different numbers.
+	GroupSeparator string `yaml:"group_separator,omitempty"`
 	// True / False list the spellings for bool fields.
 	True  []string `yaml:"true_values,omitempty"`
 	False []string `yaml:"false_values,omitempty"`
