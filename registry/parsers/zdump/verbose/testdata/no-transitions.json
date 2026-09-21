@@ -1,0 +1,62 @@
+[
+  {
+    "zone": "UTC",
+    "ut": null,
+    "ut_seconds": -9223372036854775808,
+    "local": null,
+    "abbreviation": null,
+    "isdst": null,
+    "gmtoff": null,
+    "local_seconds": -9223372036854775808
+  },
+  {
+    "zone": "UTC",
+    "ut": null,
+    "ut_seconds": -67768040609740801,
+    "local": null,
+    "abbreviation": null,
+    "isdst": null,
+    "gmtoff": null,
+    "local_seconds": -67768040609740801
+  },
+  {
+    "zone": "UTC",
+    "ut": "Thu Jan  1 00:00:00 -2147481748",
+    "ut_seconds": null,
+    "local": "Thu Jan  1 00:00:00 -2147481748",
+    "abbreviation": "UTC",
+    "isdst": 0,
+    "gmtoff": 0,
+    "local_seconds": null
+  },
+  {
+    "zone": "UTC",
+    "ut": "Wed Dec 31 23:59:59 2147485547",
+    "ut_seconds": null,
+    "local": "Wed Dec 31 23:59:59 2147485547",
+    "abbreviation": "UTC",
+    "isdst": 0,
+    "gmtoff": 0,
+    "local_seconds": null
+  },
+  {
+    "zone": "UTC",
+    "ut": null,
+    "ut_seconds": 67768036191676800,
+    "local": null,
+    "abbreviation": null,
+    "isdst": null,
+    "gmtoff": null,
+    "local_seconds": 67768036191676800
+  },
+  {
+    "zone": "UTC",
+    "ut": null,
+    "ut_seconds": 9223372036854775807,
+    "local": null,
+    "abbreviation": null,
+    "isdst": null,
+    "gmtoff": null,
+    "local_seconds": 9223372036854775807
+  }
+]

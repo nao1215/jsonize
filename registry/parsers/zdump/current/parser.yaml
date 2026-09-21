@@ -1,0 +1,36 @@
+# One line per zone named on the command line: the zone, padded to the
+# longest name plus two spaces, then the current local time there in
+# asctime form and the zone abbreviation.
+#
+# The times stay strings. The year is printed as a plain integer of any
+# sign (zdump -v prints -2147481748 at the far end of the range), and the
+# abbreviation is not an offset (definition-format.md, fields), so there
+# is no timestamp jz could write without a table of abbreviations.
+format: 1
+command: zdump
+variant: current
+description: zdump ZONE..., the current time in each zone
+metadata:
+  tags: [time, timezone, tzcode]
+  compatible: [tzcode zdump, glibc zdump]
+  references:
+    - https://man7.org/linux/man-pages/man8/zdump.8.html
+    - https://data.iana.org/time-zones/tz-link.html
+detect:
+  # No argument list: the verbose forms (-v, -V) have " = " between a UT
+  # time and a local time on every line, which this signature leaves out,
+  # and -i prints a TZ="..." heading, which it also leaves out.
+  signature:
+    all:
+      # Every line is a zone, a time and an optional abbreviation. The
+      # zone is one word; a zone given as a path with a space in it is
+      # refused rather than split.
+      - '\A(?:\S+ {2,}(?:(?:[A-Z][a-z]{2}|\?{3}) (?:[A-Z][a-z]{2}|\?{3}) [ \d]\d \d{2}:\d{2}:\d{2} -?\d+(?: \S+)?|-?\d+ \(localtime failed\))(?:\n|\z))+\z'
+parse:
+  type: regex
+  # zdump prints the abbreviation only when it is not empty, and prints
+  # the time as a count of seconds when localtime() cannot represent it.
+  pattern: '^(?P<zone>\S+) {2,}(?:(?P<local>(?:[A-Z][a-z]{2}|\?{3}) (?:[A-Z][a-z]{2}|\?{3}) [ \d]\d \d{2}:\d{2}:\d{2} -?\d+)(?: (?P<abbreviation>\S+))?|(?P<local_seconds>-?\d+) \(localtime failed\))$'
+fields:
+  zone: {required: true}
+  local_seconds: {type: int}

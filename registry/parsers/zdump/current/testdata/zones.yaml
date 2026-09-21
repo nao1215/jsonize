@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (glibc zdump 2.43) as zdump Asia/Tokyo UTC America/New_York Europe/London Australia/Lord_Howe EST5EDT "<+0330>-3:30" with LC_ALL=C
+description: several zones, including a POSIX TZ string and zones whose abbreviation is a numeric offset
+os: linux
+args: [Asia/Tokyo, UTC, America/New_York, Europe/London, Australia/Lord_Howe, EST5EDT, "<+0330>-3:30"]

@@ -1,0 +1,44 @@
+[
+  {
+    "zone": "Asia/Tokyo",
+    "local": "Mon Sep 21 22:24:32 2026",
+    "abbreviation": "JST",
+    "local_seconds": null
+  },
+  {
+    "zone": "UTC",
+    "local": "Mon Sep 21 13:24:32 2026",
+    "abbreviation": "UTC",
+    "local_seconds": null
+  },
+  {
+    "zone": "America/New_York",
+    "local": "Mon Sep 21 09:24:32 2026",
+    "abbreviation": "EDT",
+    "local_seconds": null
+  },
+  {
+    "zone": "Europe/London",
+    "local": "Mon Sep 21 14:24:32 2026",
+    "abbreviation": "BST",
+    "local_seconds": null
+  },
+  {
+    "zone": "Australia/Lord_Howe",
+    "local": "Mon Sep 21 23:54:32 2026",
+    "abbreviation": "+1030",
+    "local_seconds": null
+  },
+  {
+    "zone": "EST5EDT",
+    "local": "Mon Sep 21 09:24:32 2026",
+    "abbreviation": "EDT",
+    "local_seconds": null
+  },
+  {
+    "zone": "<+0330>-3:30",
+    "local": "Mon Sep 21 16:54:32 2026",
+    "abbreviation": "+0330",
+    "local_seconds": null
+  }
+]

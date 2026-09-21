@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (glibc zdump 2.43) as zdump -V -c 2026,2027 Europe/London Australia/Lord_Howe "<+0330>-3:30" with LC_ALL=C
+description: -V leaves out the extreme values, so every line is a transition; a POSIX TZ string with no transition prints nothing
+os: linux
+args: [-V, -c, "2026,2027", Europe/London, Australia/Lord_Howe, "<+0330>-3:30"]

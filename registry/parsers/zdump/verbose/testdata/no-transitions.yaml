@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (glibc zdump 2.43) as zdump -v UTC with LC_ALL=C
+description: a zone with no transitions prints only the extreme and year-boundary lines
+os: linux
+args: [-v, UTC]

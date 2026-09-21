@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (glibc zdump 2.43) as zdump -v -c 2025,2027 Asia/Tokyo America/New_York with LC_ALL=C
+description: -v with a year cutoff, which still prints the gmtime failed and localtime failed lines for the extreme time values
+os: linux
+args: [-v, -c, "2025,2027", Asia/Tokyo, America/New_York]
