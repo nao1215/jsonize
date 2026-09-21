@@ -2469,6 +2469,15 @@ scenarios:
               - { path: "$[2].Path", equals: "tree/docs/report.txt" }
               - { path: "$[2].Size", equals: 15 }
               - { path: "$[2].Encrypted", equals: false }
+      # An archive holds as many members as it holds, so --stream writes
+      # each entry as soon as its block has been read rather than
+      # holding the listing to build one array.
+      - run:
+          command: jz run --stream 7z l -slt -ba "${workdir}/up loads/archive [1].7z"
+      - assert:
+          exit_code: 0
+          stdout:
+            contains: '"Path":"tree/docs/report.txt"'
       # An archive that is not there: 7-Zip exits 2 and writes its error
       # where the listing would have been, so no variant reads it and
       # 7-Zip's own status is what comes back.
