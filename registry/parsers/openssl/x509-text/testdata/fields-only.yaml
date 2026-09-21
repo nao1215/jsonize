@@ -1,0 +1,9 @@
+source: >-
+  captured on Ubuntu 26.04 with OpenSSL 3.5.5, LC_ALL=C openssl x509 -noout
+  -subject -issuer -dates over the certificate of ec-small-serial
+description: >-
+  the label=value lines the five field options print, which openssl/x509-fields
+  reads and this definition does not
+os: linux
+args: [x509, -noout, -subject, -issuer, -dates, -in, ec.pem]
+expect_error: 'does not describe this input'

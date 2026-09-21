@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/openssl/x509-text.json",
+  "title": "openssl/x509-text",
+  "description": "openssl x509 -noout -text, the fields, the key kind and the extensions",
+  "x-jsonize": {
+    "definition": "openssl/x509-text",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "certificate": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "type": "integer"
+        },
+        "serial": {
+          "type": "string"
+        },
+        "signature_algorithm": {
+          "type": "string"
+        },
+        "issuer": {
+          "type": "string"
+        },
+        "not_before": {
+          "type": "string"
+        },
+        "not_after": {
+          "type": "string"
+        },
+        "subject": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "version",
+        "serial",
+        "signature_algorithm",
+        "issuer",
+        "not_before",
+        "not_after",
+        "subject"
+      ]
+    },
+    "public_key": {
+      "type": "object",
+      "properties": {
+        "algorithm": {
+          "type": "string"
+        },
+        "bits": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "algorithm",
+        "bits"
+      ]
+    },
+    "extensions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "critical": {
+            "type": "boolean"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "critical"
+        ]
+      }
+    }
+  },
+  "required": [
+    "certificate",
+    "public_key",
+    "extensions"
+  ]
+}

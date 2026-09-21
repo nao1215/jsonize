@@ -182,7 +182,7 @@ the same reading with settings of your own.
 | `objdump` | [`section-headers`](../schemas/objdump/section-headers.json) |
 | `od` | [`hex-bytes`](../schemas/od/hex-bytes.json) |
 | `oomctl` | [`dump`](../schemas/oomctl/dump.json) |
-| `openssl` | [`ciphers`](../schemas/openssl/ciphers.json), [`ciphers-codes`](../schemas/openssl/ciphers-codes.json), [`version-all`](../schemas/openssl/version-all.json), [`x509-fields`](../schemas/openssl/x509-fields.json) |
+| `openssl` | [`ciphers`](../schemas/openssl/ciphers.json), [`ciphers-codes`](../schemas/openssl/ciphers-codes.json), [`version-all`](../schemas/openssl/version-all.json), [`x509-fields`](../schemas/openssl/x509-fields.json), [`x509-text`](../schemas/openssl/x509-text.json) |
 | `otool` | [`libraries`](../schemas/otool/libraries.json) |
 | `pactl` | [`info`](../schemas/pactl/info.json), [`short-cards`](../schemas/pactl/short-cards.json), [`short-clients`](../schemas/pactl/short-clients.json), [`short-devices`](../schemas/pactl/short-devices.json), [`sinks`](../schemas/pactl/sinks.json) |
 | `parted` | [`machine`](../schemas/parted/machine.json) |

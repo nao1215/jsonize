@@ -1,0 +1,4 @@
+subject=CN=ec.example.test
+issuer=CN=ec.example.test
+notBefore=Sep 21 02:23:00 2026 GMT
+notAfter=Oct 21 02:23:00 2026 GMT

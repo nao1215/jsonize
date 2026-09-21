@@ -1,0 +1,11 @@
+source: >-
+  captured on Ubuntu 26.04 with OpenSSL 3.5.5, LC_ALL=C openssl x509 -noout
+  -text over a self-signed certificate made for this fixture with
+  `openssl req -x509 -newkey rsa:2048 -nodes -subj /CN=api.example.test/O=Example/C=JP
+  -addext subjectAltName=DNS:api.example.test,DNS:www.example.test,IP:192.0.2.10`
+description: >-
+  an RSA certificate whose serial is too long for its label and is printed
+  on the next line, with a subject alternative name of two hosts and an
+  address
+os: linux
+args: [x509, -noout, -text, -in, server.pem]

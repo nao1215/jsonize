@@ -1,0 +1,37 @@
+{
+  "certificate": {
+    "version": 3,
+    "serial": "3f:16:78:6a:29:d6:12:25:50:06:59:f9:bc:38:f3:07:33:9c:0c:ef",
+    "signature_algorithm": "sha256WithRSAEncryption",
+    "issuer": "CN=api.example.test, O=Example, C=JP",
+    "not_before": "2026-09-21T02:22:25Z",
+    "not_after": "2027-09-21T02:22:25Z",
+    "subject": "CN=api.example.test, O=Example, C=JP"
+  },
+  "public_key": {
+    "algorithm": "rsaEncryption",
+    "bits": 2048
+  },
+  "extensions": [
+    {
+      "name": "X509v3 Subject Key Identifier",
+      "critical": false,
+      "value": "53:91:0E:F8:73:56:0F:F8:9A:E1:4C:C9:70:0A:0D:02:28:ED:15:19"
+    },
+    {
+      "name": "X509v3 Authority Key Identifier",
+      "critical": false,
+      "value": "53:91:0E:F8:73:56:0F:F8:9A:E1:4C:C9:70:0A:0D:02:28:ED:15:19"
+    },
+    {
+      "name": "X509v3 Basic Constraints",
+      "critical": true,
+      "value": "CA:TRUE"
+    },
+    {
+      "name": "X509v3 Subject Alternative Name",
+      "critical": false,
+      "value": "DNS:api.example.test, DNS:www.example.test, IP Address:192.0.2.10"
+    }
+  ]
+}

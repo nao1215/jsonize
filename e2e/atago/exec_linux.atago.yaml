@@ -2576,6 +2576,32 @@ scenarios:
               - { path: "$.subject", matches: "^CN ?= ?example\\.test, ?O ?= ?Example$" }
               - { path: "$.notBefore", matches: "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9:]+Z$" }
               - { path: "$.notAfter", matches: "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9:]+Z$" }
+      # -text is the whole report rather than the five label=value lines,
+      # and has a definition of its own. The assertions are written
+      # against what does not move between OpenSSL releases: 3.0 prints
+      # the names with spaces around the equals signs and puts no
+      # heading over the signature.
+      - run:
+          command: jz run --explain openssl x509 -noout -text -in "${workdir}/cert [1].pem"
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose openssl/x509-text from embedded"
+          stdout:
+            json:
+              - { path: "$.certificate.version", equals: 3 }
+              - { path: "$.certificate.subject", matches: "example\\.test" }
+              - { path: "$.certificate.not_after", matches: "^[0-9]{4}-[0-9]{2}-[0-9]{2}T" }
+              - { path: "$.public_key.bits", equals: 2048 }
+              - { path: "$.extensions[0].name", matches: "^X509v3 " }
+      # Without -noout the PEM block follows the report and is not part
+      # of it. openssl succeeded, so this is a conversion failure and
+      # the status is jz's own rather than the command's.
+      - run:
+          command: jz run openssl x509 -text -in "${workdir}/cert [1].pem"
+      - assert:
+          exit_code: 3
+          stdout: {empty: true}
       # The key is not a certificate: openssl fails, and its status is
       # what comes back.
       - run:

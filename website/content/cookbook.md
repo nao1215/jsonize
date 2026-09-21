@@ -436,6 +436,21 @@ but the subject and the issuer do not: 3.0 prints
 `CN=example.test, O=Example`. They are the one string OpenSSL printed in
 both, so a check on a name belongs in a comparison that allows either.
 
+`-noout -text` is the whole report instead, read by `openssl/x509-text`:
+the same fields under `certificate`, the kind of key and its size under
+`public_key`, and one record per extension with its critical mark.
+
+```console
+$ openssl x509 -noout -text -in server.pem | jz --parser openssl | jq -c '.extensions[] | select(.name | test("Alternative"))'
+{"name":"X509v3 Subject Alternative Name","critical":false,"value":"DNS:api.example.test, DNS:www.example.test, IP Address:192.0.2.10"}
+```
+
+Reach for it when you need the extensions, and keep the five options
+above when you need a date or a fingerprint: those lines are the same in
+every OpenSSL, and the report is not. The key material and the signature
+are hexadecimal folded over a dozen lines and are not read; `-pubkey`
+and `-modulus` print the key on its own where you want it.
+
 ## Check the type of an upload
 
 `file -i` names the MIME type and the character set of each file.

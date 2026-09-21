@@ -1,0 +1,60 @@
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number:
+            3f:16:78:6a:29:d6:12:25:50:06:59:f9:bc:38:f3:07:33:9c:0c:ef
+        Signature Algorithm: sha256WithRSAEncryption
+        Issuer: CN=api.example.test, O=Example, C=JP
+        Validity
+            Not Before: Sep 21 02:22:25 2026 GMT
+            Not After : Sep 21 02:22:25 2027 GMT
+        Subject: CN=api.example.test, O=Example, C=JP
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption
+                Public-Key: (2048 bit)
+                Modulus:
+                    00:d2:39:d0:2c:9d:55:d9:a1:c4:cb:c4:d9:66:2f:
+                    08:04:3b:df:6f:f4:94:e9:32:a4:61:3f:7c:03:ac:
+                    6d:36:62:57:f6:d1:e0:8a:e3:39:39:58:f1:9d:40:
+                    f9:c4:f8:ee:3e:aa:b3:ec:07:63:63:d4:b1:93:ca:
+                    e8:17:4c:32:2f:82:a8:d9:fc:32:83:03:3b:89:a3:
+                    96:64:34:ab:c9:48:cf:3d:31:4e:d1:8c:fb:09:28:
+                    fe:9a:50:5b:97:b3:a5:95:e0:44:00:ac:70:79:9e:
+                    75:cc:6a:9f:83:73:8b:9b:b0:ea:60:a2:4b:3e:f0:
+                    d5:91:46:62:bf:6a:e3:e8:ac:b5:20:79:ee:7f:38:
+                    f2:2c:75:8b:8a:11:c1:76:36:46:a8:f6:b2:2f:54:
+                    13:21:f6:3a:c6:54:ce:60:9d:59:79:22:07:7f:b4:
+                    9d:63:75:8c:5f:c2:e3:ff:cc:04:1d:22:64:e7:ea:
+                    98:79:e6:8b:16:97:9a:76:fa:33:55:37:e8:fe:a8:
+                    7c:55:70:b4:45:24:61:10:61:79:db:e3:45:57:c1:
+                    53:a9:72:e9:7c:0d:e6:89:48:b5:ae:32:42:5f:e3:
+                    66:ce:eb:d9:6b:07:6a:e6:d8:3a:82:5a:5c:d2:12:
+                    53:9e:a9:61:bb:ec:3e:95:77:cc:27:f3:d3:de:87:
+                    29:47
+                Exponent: 65537 (0x10001)
+        X509v3 extensions:
+            X509v3 Subject Key Identifier: 
+                53:91:0E:F8:73:56:0F:F8:9A:E1:4C:C9:70:0A:0D:02:28:ED:15:19
+            X509v3 Authority Key Identifier: 
+                53:91:0E:F8:73:56:0F:F8:9A:E1:4C:C9:70:0A:0D:02:28:ED:15:19
+            X509v3 Basic Constraints: critical
+                CA:TRUE
+            X509v3 Subject Alternative Name: 
+                DNS:api.example.test, DNS:www.example.test, IP Address:192.0.2.10
+    Signature Algorithm: sha256WithRSAEncryption
+    Signature Value:
+        4f:37:d6:c1:65:8f:cb:66:9d:ff:ce:53:e9:0c:ca:c8:36:e6:
+        ae:0c:55:3b:f9:4b:ef:6a:27:db:4c:26:2d:f8:ec:b2:8e:e2:
+        e6:06:70:d1:a0:6b:e4:c9:47:3a:7a:fc:9e:b0:99:f0:6e:7e:
+        66:9c:d1:b8:46:55:71:12:e1:99:44:4e:57:77:93:dc:41:da:
+        78:b1:ca:6a:dd:7e:51:50:6e:8b:20:3f:29:e3:60:47:e9:ff:
+        40:bb:ac:99:39:5e:be:15:09:dc:dc:c2:f3:8e:ab:ef:b0:51:
+        5a:65:32:9e:c9:97:7e:0c:c7:0d:a0:18:b9:29:91:cc:23:ac:
+        d0:0e:57:60:05:59:4a:93:2b:b6:86:f5:24:d4:54:bc:9f:2c:
+        70:2b:09:1e:93:dc:0a:c9:2d:e3:0f:9e:da:d0:ad:d6:75:52:
+        a6:ef:f1:f4:69:00:39:c8:df:89:ae:2b:19:0b:6d:76:d4:02:
+        d3:16:b2:be:ed:32:37:1c:87:b4:83:ef:5b:7e:9e:9c:90:60:
+        98:50:93:4c:81:cc:4b:9a:03:f9:d2:2e:3a:ec:9d:1e:32:e8:
+        6f:c7:9a:52:7c:4a:b3:b3:53:03:7a:c6:83:62:ac:c9:1a:4c:
+        b9:ec:88:5d:a0:29:bc:b9:79:a4:86:1e:1d:18:9d:00:94:ee:
+        6a:5b:4e:ea

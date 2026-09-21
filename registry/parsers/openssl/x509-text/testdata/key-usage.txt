@@ -1,0 +1,64 @@
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number:
+            4d:58:44:c0:69:a0:2e:b1:86:09:70:7f:b4:be:5b:c6:2f:85:6e:be
+        Signature Algorithm: sha256WithRSAEncryption
+        Issuer: CN=svc.example.test, O=Example
+        Validity
+            Not Before: Sep 21 02:32:20 2026 GMT
+            Not After : Dec 20 02:32:20 2026 GMT
+        Subject: CN=svc.example.test, O=Example
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption
+                Public-Key: (2048 bit)
+                Modulus:
+                    00:b9:26:f6:70:0d:80:25:c8:d0:88:8c:ca:78:5c:
+                    e0:c2:a6:7b:15:83:30:3d:39:d2:2f:59:f5:b0:79:
+                    48:08:4c:f1:16:85:9d:12:0a:d4:c6:2e:cd:d5:06:
+                    c6:cb:8f:69:cf:6a:3c:05:0a:96:f8:c6:94:89:93:
+                    5c:54:9a:0e:cc:2a:e9:c8:af:e7:59:f6:b7:cb:c5:
+                    b2:7f:5d:1a:93:f8:ec:95:7c:9c:bf:8a:ce:e7:33:
+                    9f:16:f9:5c:bd:ea:6c:02:8f:73:07:b5:4b:9b:e4:
+                    a2:30:44:62:b7:fd:dd:e3:bd:d8:a5:aa:d2:71:90:
+                    bb:2e:29:f2:2d:bb:94:aa:af:46:58:04:93:f2:9d:
+                    d0:99:43:19:9e:2b:e4:ae:89:6a:3b:73:fd:46:ff:
+                    76:11:db:4f:ec:eb:48:1f:e2:cd:f2:74:3a:26:14:
+                    d8:36:df:f3:5a:2c:35:13:40:a8:66:ea:6d:a5:4a:
+                    37:35:a6:da:02:17:a5:98:c7:cc:bf:0a:96:a7:3a:
+                    8c:ed:da:23:de:38:e5:d6:19:65:fa:5f:92:a1:a7:
+                    2c:b3:8a:f5:2c:3f:07:d6:76:93:cc:a6:46:6f:cd:
+                    0e:8a:89:15:be:62:4b:13:66:2e:c8:46:c0:0a:b9:
+                    6b:8b:51:b9:75:4a:5d:4b:33:2b:5e:00:36:e7:9e:
+                    ce:49
+                Exponent: 65537 (0x10001)
+        X509v3 extensions:
+            X509v3 Subject Key Identifier: 
+                D7:D1:B0:38:EA:82:8E:AB:CE:55:27:FA:2D:A6:C8:8F:4B:7F:92:75
+            X509v3 Authority Key Identifier: 
+                D7:D1:B0:38:EA:82:8E:AB:CE:55:27:FA:2D:A6:C8:8F:4B:7F:92:75
+            X509v3 Key Usage: critical
+                Digital Signature, Key Encipherment
+            X509v3 Extended Key Usage: 
+                TLS Web Server Authentication, TLS Web Client Authentication
+            X509v3 Basic Constraints: critical
+                CA:FALSE
+            X509v3 Subject Alternative Name: 
+                DNS:svc.example.test
+    Signature Algorithm: sha256WithRSAEncryption
+    Signature Value:
+        09:39:34:30:99:62:f8:4d:af:cb:b6:6b:16:c5:f2:3d:c9:f1:
+        6b:cf:0b:18:14:50:d0:cb:34:0d:07:cd:14:9a:6f:42:71:42:
+        1b:f8:9e:e8:80:84:09:21:4c:83:ac:30:18:1c:92:10:d3:30:
+        85:38:e3:aa:56:14:ab:bb:dd:1a:e2:9f:19:51:7e:73:6c:62:
+        a1:a6:bb:d6:a2:c6:9a:41:34:7c:1b:ab:a1:01:d7:40:9f:e5:
+        73:cb:42:4e:93:08:a0:e1:a3:25:ca:04:2b:5b:a2:d0:ce:0b:
+        a3:83:39:cf:89:8c:85:40:53:65:ec:d6:64:52:02:7b:35:13:
+        98:0d:5a:23:be:61:bc:67:78:41:d4:9f:a7:ae:7a:ce:d4:ff:
+        18:a2:c4:ea:c2:5c:4d:4c:cb:ae:b6:7b:c5:88:55:c3:21:b8:
+        8d:d7:bf:4f:16:fd:6f:85:60:90:d9:cb:36:59:41:5c:4f:4c:
+        b4:59:18:1e:dc:09:d3:87:59:bf:82:da:dd:52:f2:32:92:88:
+        e4:15:e5:61:d2:0f:42:a4:2c:e4:3c:51:21:d3:4a:9e:11:60:
+        ae:02:96:d5:ab:2c:91:02:9b:c7:00:ae:4a:1d:ff:3b:34:9f:
+        00:11:66:2b:c7:ff:9f:4a:3a:5f:63:26:0f:81:57:51:1a:36:
+        d6:2c:07:1b

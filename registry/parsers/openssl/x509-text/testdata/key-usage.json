@@ -1,0 +1,47 @@
+{
+  "certificate": {
+    "version": 3,
+    "serial": "4d:58:44:c0:69:a0:2e:b1:86:09:70:7f:b4:be:5b:c6:2f:85:6e:be",
+    "signature_algorithm": "sha256WithRSAEncryption",
+    "issuer": "CN=svc.example.test, O=Example",
+    "not_before": "2026-09-21T02:32:20Z",
+    "not_after": "2026-12-20T02:32:20Z",
+    "subject": "CN=svc.example.test, O=Example"
+  },
+  "public_key": {
+    "algorithm": "rsaEncryption",
+    "bits": 2048
+  },
+  "extensions": [
+    {
+      "name": "X509v3 Subject Key Identifier",
+      "critical": false,
+      "value": "D7:D1:B0:38:EA:82:8E:AB:CE:55:27:FA:2D:A6:C8:8F:4B:7F:92:75"
+    },
+    {
+      "name": "X509v3 Authority Key Identifier",
+      "critical": false,
+      "value": "D7:D1:B0:38:EA:82:8E:AB:CE:55:27:FA:2D:A6:C8:8F:4B:7F:92:75"
+    },
+    {
+      "name": "X509v3 Key Usage",
+      "critical": true,
+      "value": "Digital Signature, Key Encipherment"
+    },
+    {
+      "name": "X509v3 Extended Key Usage",
+      "critical": false,
+      "value": "TLS Web Server Authentication, TLS Web Client Authentication"
+    },
+    {
+      "name": "X509v3 Basic Constraints",
+      "critical": true,
+      "value": "CA:FALSE"
+    },
+    {
+      "name": "X509v3 Subject Alternative Name",
+      "critical": false,
+      "value": "DNS:svc.example.test"
+    }
+  ]
+}
