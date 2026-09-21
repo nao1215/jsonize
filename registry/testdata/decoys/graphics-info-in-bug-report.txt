@@ -1,0 +1,18 @@
+The window flickers when it is resized on the second monitor. Output of
+glxinfo -B and the adapter from usb-devices are below.
+
+name of display: :0
+display: :0  screen: 0
+direct rendering: Yes
+OpenGL vendor string: AMD
+OpenGL renderer string: AMD Radeon Graphics (radeonsi, strix_halo, ACO)
+
+GBM platform:
+EGL API version: 1.5
+EGL vendor string: Mesa Project
+
+T:  Bus=03 Lev=01 Prnt=01 Port=04 Cnt=05 Dev#=  6 Spd=480  MxCh= 0
+D:  Ver= 2.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
+
+Steps to reproduce: drag the window across the boundary between the
+monitors. It does not happen with LIBGL_ALWAYS_SOFTWARE=1.

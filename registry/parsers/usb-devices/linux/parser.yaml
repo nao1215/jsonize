@@ -1,0 +1,97 @@
+# usb-devices (a shell script shipped with usbutils) prints one block per
+# USB device, read from sysfs: a topology line (T:), the device
+# descriptor (D:), the vendor and product ids (P:), up to three strings
+# (S:), the active configuration (C:), and then each interface (I:)
+# followed by its endpoints (E:). A blank line opens every block.
+#
+# The block is one expression, so the device is one flat object. The
+# interfaces and their endpoints are captured as text and split into
+# nested arrays by the field rules; the expression that captures them
+# only admits I: lines each followed by E: lines, so a line of any other
+# shape is an error rather than a value left out.
+format: 1
+command: usb-devices
+variant: linux
+description: usb-devices, one object per USB device with its interfaces and endpoints
+metadata:
+  tags: [linux, hardware, usb]
+  compatible: [usbutils]
+  references:
+    - https://man7.org/linux/man-pages/man1/usb-devices.1.html
+    - https://github.com/gregkh/usbutils/blob/master/usb-devices
+detect:
+  os: [linux]
+  signature:
+    all:
+      # The topology line and the device descriptor right under it. The
+      # kernel's own /sys/kernel/debug/usb/devices opens with the same
+      # T: line, but a root hub there is followed by a bandwidth line
+      # (B:), and its active configuration is marked C:* and I:*.
+      - '\AT:  Bus=[0-9]+ Lev=[0-9]+ Prnt=[0-9]+ Port=[0-9]+ Cnt=[0-9]+ Dev#= *[0-9]+ Spd=\S+ +MxCh= *[0-9]+[ \t]*\nD:  Ver= *\S+ Cls=[0-9a-f]{2}\('
+      - '^C:  #Ifs= *[0-9]+ Cfg#= *[0-9]+ '
+parse:
+  type: records
+  start: '^T:  '
+  record:
+    parse:
+      type: regex
+      each: input
+      # print_string skips a string the device does not have, so each S:
+      # line is optional, but the script always prints them in this
+      # order. A string keeps what the device reports except trailing
+      # blanks, which some devices pad their product name with.
+      #
+      # class_decode has no name for a class it does not list, and prints
+      # Cls=0c() for one, so the name may be empty. The name is padded
+      # to five characters ("hub  "), which is taken off.
+      #
+      # An unconfigured device leaves bNumInterfaces, bmAttributes and
+      # bMaxPower empty in sysfs, so C: then prints Atr= and MxPwr= with
+      # nothing after them.
+      pattern: '\AT:  Bus=(?P<bus>[0-9]+) Lev=(?P<level>[0-9]+) Prnt=(?P<parent>[0-9]+) Port=(?P<port>[0-9]+) Cnt=(?P<count>[0-9]+) Dev#= *(?P<device>[0-9]+) Spd=(?P<speed_mbps>\S+) +MxCh= *(?P<max_children>[0-9]+)[ \t]*\nD:  Ver= *(?P<usb_version>\S+) Cls=(?P<class>[0-9a-f]{2})\((?P<class_name>[^)\n]*?) *\) Sub=(?P<subclass>[0-9a-f]{2}) Prot=(?P<protocol>[0-9a-f]{2}) MxPS= *(?P<max_packet_size>[0-9]+) #Cfgs= *(?P<configurations>[0-9]+)[ \t]*\nP:  Vendor=(?P<vendor_id>[0-9a-f]{4}) ProdID=(?P<product_id>[0-9a-f]{4}) Rev=(?P<revision>\S+)[ \t]*(?:\nS:  Manufacturer=(?P<manufacturer>[^\n]*?)[ \t]*)?(?:\nS:  Product=(?P<product>[^\n]*?)[ \t]*)?(?:\nS:  SerialNumber=(?P<serial_number>[^\n]*?)[ \t]*)?\nC:  #Ifs= *(?P<interface_count>[0-9]+) Cfg#= *(?P<configuration>[0-9]+) Atr=(?P<attributes>\S*) MxPwr=(?P<max_power_ma>\S*)[ \t]*(?P<interfaces>(?:\nI:  [^\n]*(?:\nE:  [^\n]*)*)*)\z'
+    fields:
+      bus: {type: int}
+      level: {type: int}
+      parent: {type: int}
+      port: {type: int}
+      count: {type: int}
+      device: {type: int}
+      # The kernel writes 1.5, 12, 480, 5000, 10000 or 20000, and
+      # "unknown" for a speed it cannot name.
+      speed_mbps: {type: float, null_if: [unknown]}
+      max_children: {type: int}
+      max_packet_size: {type: int}
+      configurations: {type: int}
+      interface_count: {type: int}
+      configuration: {type: int}
+      attributes: {null_if: [""]}
+      max_power_ma: {type: int, trim_suffix: mA, null_if: [""]}
+      interfaces:
+        type: array
+        # Every interface starts with its own I: line, so the text before
+        # the first one is the empty piece, which is left out.
+        split_regex: '\nI:  '
+        items:
+          type: object
+          null_if: [""]
+          when_missing: omit
+          regex: '\AIf#= *(?P<number>[0-9]+) Alt= *(?P<alternate_setting>[0-9]+) #EPs= *(?P<endpoint_count>[0-9]+) Cls=(?P<class>[0-9a-f]{2})\((?P<class_name>[^)\n]*?) *\) Sub=(?P<subclass>[0-9a-f]{2}) Prot=(?P<protocol>[0-9a-f]{2}) Driver=(?P<driver>\S+)(?P<endpoints>(?:\nE:  [^\n]*)*)\z'
+          fields:
+            number: {type: int}
+            alternate_setting: {type: int}
+            endpoint_count: {type: int}
+            # An interface no driver has bound prints Driver=(none).
+            driver: {null_if: ["(none)"]}
+            endpoints:
+              type: array
+              split_regex: '\nE:  '
+              items:
+                type: object
+                null_if: [""]
+                when_missing: omit
+                # The direction is I, O or B, and the transfer type is
+                # Ctrl, Int., Isoc or Bulk. MxPS is the packet size times
+                # the transactions per microframe, already multiplied.
+                regex: '\AAd=(?P<address>[0-9a-f]{2})\((?P<direction>[^)\n]*)\) Atr=(?P<attributes>[0-9a-f]{2})\((?P<type>[^)\n]*)\) MxPS= *(?P<max_packet_size>[0-9]+) Ivl=(?P<interval>\S+)[ \t]*\z'
+                fields:
+                  max_packet_size: {type: int}

@@ -1,0 +1,7 @@
+source: captured on Ubuntu 26.04 (usbutils 019) with LC_ALL=C usb-devices; two device serial numbers replaced with zeros of the same length
+description: >-
+  Root hubs, a keyboard, a mouse, a webcam with interfaces that have no
+  endpoints, a sound device whose product name is padded with blanks and
+  one with no serial number.
+os: linux
+args: []

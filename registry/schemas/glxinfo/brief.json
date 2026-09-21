@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/glxinfo/brief.json",
+  "title": "glxinfo/brief",
+  "description": "glxinfo -B, the display, the renderer sections and the OpenGL strings",
+  "x-jsonize": {
+    "definition": "glxinfo/brief",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "display": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "display": {
+          "type": "string"
+        },
+        "screen": {
+          "type": "integer"
+        },
+        "direct_rendering": {
+          "type": "boolean"
+        },
+        "direct_rendering_note": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "name",
+        "display",
+        "screen",
+        "direct_rendering",
+        "direct_rendering_note"
+      ]
+    },
+    "sections": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "heading": {
+            "type": "object",
+            "properties": {
+              "title": {
+                "type": "string"
+              },
+              "extension": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "title",
+              "extension"
+            ]
+          },
+          "properties": {
+            "type": "object",
+            "properties": {},
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "heading",
+          "properties"
+        ]
+      }
+    },
+    "opengl": {
+      "type": "object",
+      "properties": {},
+      "additionalProperties": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "display",
+    "sections",
+    "opengl"
+  ]
+}
