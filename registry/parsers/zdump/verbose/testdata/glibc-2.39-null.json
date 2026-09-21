@@ -1,0 +1,122 @@
+[
+  {
+    "zone": "America/New_York",
+    "ut": null,
+    "ut_seconds": -9223372036854775808,
+    "local": null,
+    "abbreviation": null,
+    "isdst": null,
+    "gmtoff": null,
+    "local_seconds": null
+  },
+  {
+    "zone": "America/New_York",
+    "ut": null,
+    "ut_seconds": -9223372036854689408,
+    "local": null,
+    "abbreviation": null,
+    "isdst": null,
+    "gmtoff": null,
+    "local_seconds": null
+  },
+  {
+    "zone": "America/New_York",
+    "ut": "Sun Mar  9 06:59:59 2025",
+    "ut_seconds": null,
+    "local": "Sun Mar  9 01:59:59 2025",
+    "abbreviation": "EST",
+    "isdst": 0,
+    "gmtoff": -18000,
+    "local_seconds": null
+  },
+  {
+    "zone": "America/New_York",
+    "ut": "Sun Mar  9 07:00:00 2025",
+    "ut_seconds": null,
+    "local": "Sun Mar  9 03:00:00 2025",
+    "abbreviation": "EDT",
+    "isdst": 1,
+    "gmtoff": -14400,
+    "local_seconds": null
+  },
+  {
+    "zone": "America/New_York",
+    "ut": "Sun Nov  2 05:59:59 2025",
+    "ut_seconds": null,
+    "local": "Sun Nov  2 01:59:59 2025",
+    "abbreviation": "EDT",
+    "isdst": 1,
+    "gmtoff": -14400,
+    "local_seconds": null
+  },
+  {
+    "zone": "America/New_York",
+    "ut": "Sun Nov  2 06:00:00 2025",
+    "ut_seconds": null,
+    "local": "Sun Nov  2 01:00:00 2025",
+    "abbreviation": "EST",
+    "isdst": 0,
+    "gmtoff": -18000,
+    "local_seconds": null
+  },
+  {
+    "zone": "America/New_York",
+    "ut": null,
+    "ut_seconds": 9223372036854689407,
+    "local": null,
+    "abbreviation": null,
+    "isdst": null,
+    "gmtoff": null,
+    "local_seconds": null
+  },
+  {
+    "zone": "America/New_York",
+    "ut": null,
+    "ut_seconds": 9223372036854775807,
+    "local": null,
+    "abbreviation": null,
+    "isdst": null,
+    "gmtoff": null,
+    "local_seconds": null
+  },
+  {
+    "zone": "UTC",
+    "ut": null,
+    "ut_seconds": -9223372036854775808,
+    "local": null,
+    "abbreviation": null,
+    "isdst": null,
+    "gmtoff": null,
+    "local_seconds": null
+  },
+  {
+    "zone": "UTC",
+    "ut": null,
+    "ut_seconds": -9223372036854689408,
+    "local": null,
+    "abbreviation": null,
+    "isdst": null,
+    "gmtoff": null,
+    "local_seconds": null
+  },
+  {
+    "zone": "UTC",
+    "ut": null,
+    "ut_seconds": 9223372036854689407,
+    "local": null,
+    "abbreviation": null,
+    "isdst": null,
+    "gmtoff": null,
+    "local_seconds": null
+  },
+  {
+    "zone": "UTC",
+    "ut": null,
+    "ut_seconds": 9223372036854775807,
+    "local": null,
+    "abbreviation": null,
+    "isdst": null,
+    "gmtoff": null,
+    "local_seconds": null
+  }
+]

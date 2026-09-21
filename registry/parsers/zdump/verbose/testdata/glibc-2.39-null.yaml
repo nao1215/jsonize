@@ -1,0 +1,4 @@
+description: the older form, where a time the library cannot represent is the bare count of seconds on the UT side and NULL on the local side
+source: captured with LC_ALL=C zdump -v -c 2025,2026 America/New_York UTC in an ubuntu:24.04 container (zdump from Ubuntu GLIBC 2.39-0ubuntu8.8, tzdata installed)
+os: linux
+args: [-v, -c, "2025,2026", America/New_York, UTC]
