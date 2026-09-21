@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (OpenSSH_10.2p1 Ubuntu-2ubuntu3.6) as ssh -G localhost </dev/null with LC_ALL=C, standard output only; user name and home directory replaced
+description: the default configuration, with identityfile and sendenv printed once per value
+os: linux
+args: [-G, localhost]

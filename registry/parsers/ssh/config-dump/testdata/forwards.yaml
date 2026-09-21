@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (OpenSSH_10.2p1 Ubuntu-2ubuntu3.6) as ssh -G -F /dev/null -l deploy -p 2222 with -o LocalForward (twice), RemoteForward, DynamicForward, ProxyJump, SetEnv, CertificateFile, IdentityFile, ControlPath and ServerAliveInterval, host web.example.com, </dev/null, LC_ALL=C, standard output only; home directory replaced
+description: repeated forwarding and setenv lines, and keywords printed only when set (controlpath, proxyjump, certificatefile)
+os: linux
+args: [-G, -F, /dev/null, -l, deploy, -p, "2222", -o, "LocalForward=8080 localhost:80", -o, "LocalForward=9090 localhost:90", -o, "RemoteForward=7000 localhost:7000", -o, DynamicForward=1080, -o, ProxyJump=bastion.example.com, -o, "SetEnv=FOO=bar BAZ=1", -o, "CertificateFile=~/.ssh/id_ed25519-cert.pub", -o, "IdentityFile=~/.ssh/deploy_key", -o, "ControlPath=~/.ssh/cm-%r@%h:%p", -o, ServerAliveInterval=30, web.example.com]

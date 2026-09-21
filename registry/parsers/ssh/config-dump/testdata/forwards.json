@@ -1,0 +1,366 @@
+[
+  {
+    "name": "host",
+    "value": "web.example.com"
+  },
+  {
+    "name": "user",
+    "value": "deploy"
+  },
+  {
+    "name": "hostname",
+    "value": "web.example.com"
+  },
+  {
+    "name": "port",
+    "value": "2222"
+  },
+  {
+    "name": "addressfamily",
+    "value": "any"
+  },
+  {
+    "name": "batchmode",
+    "value": "no"
+  },
+  {
+    "name": "canonicalizefallbacklocal",
+    "value": "yes"
+  },
+  {
+    "name": "canonicalizehostname",
+    "value": "false"
+  },
+  {
+    "name": "checkhostip",
+    "value": "no"
+  },
+  {
+    "name": "compression",
+    "value": "no"
+  },
+  {
+    "name": "controlmaster",
+    "value": "false"
+  },
+  {
+    "name": "enablesshkeysign",
+    "value": "no"
+  },
+  {
+    "name": "clearallforwardings",
+    "value": "no"
+  },
+  {
+    "name": "exitonforwardfailure",
+    "value": "no"
+  },
+  {
+    "name": "fingerprinthash",
+    "value": "SHA256"
+  },
+  {
+    "name": "forwardx11",
+    "value": "no"
+  },
+  {
+    "name": "forwardx11trusted",
+    "value": "yes"
+  },
+  {
+    "name": "gatewayports",
+    "value": "no"
+  },
+  {
+    "name": "gssapiauthentication",
+    "value": "no"
+  },
+  {
+    "name": "gssapikeyexchange",
+    "value": "no"
+  },
+  {
+    "name": "gssapidelegatecredentials",
+    "value": "no"
+  },
+  {
+    "name": "gssapitrustdns",
+    "value": "no"
+  },
+  {
+    "name": "gssapirenewalforcesrekey",
+    "value": "no"
+  },
+  {
+    "name": "gssapikexalgorithms",
+    "value": "gss-group14-sha256-,gss-group16-sha512-,gss-nistp256-sha256-,gss-curve25519-sha256-"
+  },
+  {
+    "name": "hashknownhosts",
+    "value": "no"
+  },
+  {
+    "name": "hostbasedauthentication",
+    "value": "no"
+  },
+  {
+    "name": "identitiesonly",
+    "value": "no"
+  },
+  {
+    "name": "kbdinteractiveauthentication",
+    "value": "yes"
+  },
+  {
+    "name": "nohostauthenticationforlocalhost",
+    "value": "no"
+  },
+  {
+    "name": "passwordauthentication",
+    "value": "yes"
+  },
+  {
+    "name": "permitlocalcommand",
+    "value": "no"
+  },
+  {
+    "name": "proxyusefdpass",
+    "value": "no"
+  },
+  {
+    "name": "pubkeyauthentication",
+    "value": "true"
+  },
+  {
+    "name": "requesttty",
+    "value": "auto"
+  },
+  {
+    "name": "sessiontype",
+    "value": "default"
+  },
+  {
+    "name": "stdinnull",
+    "value": "no"
+  },
+  {
+    "name": "forkafterauthentication",
+    "value": "no"
+  },
+  {
+    "name": "streamlocalbindunlink",
+    "value": "no"
+  },
+  {
+    "name": "stricthostkeychecking",
+    "value": "ask"
+  },
+  {
+    "name": "tcpkeepalive",
+    "value": "yes"
+  },
+  {
+    "name": "tunnel",
+    "value": "false"
+  },
+  {
+    "name": "verifyhostkeydns",
+    "value": "false"
+  },
+  {
+    "name": "visualhostkey",
+    "value": "no"
+  },
+  {
+    "name": "updatehostkeys",
+    "value": "true"
+  },
+  {
+    "name": "enableescapecommandline",
+    "value": "no"
+  },
+  {
+    "name": "warnweakcrypto",
+    "value": "yes"
+  },
+  {
+    "name": "canonicalizemaxdots",
+    "value": "1"
+  },
+  {
+    "name": "connectionattempts",
+    "value": "1"
+  },
+  {
+    "name": "forwardx11timeout",
+    "value": "1200"
+  },
+  {
+    "name": "numberofpasswordprompts",
+    "value": "3"
+  },
+  {
+    "name": "serveralivecountmax",
+    "value": "3"
+  },
+  {
+    "name": "serveraliveinterval",
+    "value": "30"
+  },
+  {
+    "name": "requiredrsasize",
+    "value": "1024"
+  },
+  {
+    "name": "obscurekeystroketiming",
+    "value": "yes"
+  },
+  {
+    "name": "ciphers",
+    "value": "chacha20-poly1305@openssh.com,aes128-gcm@openssh.com,aes256-gcm@openssh.com,aes128-ctr,aes192-ctr,aes256-ctr"
+  },
+  {
+    "name": "controlpath",
+    "value": "/home/user/.ssh/cm-deploy@web.example.com:2222"
+  },
+  {
+    "name": "hostkeyalgorithms",
+    "value": "ssh-ed25519-cert-v01@openssh.com,ecdsa-sha2-nistp256-cert-v01@openssh.com,ecdsa-sha2-nistp384-cert-v01@openssh.com,ecdsa-sha2-nistp521-cert-v01@openssh.com,sk-ssh-ed25519-cert-v01@openssh.com,sk-ecdsa-sha2-nistp256-cert-v01@openssh.com,rsa-sha2-512-cert-v01@openssh.com,rsa-sha2-256-cert-v01@openssh.com,ssh-ed25519,ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ecdsa-sha2-nistp521,sk-ssh-ed25519@openssh.com,sk-ecdsa-sha2-nistp256@openssh.com,rsa-sha2-512,rsa-sha2-256"
+  },
+  {
+    "name": "hostbasedacceptedalgorithms",
+    "value": "ssh-ed25519-cert-v01@openssh.com,ecdsa-sha2-nistp256-cert-v01@openssh.com,ecdsa-sha2-nistp384-cert-v01@openssh.com,ecdsa-sha2-nistp521-cert-v01@openssh.com,sk-ssh-ed25519-cert-v01@openssh.com,sk-ecdsa-sha2-nistp256-cert-v01@openssh.com,rsa-sha2-512-cert-v01@openssh.com,rsa-sha2-256-cert-v01@openssh.com,ssh-ed25519,ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ecdsa-sha2-nistp521,sk-ssh-ed25519@openssh.com,sk-ecdsa-sha2-nistp256@openssh.com,rsa-sha2-512,rsa-sha2-256"
+  },
+  {
+    "name": "kexalgorithms",
+    "value": "mlkem768x25519-sha256,sntrup761x25519-sha512,sntrup761x25519-sha512@openssh.com,curve25519-sha256,curve25519-sha256@libssh.org,ecdh-sha2-nistp256,ecdh-sha2-nistp384,ecdh-sha2-nistp521,diffie-hellman-group-exchange-sha256,diffie-hellman-group16-sha512,diffie-hellman-group18-sha512,diffie-hellman-group14-sha256"
+  },
+  {
+    "name": "casignaturealgorithms",
+    "value": "ssh-ed25519,ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ecdsa-sha2-nistp521,sk-ssh-ed25519@openssh.com,sk-ecdsa-sha2-nistp256@openssh.com,rsa-sha2-512,rsa-sha2-256"
+  },
+  {
+    "name": "loglevel",
+    "value": "INFO"
+  },
+  {
+    "name": "macs",
+    "value": "umac-64-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-256-etm@openssh.com,hmac-sha2-512-etm@openssh.com,hmac-sha1-etm@openssh.com,umac-64@openssh.com,umac-128@openssh.com,hmac-sha2-256,hmac-sha2-512,hmac-sha1"
+  },
+  {
+    "name": "securitykeyprovider",
+    "value": "internal"
+  },
+  {
+    "name": "pubkeyacceptedalgorithms",
+    "value": "ssh-ed25519-cert-v01@openssh.com,ecdsa-sha2-nistp256-cert-v01@openssh.com,ecdsa-sha2-nistp384-cert-v01@openssh.com,ecdsa-sha2-nistp521-cert-v01@openssh.com,sk-ssh-ed25519-cert-v01@openssh.com,sk-ecdsa-sha2-nistp256-cert-v01@openssh.com,rsa-sha2-512-cert-v01@openssh.com,rsa-sha2-256-cert-v01@openssh.com,ssh-ed25519,ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ecdsa-sha2-nistp521,sk-ssh-ed25519@openssh.com,sk-ecdsa-sha2-nistp256@openssh.com,rsa-sha2-512,rsa-sha2-256"
+  },
+  {
+    "name": "xauthlocation",
+    "value": "/usr/bin/xauth"
+  },
+  {
+    "name": "dynamicforward",
+    "value": "1080"
+  },
+  {
+    "name": "localforward",
+    "value": "8080 [localhost]:80"
+  },
+  {
+    "name": "localforward",
+    "value": "9090 [localhost]:90"
+  },
+  {
+    "name": "remoteforward",
+    "value": "7000 [localhost]:7000"
+  },
+  {
+    "name": "identityfile",
+    "value": "/home/user/.ssh/deploy_key"
+  },
+  {
+    "name": "canonicaldomains",
+    "value": "none"
+  },
+  {
+    "name": "certificatefile",
+    "value": "/home/user/.ssh/id_ed25519-cert.pub"
+  },
+  {
+    "name": "globalknownhostsfile",
+    "value": "/etc/ssh/ssh_known_hosts /etc/ssh/ssh_known_hosts2"
+  },
+  {
+    "name": "userknownhostsfile",
+    "value": "/home/user/.ssh/known_hosts /home/user/.ssh/known_hosts2"
+  },
+  {
+    "name": "setenv",
+    "value": "FOO=bar"
+  },
+  {
+    "name": "setenv",
+    "value": "BAZ=1"
+  },
+  {
+    "name": "logverbose",
+    "value": "none"
+  },
+  {
+    "name": "channeltimeout",
+    "value": "none"
+  },
+  {
+    "name": "permitremoteopen",
+    "value": "any"
+  },
+  {
+    "name": "addkeystoagent",
+    "value": "false"
+  },
+  {
+    "name": "forwardagent",
+    "value": "no"
+  },
+  {
+    "name": "connecttimeout",
+    "value": "none"
+  },
+  {
+    "name": "tunneldevice",
+    "value": "any:any"
+  },
+  {
+    "name": "canonicalizePermittedcnames",
+    "value": "none"
+  },
+  {
+    "name": "controlpersist",
+    "value": "no"
+  },
+  {
+    "name": "escapechar",
+    "value": "~"
+  },
+  {
+    "name": "ipqos",
+    "value": "ef cs0"
+  },
+  {
+    "name": "rekeylimit",
+    "value": "0 0"
+  },
+  {
+    "name": "streamlocalbindmask",
+    "value": "0177"
+  },
+  {
+    "name": "syslogfacility",
+    "value": "USER"
+  },
+  {
+    "name": "proxyjump",
+    "value": "bastion.example.com"
+  }
+]
