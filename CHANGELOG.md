@@ -4,6 +4,13 @@ All notable changes to this project are documented here. The format is
 based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the
 project follows [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Added
+
+- `rsync --stats` (`rsync/stats`): the transfer counts rsync prints at the end of a run, with the summary lines that follow them, as one object of typed numbers. The counts by kind that rsync prints in parentheses are read as an object of their own, and a kind it leaves out is null rather than zero. `-v`, `-i`, `--progress` and two or more `-h` options print something else and are refused. The registry holds 270 commands through 743 definitions.
+- `group_separator` on an int or a float field: the one character a format writes between groups of three digits. It is removed only where the digits are grouped by it, so a value of another shape is an error rather than a number made by dropping characters. It is for a format that decides the character itself; a count printed with the separator of the user's locale still stays the string it was printed as.
+
 ## [0.8.0]
 
 This release adds five Git inspection reports, holds every document built by `jz new` to the same nesting limit as documents jz reads, and replaces the in-process Go benchmarks with whole-command himorime suites that cover latency, CPU time, peak memory and throughput.

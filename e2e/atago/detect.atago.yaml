@@ -2794,3 +2794,40 @@ scenarios:
             json:
               - { path: '$[1].cpu', equals: 1 }
               - { path: '$[0].children[0].value', equals: amd-pstate-epp }
+
+  - name: rsync --stats is detected, and the -v and -h forms are refused
+    steps:
+      - fixture:
+          file: stats.txt
+          from: "${specdir}/../../registry/parsers/rsync/stats/testdata/deletions.txt"
+      - run:
+          command: jz
+          stdin: {file: stats.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: '$.files', equals: 6 }
+              - { path: '$.deleted_files_by_type.reg', equals: 1 }
+              - { path: '$.total_file_size', equals: 3000023 }
+              - { path: '$.dry_run', equals: false }
+      # -v prints the file list first and -h rounds the sizes; neither is
+      # read, and naming the parser does not change that.
+      - fixture:
+          file: verbose.txt
+          from: "${specdir}/../../registry/parsers/rsync/stats/testdata/verbose.txt"
+      - run:
+          command: jz --parser rsync
+          stdin: {file: verbose.txt}
+      - assert:
+          exit_code: 4
+          stdout: {empty: true}
+      - fixture:
+          file: human.txt
+          from: "${specdir}/../../registry/parsers/rsync/stats/testdata/human.txt"
+      - run:
+          command: jz --parser rsync
+          stdin: {file: human.txt}
+      - assert:
+          exit_code: 4
+          stdout: {empty: true}

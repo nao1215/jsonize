@@ -1,0 +1,217 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/rsync/stats.json",
+  "title": "rsync/stats",
+  "description": "rsync --stats transfer counts and summary",
+  "x-jsonize": {
+    "definition": "rsync/stats",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "files": {
+      "type": "integer"
+    },
+    "files_by_type": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "reg": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "dir": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "link": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "dev": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "special": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "reg",
+        "dir",
+        "link",
+        "dev",
+        "special"
+      ]
+    },
+    "created_files": {
+      "type": "integer"
+    },
+    "created_files_by_type": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "reg": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "dir": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "link": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "dev": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "special": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "reg",
+        "dir",
+        "link",
+        "dev",
+        "special"
+      ]
+    },
+    "deleted_files": {
+      "type": "integer"
+    },
+    "deleted_files_by_type": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "reg": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "dir": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "link": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "dev": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "special": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "reg",
+        "dir",
+        "link",
+        "dev",
+        "special"
+      ]
+    },
+    "regular_files_transferred": {
+      "type": "integer"
+    },
+    "total_file_size": {
+      "type": "integer"
+    },
+    "total_transferred_file_size": {
+      "type": "integer"
+    },
+    "literal_data": {
+      "type": "integer"
+    },
+    "matched_data": {
+      "type": "integer"
+    },
+    "file_list_size": {
+      "type": "integer"
+    },
+    "file_list_generation_time": {
+      "type": "number"
+    },
+    "file_list_transfer_time": {
+      "type": "number"
+    },
+    "total_bytes_sent": {
+      "type": "integer"
+    },
+    "total_bytes_received": {
+      "type": "integer"
+    },
+    "bytes_per_second": {
+      "type": "number"
+    },
+    "speedup": {
+      "type": "number"
+    },
+    "dry_run": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "files",
+    "files_by_type",
+    "created_files",
+    "created_files_by_type",
+    "deleted_files",
+    "deleted_files_by_type",
+    "regular_files_transferred",
+    "total_file_size",
+    "total_transferred_file_size",
+    "literal_data",
+    "matched_data",
+    "file_list_size",
+    "file_list_generation_time",
+    "file_list_transfer_time",
+    "total_bytes_sent",
+    "total_bytes_received",
+    "bytes_per_second",
+    "speedup",
+    "dry_run"
+  ]
+}

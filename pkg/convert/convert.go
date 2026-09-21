@@ -50,8 +50,10 @@ func (e *Error) Error() string {
 func (e *Error) Unwrap() error { return e.Cause }
 
 // Int parses a base-10 integer. One leading sign is accepted, '+' or
-// '-'; thousands separators are not, because jsonize always runs
-// commands with LC_ALL=C.
+// '-'; a separator between groups of digits is not, since which
+// character that is belongs to the format rather than to the number.
+// A definition whose command prints one names it, and Ungroup takes it
+// off before the value gets here.
 func Int(s string) (int64, error) {
 	t := strings.TrimSpace(s)
 	if t == "" {
@@ -304,6 +306,61 @@ func Strip(s, prefix, suffix string) string {
 		t = strings.TrimSuffix(t, suffix)
 	}
 	return strings.TrimSpace(t)
+}
+
+// Ungroup removes the character a format puts between groups of three
+// digits, so that "3,000,023" can be read as the number it names. A
+// value holding no such character, and an empty sep, come back as they
+// were.
+//
+// The grouping is checked rather than assumed: sep is removed only where
+// it stands between a leading group of one to three digits and groups of
+// exactly three, with at most a fraction after them. Anywhere else it is
+// text of another shape, and the false result says so instead of a
+// number produced by dropping characters.
+func Ungroup(s, sep string) (string, bool) {
+	if sep == "" {
+		return s, true
+	}
+	// The surrounding whitespace comes off first, so that a format whose
+	// separator is a space is not read as one padded value.
+	t := strings.TrimSpace(s)
+	if !strings.Contains(t, sep) {
+		return s, true
+	}
+	sign := ""
+	if t != "" && (t[0] == '+' || t[0] == '-') {
+		sign, t = t[:1], t[1:]
+	}
+	// A format whose group separator is the period writes no fraction,
+	// so the period is only a decimal point for the others.
+	head, tail := t, ""
+	if sep != "." {
+		if i := strings.IndexByte(t, '.'); i >= 0 {
+			head, tail = t[:i], t[i:]
+		}
+	}
+	if strings.Contains(tail, sep) {
+		return s, false
+	}
+	groups := strings.Split(head, sep)
+	if len(groups) < 2 {
+		return s, false
+	}
+	for i, g := range groups {
+		switch {
+		case i == 0 && (len(g) < 1 || len(g) > 3):
+			return s, false
+		case i > 0 && len(g) != 3:
+			return s, false
+		}
+		for j := 0; j < len(g); j++ {
+			if g[j] < '0' || g[j] > '9' {
+				return s, false
+			}
+		}
+	}
+	return sign + strings.Join(groups, "") + tail, true
 }
 
 // StripANSI removes the escape sequences a command writes to colour its

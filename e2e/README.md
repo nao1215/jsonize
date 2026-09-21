@@ -66,7 +66,7 @@ lacks:
 | `jq`, `sed` | on every runner, Windows through Git; the FreeBSD machine installs jq | `cookbook`: the recipes that hand the JSON to jq are pipelines, and the pipeline is what they pin |
 | `git` | on every runner; the FreeBSD machine installs it | `exec`, `exec_linux` |
 | `df`, `free`, `ps`, `uptime`, `id`, `env`, `mount`, `du`, `stat`, `lscpu`, `lsmod`, `prlimit`, `who`, `wc`, `ls`, `ln`, `md5sum`, `sha256sum`, `tar`, `gzip` | on every runner | `exec_linux` |
-| `ip`, `ss`, `dpkg`, `apt-cache` | on every runner | `exec_linux` |
+| `ip`, `ss`, `dpkg`, `apt-cache`, `rsync` | on every runner | `exec_linux` |
 | a running systemd | the runner boots with it; a container usually does not | `exec_linux` (`systemctl`) |
 | `ipconfig`, `systeminfo`, `hostname`, `powershell` | part of Windows | `exec_windows` |
 | `go` | the toolchain | `scripts/run_e2e.sh` builds `jz` and `e2ehelper` |

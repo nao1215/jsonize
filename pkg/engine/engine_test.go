@@ -1809,6 +1809,58 @@ parse:
 // it has. One past what 64 bits hold (a limit printed as 2^64 - 4) is
 // written with its digits rather than refused, and what is not an
 // integer is still refused.
+func TestGroupSeparatorIsRemovedBeforeConversion(t *testing.T) {
+	t.Parallel()
+	def := load(t, `
+format: 1
+command: x
+variant: v
+parse:
+  type: regex
+  pattern: '^(?P<name>\S+) (?P<value>.+)$'
+fields:
+  value: {type: int, group_separator: ",", trim_suffix: " bytes"}
+`)
+	got, err := Parse(def, []byte("a 23 bytes\nb 3,000,023 bytes\nc -1,234 bytes\nd 18,446,744,073,709,551,616 bytes\n"), Options{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	want := `[{"name":"a","value":23},{"name":"b","value":3000023},{"name":"c","value":-1234},{"name":"d","value":18446744073709551616}]`
+	if diff := diff(want, mustJSON(t, got)); diff != "" {
+		t.Error(diff)
+	}
+	// The separator is taken off where the digits are grouped by it and
+	// nowhere else, so text of another shape is an error rather than a
+	// number made by dropping characters.
+	for _, bad := range []string{"1,23", "1,2345", ",123", "123,", "1,,234", "a,bcd"} {
+		if _, err := Parse(def, []byte("a "+bad+" bytes\n"), Options{}); err == nil {
+			t.Errorf("%q was read as an int", bad)
+		}
+	}
+}
+
+func TestGroupSeparatorOnAFloatField(t *testing.T) {
+	t.Parallel()
+	def := load(t, `
+format: 1
+command: x
+variant: v
+parse:
+  type: regex
+  pattern: '^(?P<name>\S+) (?P<value>.+)$'
+fields:
+  value: {type: float, group_separator: ","}
+`)
+	got, err := Parse(def, []byte("a 6,002,300.00\nb 0.001\n"), Options{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	want := `[{"name":"a","value":6002300},{"name":"b","value":0.001}]`
+	if diff := diff(want, mustJSON(t, got)); diff != "" {
+		t.Error(diff)
+	}
+}
+
 func TestIntFieldKeepsAnIntegerPast64Bits(t *testing.T) {
 	t.Parallel()
 	def := load(t, `

@@ -1,0 +1,10 @@
+source: >-
+  captured on Ubuntu 26.04 with rsync 3.4.1, LC_ALL=C rsync -a --stats -h
+  -h src/ dst/ over two scratch directories holding only files made for
+  this fixture
+description: >-
+  two -h options round the sizes to units of 1000 ("2.86M bytes"), which
+  names no particular number of bytes and is refused
+os: linux
+args: ["-a", "--stats", "-h", "-h", "src/", "dst/"]
+expect_error: 'does not describe this input'

@@ -573,3 +573,54 @@ func TestParseZoneOffset(t *testing.T) {
 		}
 	}
 }
+
+func TestUngroup(t *testing.T) {
+	t.Parallel()
+	tests := []struct {
+		name string
+		in   string
+		sep  string
+		want string
+		ok   bool
+	}{
+		{"no separator named", "1000", "", "1000", true},
+		{"none in the value", "1000", ",", "1000", true},
+		{"one group", "3,000", ",", "3000", true},
+		{"several groups", "3,000,023", ",", "3000023", true},
+		{"leading group of one", "1,234,567", ",", "1234567", true},
+		{"negative", "-1,234", ",", "-1234", true},
+		{"signed", "+1,234", ",", "+1234", true},
+		{"a fraction after the groups", "1,234.50", ",", "1234.50", true},
+		{"surrounding space", " 1,234 ", ",", "1234", true},
+		// A separator anywhere but between a group of one to three digits
+		// and groups of exactly three is text of another shape.
+		{"group of two", "1,23", ",", "1,23", false},
+		{"group of four", "1,2345", ",", "1,2345", false},
+		{"leading separator", ",123", ",", ",123", false},
+		{"trailing separator", "123,", ",", "123,", false},
+		{"two separators", "1,,234", ",", "1,,234", false},
+		{"first group too long", "1234,567", ",", "1234,567", false},
+		{"inside the fraction", "1,234.5,67", ",", "1,234.5,67", false},
+		{"not digits", "a,bcd", ",", "a,bcd", false},
+		{"a period separator", "1.234.567", ".", "1234567", true},
+		// A format whose separator is a space: the padding around the
+		// value is not one of them.
+		{"a space separator", "1 234 567", " ", "1234567", true},
+		{"padding around a space separator", "  1 234  ", " ", "1234", true},
+		{"padding and no space separator", "  1234  ", " ", "  1234  ", true},
+		{"padding and no tab separator", "\t1234\t", "\t", "\t1234\t", true},
+		{"a tab separator", "1\t234", "\t", "1234", true},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			got, ok := Ungroup(tt.in, tt.sep)
+			if ok != tt.ok {
+				t.Fatalf("Ungroup(%q, %q) ok = %v, want %v", tt.in, tt.sep, ok, tt.ok)
+			}
+			if got != tt.want {
+				t.Errorf("Ungroup(%q, %q) = %q, want %q", tt.in, tt.sep, got, tt.want)
+			}
+		})
+	}
+}
