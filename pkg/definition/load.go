@@ -1166,7 +1166,7 @@ func validateGroupSeparator(v *validator, path string, f *Field) {
 		v.add(path+".group_separator", "is one character, the one the format writes between groups of three digits")
 		return
 	}
-	if strings.ContainsAny(f.GroupSeparator, "0123456789+-") {
+	if strings.ContainsAny(f.GroupSeparator, "0123456789+-eE") {
 		v.add(path+".group_separator", "%q is part of a number and cannot separate its digits", f.GroupSeparator)
 	}
 	if f.EffectiveType() == FieldFloat && f.GroupSeparator == "." {

@@ -335,6 +335,8 @@ func TestLoadErrors(t *testing.T) {
 		{"group separator on a string field", base + "fields: {t: {group_separator: ','}}\n", "is only valid for type int and type float"},
 		{"group separator of two characters", base + "fields: {t: {type: int, group_separator: ', '}}\n", "is one character"},
 		{"group separator that is a digit", base + "fields: {t: {type: int, group_separator: '0'}}\n", "is part of a number"},
+		{"group separator that is an exponent marker", base + "fields: {t: {type: float, group_separator: 'e'}}\n", "is part of a number"},
+		{"group separator that is a capital exponent marker", base + "fields: {t: {type: int, group_separator: 'E'}}\n", "is part of a number"},
 		{"group separator that is the decimal point of a float", base + "fields: {t: {type: float, group_separator: '.'}}\n", "is the decimal point"},
 		{"duration without a layout", base + "fields: {t: {type: duration}}\n", "is required for type duration"},
 		{"tree without an indent", "format: 1\ncommand: c\nvariant: v\nparse: {type: tree, node: {parse: {type: regex, pattern: '(?P<a>.)'}}}\n", "indent: is required"},

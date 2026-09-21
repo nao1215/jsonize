@@ -603,6 +603,13 @@ func TestUngroup(t *testing.T) {
 		{"inside the fraction", "1,234.5,67", ",", "1,234.5,67", false},
 		{"not digits", "a,bcd", ",", "a,bcd", false},
 		{"a period separator", "1.234.567", ".", "1234567", true},
+		// A format whose separator is a space: the padding around the
+		// value is not one of them.
+		{"a space separator", "1 234 567", " ", "1234567", true},
+		{"padding around a space separator", "  1 234  ", " ", "1234", true},
+		{"padding and no space separator", "  1234  ", " ", "  1234  ", true},
+		{"padding and no tab separator", "\t1234\t", "\t", "\t1234\t", true},
+		{"a tab separator", "1\t234", "\t", "1234", true},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

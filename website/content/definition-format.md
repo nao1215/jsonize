@@ -893,7 +893,9 @@ bytes`). The separator is removed only where the digits are grouped by
 it: a leading group of one to three digits, then groups of exactly
 three, and at most a fraction after them. Anywhere else it is an error,
 so a value of another shape is refused rather than turned into a number
-by dropping characters.
+by dropping characters. The whitespace around a value comes off first,
+so a format whose separator is a space reads a padded value as the one
+number it is.
 
 Write it only where the format decides the character rather than the
 locale of whoever ran the command. `tasklist`, `systeminfo` and `scc`

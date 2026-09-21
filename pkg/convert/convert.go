@@ -319,10 +319,15 @@ func Strip(s, prefix, suffix string) string {
 // text of another shape, and the false result says so instead of a
 // number produced by dropping characters.
 func Ungroup(s, sep string) (string, bool) {
-	if sep == "" || !strings.Contains(s, sep) {
+	if sep == "" {
 		return s, true
 	}
+	// The surrounding whitespace comes off first, so that a format whose
+	// separator is a space is not read as one padded value.
 	t := strings.TrimSpace(s)
+	if !strings.Contains(t, sep) {
+		return s, true
+	}
 	sign := ""
 	if t != "" && (t[0] == '+' || t[0] == '-') {
 		sign, t = t[:1], t[1:]
