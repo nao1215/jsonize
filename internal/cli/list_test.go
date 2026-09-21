@@ -62,4 +62,10 @@ func TestListNamesWhatItHasNoParserFor(t *testing.T) {
 	if code := h.run("list", "/usr/bin/df", "gnu"); code != ExitOK || !strings.Contains(h.stdout.String(), "df/gnu") {
 		t.Errorf("a path: %d %s", code, h.stdout.String())
 	}
+	// A misspelt name gets the suggestion jz run and --parser give it.
+	for _, args := range [][]string{{"list", "dff"}, {"list", "dff", "gnu"}} {
+		if code := h.run(args...); code != ExitSelect || !strings.Contains(h.stderr.String(), "did you mean df?") {
+			t.Errorf("%v: %d %s", args, code, h.stderr.String())
+		}
+	}
 }
