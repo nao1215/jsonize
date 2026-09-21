@@ -1,0 +1,4 @@
+description: Physical ids, where lscpu prints a dash for the book and drawer ids the kernel does not report, beside columns that are empty on this machine.
+source: the prose, the header and rows 1 to 8 of `lscpu -p=cpu,core,socket,cluster,book,drawer,node,address,configured,polarization -y -a` captured on Ubuntu 26.04 (util-linux 2.41.3) with LC_ALL=C
+os: linux
+args: ["-p=cpu,core,socket,cluster,book,drawer,node,address,configured,polarization", "-y", "-a"]

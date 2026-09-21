@@ -1,0 +1,4 @@
+description: A CPU without an L2 cache, whose L3 id lscpu then prints in the L2 column; the row is refused rather than read with the ids shifted.
+source: the prose, the header and rows 1 to 10 of the default capture, with the L2 id of CPU 5 removed by hand the way lscpu leaves out a cache a CPU does not have (sys-utils/lscpu.c, get_cell_data); not a capture of a real machine
+os: linux
+expect_error: 'field "l3"'

@@ -1,0 +1,157 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/lscpu/parsable.json",
+  "title": "lscpu/parsable",
+  "description": "lscpu -p, one comma separated row per logical CPU",
+  "x-jsonize": {
+    "definition": "lscpu/parsable",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "address": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "bogomips": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "book": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "cluster": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "column": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "configured": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "core": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "cpu": {
+        "type": "integer"
+      },
+      "drawer": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "l1": {
+        "type": "integer"
+      },
+      "l1d": {
+        "type": "integer"
+      },
+      "l1d_l1i_l2": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "l1d_l1i_l2_l3": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "l1i": {
+        "type": "integer"
+      },
+      "l2": {
+        "type": "integer"
+      },
+      "l3": {
+        "type": "integer"
+      },
+      "l4": {
+        "type": "integer"
+      },
+      "maxmhz": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "mhz": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "minmhz": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "modelname": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "node": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "online": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "polarization": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "scalmhz_percent": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "socket": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      }
+    },
+    "additionalProperties": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

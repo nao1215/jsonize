@@ -1,0 +1,6 @@
+# Exported by the inventory tool, which writes one row per host.
+# Columns are separated by commas; empty cells mean unknown.
+# Host,Rack,Slot,,Owner
+web01,3,12,,ops
+web02,3,13,,ops
+db01,4,1,,dba
