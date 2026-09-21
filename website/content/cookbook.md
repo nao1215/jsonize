@@ -464,10 +464,9 @@ $ rsync -a --stats /srv/data/ /srv/backup/ | jz | jq -c '{moved: .regular_files_
 ```
 
 Needs rsync 3.1.0 or later, checked against 3.4.1. `-v`, `-i`,
-`--progress` and `--out-format`
-put file names in front of the counts and are refused, which also keeps
-the paths out of the JSON; two or more `-h` options round the sizes and
-are refused as well.
+`--progress` and `--out-format` put file names in front of the counts
+and are refused, which also keeps the paths out of the JSON; two or more
+`-h` options round the sizes and are refused as well.
 
 rsync prints the block even when it failed: a missing source is exit 23
 and a block of zeros. Read the status, not the counts, which is what the
