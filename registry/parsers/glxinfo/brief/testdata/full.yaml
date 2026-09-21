@@ -1,0 +1,7 @@
+source: the first 40 lines of LC_ALL=C glxinfo (without -B) on Ubuntu 26.04 (mesa-utils 9.0.0) under X11
+description: >-
+  Without -B glxinfo opens with the same three lines and then lists the
+  server and client GLX strings and extensions, which this definition
+  does not read.
+os: linux
+expect_error: 'does not describe this input'

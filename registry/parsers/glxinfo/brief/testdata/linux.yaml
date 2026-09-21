@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (mesa-utils 9.0.0, Mesa 26.0.8, radeonsi) with LC_ALL=C glxinfo -B under X11
+description: the renderer info of GLX_MESA_query_renderer and both memory sections, then a core, a compatibility and an ES profile
+os: linux
+args: ["-B"]

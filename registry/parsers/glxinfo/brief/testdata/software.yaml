@@ -1,0 +1,3 @@
+source: captured on Ubuntu 26.04 (mesa-utils 9.0.0, Mesa 26.0.8) with LIBGL_ALWAYS_SOFTWARE=1 LC_ALL=C glxinfo -B under X11
+description: llvmpipe, which reports vendor and device ids of 0xffffffff and no dedicated video memory
+os: linux
