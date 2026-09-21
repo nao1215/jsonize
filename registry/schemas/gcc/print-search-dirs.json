@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/gcc/print-search-dirs.json",
+  "title": "gcc/print-search-dirs",
+  "description": "gcc -print-search-dirs, the install directory and the program and library search paths",
+  "x-jsonize": {
+    "definition": "gcc/print-search-dirs",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "install": {
+      "type": "string"
+    },
+    "programs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "libraries": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "install",
+    "programs",
+    "libraries"
+  ]
+}

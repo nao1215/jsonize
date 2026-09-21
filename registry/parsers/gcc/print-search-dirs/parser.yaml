@@ -1,0 +1,44 @@
+# `gcc -print-search-dirs` prints three lines: the directory gcc is
+# installed in, then the directories it searches for the programs it runs
+# (cc1, as, collect2) and for libraries and startup files. The two lists
+# are written the way an environment variable is built: an "=" (the
+# driver builds the string for COMPILER_PATH and LIBRARY_PATH with the
+# same function, gcc/gcc.cc build_search_list, and passes no name here),
+# then the directories joined with the path separator. They are split
+# into arrays, in order, with repeats kept: the order is the search
+# order, and gcc does list a directory twice.
+#
+# The separator is ":" on the systems this was captured on. A directory
+# whose name holds a colon cannot be told apart from two directories,
+# the same as in PATH; it is split. A Windows build separates with ";"
+# and starts a path with a drive letter, which the signature refuses
+# rather than splitting at the drive colon (not verified on Windows).
+#
+# The three labels pass through gettext, so the words differ in another
+# locale; jz run sets LC_ALL=C. clang prints its own lists without the
+# "install:" line (not verified: clang is not installed here), and is
+# refused.
+format: 1
+command: gcc
+variant: print-search-dirs
+aliases:
+  - name: g++
+description: gcc -print-search-dirs, the install directory and the program and library search paths
+metadata:
+  tags: [gcc, toolchain, build]
+  compatible: [GCC]
+  references:
+    - https://gcc.gnu.org/onlinedocs/gcc/Developer-Options.html
+    - https://github.com/gcc-mirror/gcc/blob/master/gcc/gcc.cc
+detect:
+  signature:
+    all:
+      - '\Ainstall: [^\n]+\nprograms: =/[^\n]*\nlibraries: =/[^\n]*\z'
+parse:
+  type: regex
+  each: input
+  pattern: '\Ainstall: (?P<install>[^\n]+?)[ \t]*\nprograms: =(?P<programs>/[^\n]*?)[ \t]*\nlibraries: =(?P<libraries>/[^\n]*?)[ \t]*\z'
+fields:
+  install: {required: true}
+  programs: {type: array, split: ":"}
+  libraries: {type: array, split: ":"}

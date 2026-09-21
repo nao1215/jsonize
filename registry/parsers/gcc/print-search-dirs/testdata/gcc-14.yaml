@@ -1,0 +1,3 @@
+description: GCC 14 installed beside 15, under its own version directory.
+source: output of `gcc-14 -print-search-dirs` captured on Ubuntu 26.04 with LC_ALL=C
+os: linux
