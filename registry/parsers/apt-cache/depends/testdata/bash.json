@@ -3,16 +3,19 @@
     "package": "bash",
     "children": [
       {
+        "alternative": false,
         "relation": "PreDepends",
         "package": "libc6",
         "children": []
       },
       {
+        "alternative": false,
         "relation": "PreDepends",
         "package": "libtinfo6",
         "children": []
       },
       {
+        "alternative": false,
         "relation": "Depends",
         "package": "base-files",
         "children": [
@@ -23,6 +26,7 @@
         ]
       },
       {
+        "alternative": false,
         "relation": "Depends",
         "package": "debianutils",
         "children": [
@@ -33,11 +37,13 @@
         ]
       },
       {
+        "alternative": false,
         "relation": "Recommends",
         "package": "bash-completion",
         "children": []
       },
       {
+        "alternative": false,
         "relation": "Suggests",
         "package": "bash-doc",
         "children": []

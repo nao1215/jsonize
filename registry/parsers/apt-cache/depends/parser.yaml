@@ -25,7 +25,12 @@ detect:
       - '^  (?:Pre)?Depends: \S+[ \t]*$'
 parse:
   type: tree
-  indent: "  "
+  # A relationship ORed with the one after it is printed with "|" in the
+  # second column of its indentation (" |PreDepends: x"). The one-space
+  # unit takes the blank in front of the "|", so the mark stays in the
+  # node's text and is read into alternative rather than dropped: without
+  # it an alternative would read as a second relationship required too.
+  indent: ["  ", " "]
   # A top-level line is a package name, one word in the characters a
   # Debian package name may hold, with an architecture after a colon
   # when the query named one; a line of any other shape at the top is
@@ -37,8 +42,10 @@ parse:
       patterns:
         # A relationship names its kind; a provider under one is a bare
         # package name, and so is the package the report is about.
-        - '^(?P<relation>\S+): (?P<package>.+?)[ \t]*$'
+        - '^(?P<alternative>\|?)(?P<relation>[^|\s]\S*): (?P<package>.+?)[ \t]*$'
         - '^(?P<package>.+?)[ \t]*$'
     fields:
       package: {required: true}
       relation: {when_missing: omit}
+      # true when this relationship is ORed with the next one
+      alternative: {type: bool, true_values: ["|"], false_values: [""], when_missing: omit}

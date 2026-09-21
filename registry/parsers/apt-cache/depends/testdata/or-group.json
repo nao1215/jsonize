@@ -1,0 +1,796 @@
+[
+  {
+    "package": "zenity",
+    "children": [
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "zenity-common",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libadwaita-1-0",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libc6",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libglib2.0-0t64",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libgtk-4-1",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libpango-1.0-0",
+        "children": []
+      }
+    ]
+  },
+  {
+    "package": "libreoffice-core",
+    "children": [
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "fontconfig",
+        "children": [
+          {
+            "package": "fontconfig:i386",
+            "children": []
+          }
+        ]
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "fonts-opensymbol",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libreoffice-common",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "uno-libs-private",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "ure",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libabsl20260107",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libargon2-1",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libboost-locale1.90.0",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libc6",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libcairo2",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libclucene-contribs1t64",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libclucene-core1t64",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libcups2t64",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libcurl4t64",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libdbus-1-3",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libdconf1",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libeot0",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libepoxy0",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libexpat1",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libexttextcat-2.0-0",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libfontconfig1",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libfreetype6",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libgcc-s1",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libglib2.0-0t64",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libgpgmepp7",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libgraphite2-3",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libgstreamer-plugins-base1.0-0",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libgstreamer1.0-0",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libharfbuzz-icu0",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libharfbuzz0b",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libhunspell-1.7-0",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libhyphen0",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libice6",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libicu78",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libjpeg8",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "liblcms2-2",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libldap2",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libmythes-1.2-0",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libnspr4",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libnss3",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libopenjp2-7",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "liborcus-0.21-0",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "liborcus-parser-0.21-0",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libpng16-16t64",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libpoppler156",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libraptor2-0",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "librdf0t64",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "<libreoffice-sal-private-abi>",
+        "children": [
+          {
+            "package": "libuno-sal3t64",
+            "children": []
+          }
+        ]
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "<libreoffice-salhelper-private-abi>",
+        "children": [
+          {
+            "package": "libuno-salhelpergcc3-3t64",
+            "children": []
+          }
+        ]
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "librevenge-0.0-0",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libsm6",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libstdc++6",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libtiff6",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libuno-cppu3t64",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libuno-cppuhelpergcc3-3t64",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libuno-sal3t64",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libuno-salhelpergcc3-3t64",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libwebp7",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libx11-6",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libx11-xcb1",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libxext6",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libxinerama1",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libxml2-16",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libxmlsec1-1",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libxmlsec1-nss1",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libxrandr2",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libxrender1",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libxslt1.1",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libzstd1",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "zlib1g",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Conflicts",
+        "package": "<libreoffice-avmedia-backend-vlc>",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Conflicts",
+        "package": "libreoffice-base",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Conflicts",
+        "package": "libreoffice-calc",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Conflicts",
+        "package": "libreoffice-core-nogui",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Conflicts",
+        "package": "libreoffice-draw",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Conflicts",
+        "package": "<libreoffice-filter-binfilter>",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Conflicts",
+        "package": "libreoffice-impress",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Conflicts",
+        "package": "libreoffice-math",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Conflicts",
+        "package": "<libreoffice-mysql-connector>",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Conflicts",
+        "package": "libreoffice-report-builder",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Conflicts",
+        "package": "libreoffice-writer",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Breaks",
+        "package": "<browser-plugin-libreoffice>",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Breaks",
+        "package": "<libreoffice-avmedia-backend-gstreamer>",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Breaks",
+        "package": "libreoffice-base",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Breaks",
+        "package": "libreoffice-calc",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Breaks",
+        "package": "libreoffice-common",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Breaks",
+        "package": "libreoffice-dev",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Breaks",
+        "package": "libreoffice-draw",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Breaks",
+        "package": "libreoffice-evolution",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Breaks",
+        "package": "libreoffice-gnome",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Breaks",
+        "package": "<libreoffice-gtk2>",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Breaks",
+        "package": "libreoffice-gtk3",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Breaks",
+        "package": "libreoffice-impress",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Breaks",
+        "package": "<libreoffice-kde4>",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Breaks",
+        "package": "<libreoffice-kde5>",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Breaks",
+        "package": "<libreoffice-kf5>",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Breaks",
+        "package": "libreoffice-officebean",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Breaks",
+        "package": "<libreoffice-pdfimport>",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Breaks",
+        "package": "<libreoffice-qt5>",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Breaks",
+        "package": "libreoffice-writer",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Recommends",
+        "package": "libpaper-utils",
+        "children": [
+          {
+            "package": "libpaper-utils:i386",
+            "children": []
+          }
+        ]
+      },
+      {
+        "alternative": false,
+        "relation": "Suggests",
+        "package": "gstreamer1.0-plugins-base",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Suggests",
+        "package": "gstreamer1.0-plugins-good",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Suggests",
+        "package": "gstreamer1.0-plugins-ugly",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Suggests",
+        "package": "gstreamer1.0-plugins-bad",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Suggests",
+        "package": "gstreamer1.0-libav",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Replaces",
+        "package": "<libreoffice-avmedia-backend-gstreamer>",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Replaces",
+        "package": "libreoffice-common",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Replaces",
+        "package": "libreoffice-core-nogui",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Replaces",
+        "package": "<libreoffice-pdfimport>",
+        "children": []
+      }
+    ]
+  },
+  {
+    "package": "bash",
+    "children": [
+      {
+        "alternative": false,
+        "relation": "PreDepends",
+        "package": "libc6",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "PreDepends",
+        "package": "libtinfo6",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "base-files",
+        "children": [
+          {
+            "package": "base-files:i386",
+            "children": []
+          }
+        ]
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "debianutils",
+        "children": [
+          {
+            "package": "debianutils:i386",
+            "children": []
+          }
+        ]
+      },
+      {
+        "alternative": false,
+        "relation": "Recommends",
+        "package": "bash-completion",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "Suggests",
+        "package": "bash-doc",
+        "children": []
+      }
+    ]
+  },
+  {
+    "package": "coreutils",
+    "children": [
+      {
+        "alternative": true,
+        "relation": "PreDepends",
+        "package": "coreutils-from-uutils",
+        "children": []
+      },
+      {
+        "alternative": false,
+        "relation": "PreDepends",
+        "package": "coreutils-from-gnu",
+        "children": []
+      }
+    ]
+  }
+]
