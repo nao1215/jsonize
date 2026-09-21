@@ -1,0 +1,4 @@
+source: "pw-cli list-objects Device on Ubuntu 26.04 with PipeWire 1.6.2, LC_ALL=C; a webcam serial in a device name replaced with 0123ABCD"
+description: The long name of the command prints the same blocks as ls.
+os: linux
+args: ["list-objects", "Device"]

@@ -1,0 +1,219 @@
+[
+  {
+    "object": {
+      "id": 30,
+      "type": "PipeWire:Interface:Node",
+      "version": 3
+    },
+    "properties": {
+      "object.serial": "30",
+      "factory.id": "11",
+      "priority.driver": "200000",
+      "node.name": "Dummy-Driver"
+    }
+  },
+  {
+    "object": {
+      "id": 31,
+      "type": "PipeWire:Interface:Node",
+      "version": 3
+    },
+    "properties": {
+      "object.serial": "31",
+      "factory.id": "11",
+      "priority.driver": "190000",
+      "node.name": "Freewheel-Driver"
+    }
+  },
+  {
+    "object": {
+      "id": 40,
+      "type": "PipeWire:Interface:Node",
+      "version": 3
+    },
+    "properties": {
+      "object.serial": "63",
+      "object.path": "alsa:acp:Generic_1:3:playback",
+      "factory.id": "19",
+      "client.id": "38",
+      "device.id": "55",
+      "priority.session": "1009",
+      "priority.driver": "1009",
+      "node.description": "Ryzen HD Audio Controller アナログステレオ",
+      "node.name": "alsa_output.pci-0000_c6_00.6.analog-stereo",
+      "node.nick": "SN6186 Analog",
+      "media.class": "Audio/Sink"
+    }
+  },
+  {
+    "object": {
+      "id": 44,
+      "type": "PipeWire:Interface:Node",
+      "version": 3
+    },
+    "properties": {
+      "object.serial": "67",
+      "object.path": "alsa:acp:MicroII:1:playback",
+      "factory.id": "19",
+      "client.id": "38",
+      "device.id": "57",
+      "priority.session": "1109",
+      "priority.driver": "1109",
+      "node.description": "CM102-A+/102S+ Audio Controller アナログステレオ",
+      "node.name": "alsa_output.usb-C-Media_INC._USB_Sound_Device-00.analog-stereo",
+      "node.nick": "Audio Advantage MicroII",
+      "media.class": "Audio/Sink"
+    }
+  },
+  {
+    "object": {
+      "id": 45,
+      "type": "PipeWire:Interface:Node",
+      "version": 3
+    },
+    "properties": {
+      "object.serial": "66",
+      "object.path": "alsa:acp:Device:2:capture",
+      "factory.id": "19",
+      "client.id": "38",
+      "device.id": "56",
+      "priority.session": "2100",
+      "priority.driver": "2100",
+      "node.description": "USB PnP Sound Device モノ",
+      "node.name": "alsa_input.usb-Fonglun_USB_PnP_Sound_Device_201801-00.mono-fallback",
+      "node.nick": "USB PnP Sound Device",
+      "media.class": "Audio/Source"
+    }
+  },
+  {
+    "object": {
+      "id": 46,
+      "type": "PipeWire:Interface:Node",
+      "version": 3
+    },
+    "properties": {
+      "object.serial": "65",
+      "object.path": "alsa:acp:Device:3:playback",
+      "factory.id": "19",
+      "client.id": "38",
+      "device.id": "56",
+      "priority.session": "1109",
+      "priority.driver": "1109",
+      "node.description": "USB PnP Sound Device アナログステレオ",
+      "node.name": "alsa_output.usb-Fonglun_USB_PnP_Sound_Device_201801-00.analog-stereo",
+      "node.nick": "USB PnP Sound Device",
+      "media.class": "Audio/Sink"
+    }
+  },
+  {
+    "object": {
+      "id": 47,
+      "type": "PipeWire:Interface:Node",
+      "version": 3
+    },
+    "properties": {
+      "object.serial": "64",
+      "object.path": "alsa:acp:Generic_1:0:capture",
+      "factory.id": "19",
+      "client.id": "38",
+      "device.id": "55",
+      "priority.session": "2009",
+      "priority.driver": "2009",
+      "node.description": "Ryzen HD Audio Controller アナログステレオ",
+      "node.name": "alsa_input.pci-0000_c6_00.6.analog-stereo",
+      "node.nick": "SN6186 Analog",
+      "media.class": "Audio/Source"
+    }
+  },
+  {
+    "object": {
+      "id": 51,
+      "type": "PipeWire:Interface:Node",
+      "version": 3
+    },
+    "properties": {
+      "object.serial": "51",
+      "factory.id": "11",
+      "client.id": "38",
+      "priority.session": "100",
+      "priority.driver": "1",
+      "node.name": "Midi-Bridge",
+      "media.class": "Midi/Bridge"
+    }
+  },
+  {
+    "object": {
+      "id": 59,
+      "type": "PipeWire:Interface:Node",
+      "version": 3
+    },
+    "properties": {
+      "object.serial": "59",
+      "factory.id": "14",
+      "client.id": "38",
+      "node.description": "BLE MIDI 1",
+      "node.name": "bluez_midi.server",
+      "media.class": "Midi/Bridge"
+    }
+  },
+  {
+    "object": {
+      "id": 62,
+      "type": "PipeWire:Interface:Node",
+      "version": 3
+    },
+    "properties": {
+      "object.serial": "6841",
+      "object.path": "alsa:acp:Generic:4:playback",
+      "factory.id": "19",
+      "client.id": "38",
+      "device.id": "54",
+      "priority.session": "696",
+      "priority.driver": "696",
+      "node.description": "Radeon High Definition Audio Controller デジタルステレオ (HDMI)",
+      "node.name": "alsa_output.pci-0000_c6_00.1.hdmi-stereo",
+      "node.nick": "LG ULTRAWIDE",
+      "media.class": "Audio/Sink"
+    }
+  },
+  {
+    "object": {
+      "id": 63,
+      "type": "PipeWire:Interface:Node",
+      "version": 3
+    },
+    "properties": {
+      "object.serial": "68",
+      "object.path": "alsa:acp:C920:0:capture",
+      "factory.id": "19",
+      "client.id": "38",
+      "device.id": "58",
+      "priority.session": "2109",
+      "priority.driver": "2109",
+      "node.description": "C920 HD Pro Webcam アナログステレオ",
+      "node.name": "alsa_input.usb-046d_HD_Pro_Webcam_C920_0123ABCD-02.analog-stereo",
+      "node.nick": "HD Pro Webcam C920",
+      "media.class": "Audio/Source"
+    }
+  },
+  {
+    "object": {
+      "id": 86,
+      "type": "PipeWire:Interface:Node",
+      "version": 3
+    },
+    "properties": {
+      "object.serial": "91",
+      "object.path": "v4l2:/dev/video0",
+      "factory.id": "11",
+      "client.id": "38",
+      "device.id": "48",
+      "priority.session": "1000",
+      "node.description": "HD Pro Webcam C920 (V4L2)",
+      "node.name": "v4l2_input.pci-0000_c8_00.0-usb-0_3_1.0",
+      "node.nick": "HD Pro Webcam C920",
+      "media.class": "Video/Source",
+      "media.role": "Camera"
+    }
+  }
+]
