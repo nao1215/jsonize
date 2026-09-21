@@ -18,6 +18,11 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- A `time` field with `location: local` moved a wall clock the zone skips to another hour. With `TZ=America/New_York`, `2025-03-09 02:30` came out as `2025-03-09T01:30:00-05:00`, the same answer as for `01:30`, because `time.ParseInLocation` normalises the hour a change to summer time skips. The value is now refused with exit 3.
+- `input.fold` joined a continuation onto a blank line above it, so `a`, an empty line and an indented `b` gave a record `" b"` with a space the text does not hold. A blank line is now nothing to join onto, in the whole reading and in `--stream` alike, and the continuation is an error naming its line.
+- A `float` field, and `--type COLUMN=float`, wrote `0` for a value too small for a 64-bit float (`1e-400`), while one too large was refused. Both are now refused with exit 3.
+- The error for a `tree` line that skips a level gave the wrong levels: `a` followed by a line indented twice said "indented 1 levels below a line at level 1". It now says the line is at level 2 under a line at level 0, and a first line that is indented says there is no line above it.
+- `jz list dff` did not suggest `df`, although `jz run dff` and `--parser dff` do. `jz list` now gives the same suggestion.
 - YAML: the value of an explicit key written on the line of its ":" was read as one string when it opened a collection there. `? a` followed by `: - x` and an indented `- y` gave `{"a":"- x - y"}` with exit 0; it is now the list `["x","y"]`, and `: b: 1` is a mapping.
 - YAML: a sequence item written on the line of its key, `a: - b`, was read as the string `"- b"`. The same happened with `- 1` inside a flow sequence and with `? b` used where a value belongs. YAML does not allow a plain scalar to start with an indicator and a space, and other readers refuse the line; jz now refuses it with exit 3 and says to start the items on the next line.
 - YAML: a comment did not end a plain scalar written over several lines. `a: x # note` followed by an indented `y` gave `"x y"`, keeping the text after the comment; the indented line is now refused as unexpected indentation.

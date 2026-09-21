@@ -774,7 +774,49 @@ scenarios:
             contains: "line 2"
       - assert:
           stderr:
-            contains: "no parent"
+            contains: "line 2: at level 2 under a line at level 0, so it skips a level and has no parent"
+
+  # A blank line is nothing a wrapped continuation can be joined onto.
+  - name: a continuation under a blank line is refused, not joined
+    steps:
+      - fixture:
+          file: wrapped.txt
+          content: |
+            modes: a
+
+               b
+      - run:
+          command: "jz --define '{input: {fold: \"^[ \\\\t]+\\\\S\"}, parse: {type: regex, pattern: \"^(?P<l>.*)$\"}}' --file ${workdir}/wrapped.txt"
+      - assert:
+          exit_code: 3
+          stdout: {empty: true}
+          stderr:
+            contains: "line 3: continuation line with nothing to join it to"
+
+  # The hour a change to summer time skips is not read as another hour.
+  - name: a local time the zone skips is refused
+    skip: {os: windows}
+    steps:
+      - run:
+          command: "jz --define '{parse: {type: regex, pattern: \"^(?P<t>.*)$\"}, fields: {t: {type: time, layout: \"2006-01-02 15:04\", location: local}}}'"
+          stdin: "2025-03-09 02:30\n"
+          env:
+            TZ: America/New_York
+      - assert:
+          exit_code: 3
+          stdout: {empty: true}
+          stderr:
+            contains: "does not show"
+      - run:
+          command: "jz --define '{parse: {type: regex, pattern: \"^(?P<t>.*)$\"}, fields: {t: {type: time, layout: \"2006-01-02 15:04\", location: local}}}'"
+          stdin: "2025-03-09 03:30\n"
+          env:
+            TZ: America/New_York
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              [{"t":"2025-03-09T03:30:00-04:00"}]
 
   # A definition given for a file rather than a command is reached by its
   # path the same way /etc/fstab is.
