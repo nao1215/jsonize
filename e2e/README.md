@@ -67,6 +67,7 @@ lacks:
 | `git` | on every runner; the FreeBSD machine installs it | `exec`, `exec_linux` |
 | `df`, `free`, `ps`, `uptime`, `id`, `env`, `mount`, `du`, `stat`, `lscpu`, `lsmod`, `prlimit`, `who`, `wc`, `ls`, `ln`, `md5sum`, `sha256sum`, `tar`, `gzip` | on every runner | `exec_linux` |
 | `ip`, `ss`, `dpkg`, `apt-cache`, `rsync` | on every runner | `exec_linux` |
+| `7z` | `p7zip-full` | `exec_linux` |
 | a running systemd | the runner boots with it; a container usually does not | `exec_linux` (`systemctl`) |
 | `ipconfig`, `systeminfo`, `hostname`, `powershell` | part of Windows | `exec_windows` |
 | `go` | the toolchain | `scripts/run_e2e.sh` builds `jz` and `e2ehelper` |

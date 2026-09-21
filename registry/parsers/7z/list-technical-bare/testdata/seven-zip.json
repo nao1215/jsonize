@@ -1,0 +1,46 @@
+[
+  {
+    "Path": "docs",
+    "Size": 0,
+    "Packed Size": 0,
+    "Modified": "2026-09-21 08:59:37.2434015",
+    "Attributes": "D drwxrwxr-x",
+    "CRC": null,
+    "Encrypted": false,
+    "Method": null,
+    "Block": null
+  },
+  {
+    "Path": "empty.txt",
+    "Size": 0,
+    "Packed Size": 0,
+    "Modified": "2026-09-21 08:59:37.2434015",
+    "Attributes": "A -rw-rw-r--",
+    "CRC": null,
+    "Encrypted": false,
+    "Method": null,
+    "Block": null
+  },
+  {
+    "Path": "docs/report.txt",
+    "Size": 15,
+    "Packed Size": 25,
+    "Modified": "2026-09-21 08:59:37.2434015",
+    "Attributes": "A -rw-rw-r--",
+    "CRC": "9B6332B0",
+    "Encrypted": false,
+    "Method": "LZMA2:12",
+    "Block": 0
+  },
+  {
+    "Path": "notes.txt",
+    "Size": 6,
+    "Packed Size": null,
+    "Modified": "2026-09-21 08:59:37.2434015",
+    "Attributes": "A -rw-rw-r--",
+    "CRC": "9F606EEC",
+    "Encrypted": false,
+    "Method": "LZMA2:12",
+    "Block": 0
+  }
+]

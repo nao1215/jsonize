@@ -1,0 +1,9 @@
+description: >-
+  the output of 7z l -slt without -ba, which opens with the banner and the
+  archive's own properties; it belongs to 7z/list-technical.
+source: >-
+  captured on Ubuntu 26.04 with 7-Zip 26.00 (x64), LC_ALL=C 7z l -slt over an
+  archive made for the fixture
+os: linux
+args: [l, -slt, many.7z]
+expect_error: 'does not describe this input'

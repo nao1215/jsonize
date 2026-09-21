@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/7z/list-technical-bare.json",
+  "title": "7z/list-technical-bare",
+  "description": "7z l -slt -ba entry properties, without the banner",
+  "x-jsonize": {
+    "definition": "7z/list-technical-bare",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "Accessed": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "Block": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "CRC": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "Comment": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "Created": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "Encrypted": {
+        "type": "boolean"
+      },
+      "Folder": {
+        "type": "boolean"
+      },
+      "Method": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "Modified": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "Packed Size": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "Size": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      }
+    },
+    "additionalProperties": {
+      "type": "string"
+    }
+  }
+}

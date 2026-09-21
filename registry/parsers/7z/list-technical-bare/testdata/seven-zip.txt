@@ -1,0 +1,40 @@
+Path = docs
+Size = 0
+Packed Size = 0
+Modified = 2026-09-21 08:59:37.2434015
+Attributes = D drwxrwxr-x
+CRC = 
+Encrypted = -
+Method = 
+Block = 
+
+Path = empty.txt
+Size = 0
+Packed Size = 0
+Modified = 2026-09-21 08:59:37.2434015
+Attributes = A -rw-rw-r--
+CRC = 
+Encrypted = -
+Method = 
+Block = 
+
+Path = docs/report.txt
+Size = 15
+Packed Size = 25
+Modified = 2026-09-21 08:59:37.2434015
+Attributes = A -rw-rw-r--
+CRC = 9B6332B0
+Encrypted = -
+Method = LZMA2:12
+Block = 0
+
+Path = notes.txt
+Size = 6
+Packed Size = 
+Modified = 2026-09-21 08:59:37.2434015
+Attributes = A -rw-rw-r--
+CRC = 9F606EEC
+Encrypted = -
+Method = LZMA2:12
+Block = 0
+
