@@ -348,37 +348,44 @@ explicit check is what stops the later step.
 
 ## Check an uploaded PDF before rendering it
 
-`pdfinfo` reports what a PDF says about itself. The page count and the
-file size are numbers, so a limit is a comparison. The keys are the
-labels poppler printed, which is why `."File size"` is quoted in jq.
+`pdfinfo` reports what a PDF says about itself, and `--extract` keeps
+the keys a limit is written against.
 
 ```console
-$ pdfinfo 'report [final].pdf' | jz | jq -c '{pages: .Pages, encrypted: .Encrypted, bytes: ."File size"}'
-{"pages":19,"encrypted":"no","bytes":146453}
+$ pdfinfo 'report [final].pdf' | jz --extract Pages --extract Encrypted
+{"Pages":19,"Encrypted":"no"}
 ```
+
+`Pages` and `File size` are numbers, so a limit is a comparison.
+`Encrypted` stays text, since poppler writes the permissions beside
+`yes`. The keys are the labels poppler printed, so one with a space in
+it is quoted where it is named, as `--extract 'File size'` here and as
+a quoted key in a jq path.
 
 Needs poppler-utils. Only `pdfinfo FILE` is read; `-box`, `-meta`,
 `-struct` and the other reports print something else and are refused.
-`Encrypted` stays text, since poppler writes the permissions beside
-`yes`.
 
 poppler is what opens the file, and an upload is untrusted input to it.
 
 ## List an archive before extracting it
 
 `7z l -slt` prints one block per member, which is what a service reads
-to decide whether to extract at all.
+to decide whether to extract at all. How much the archive claims it
+holds is one sum:
 
 ```console
-$ 7z l -slt upload.7z | jz | jq -c '.entries | {members: length, bytes: map(.Size) | add}'
-{"members":5,"bytes":496}
+$ 7z l -slt many.zip | jz | jq '[.entries[].Size] | add'
+31
 ```
 
-The same JSON answers the question that has to be asked before anything
-is written to disk:
+And the names it will write are one list, to be checked before anything
+reaches the disk:
 
 ```console
-$ 7z l -slt upload.7z | jz | jq -r '.entries[] | select(.Path | startswith("/") or contains("..")) | .Path'
+$ 7z l -slt many.zip | jz | jq -r '.entries[].Path'
+empty.txt
+hello.txt
+name with spaces.txt
 ```
 
 Needs 7-Zip, which Debian and Ubuntu package as `7zip`. `7z l -slt -ba`
@@ -386,9 +393,10 @@ prints the blocks without the banner and is read as
 `7z/list-technical-bare`. Which properties a block carries depends on
 the archive format, so the keys are the names 7-Zip printed.
 
-Listing an archive is not extracting it, and a listing that passes both
-checks can still be a decompression bomb: the size above is what the
-archive claims.
+Listing an archive is not extracting it. A name that is absolute or
+climbs out of the destination is the one to refuse, and an archive whose
+members pass every name check can still be a decompression bomb: the
+size above is what the archive says about itself.
 
 ## Check when a certificate expires
 

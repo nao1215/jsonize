@@ -2563,7 +2563,8 @@ scenarios:
             contains: "chose openssl/x509-fields from embedded"
           stdout:
             json:
-              - { path: "$.subject", equals: "CN=example.test, O=Example" }
+              # OpenSSL 3.5 prints "CN=example.test", 3.0 "CN = example.test".
+              - { path: "$.subject", matches: "^CN ?= ?example\\.test, ?O ?= ?Example$" }
               - { path: "$.notBefore", matches: "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9:]+Z$" }
               - { path: "$.notAfter", matches: "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9:]+Z$" }
       # The key is not a certificate: openssl fails, and its status is

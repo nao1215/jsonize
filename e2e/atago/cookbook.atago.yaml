@@ -537,37 +537,39 @@ scenarios:
           file: pdfinfo.txt
           from: "${specdir}/../../registry/parsers/pdfinfo/poppler/testdata/latex.txt"
       - run:
-          command: >-
-            bash -c "set -o pipefail; jz --file '${workdir}/pdfinfo.txt' |
-            jq -c '{pages: .Pages, encrypted: .Encrypted, bytes: .\"File size\"}'"
+          command: jz --extract Pages --extract Encrypted
+          stdin: {file: pdfinfo.txt}
       - assert:
           exit_code: 0
           stdout:
             equals: |
-              {"pages":19,"encrypted":"no","bytes":146453}
+              {"Pages":19,"Encrypted":"no"}
 
   - name: "List an archive before extracting it: the members and their sizes come out of 7z l -slt"
     steps:
       - fixture:
           file: 7z.txt
-          from: "${specdir}/../../registry/parsers/7z/list-technical/testdata/solid-7z.txt"
+          from: "${specdir}/../../registry/parsers/7z/list-technical/testdata/zip.txt"
       - run:
           command: >-
-            bash -c "set -o pipefail; jz --file '${workdir}/7z.txt' --parser 7z |
-            jq -c '.entries | {members: length, bytes: map(.Size) | add}'"
+            bash -c "set -o pipefail; jz --file '${workdir}/7z.txt' |
+            jq '[.entries[].Size] | add'"
       - assert:
           exit_code: 0
           stdout:
             equals: |
-              {"members":5,"bytes":496}
+              31
       - run:
           command: >-
-            bash -c "set -o pipefail; jz --file '${workdir}/7z.txt' --parser 7z |
-            jq -r '.entries[] | select(.Path | startswith(\"/\") or contains(\"..\")) | .Path'"
+            bash -c "set -o pipefail; jz --file '${workdir}/7z.txt' |
+            jq -r '.entries[].Path'"
       - assert:
           exit_code: 0
           stdout:
-            empty: true
+            equals: |
+              empty.txt
+              hello.txt
+              name with spaces.txt
 
   - name: "Check when a certificate expires: openssl x509 -noout -dates becomes two RFC 3339 timestamps"
     steps:
