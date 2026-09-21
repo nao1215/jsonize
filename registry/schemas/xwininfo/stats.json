@@ -1,0 +1,126 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/xwininfo/stats.json",
+  "title": "xwininfo/stats",
+  "description": "xwininfo -root or -id WINDOW, the geometry and attributes of one window",
+  "x-jsonize": {
+    "definition": "xwininfo/stats",
+    "version": 1
+  },
+  "type": "object",
+  "properties": {
+    "window_id": {
+      "type": "string"
+    },
+    "root": {
+      "type": "boolean"
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "absolute_x": {
+      "type": "integer"
+    },
+    "absolute_y": {
+      "type": "integer"
+    },
+    "relative_x": {
+      "type": "integer"
+    },
+    "relative_y": {
+      "type": "integer"
+    },
+    "width": {
+      "type": "integer"
+    },
+    "height": {
+      "type": "integer"
+    },
+    "depth": {
+      "type": "integer"
+    },
+    "visual": {
+      "type": "string"
+    },
+    "visual_class": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "border_width": {
+      "type": "integer"
+    },
+    "class": {
+      "type": "string"
+    },
+    "colormap": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "colormap_installed": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "bit_gravity": {
+      "type": "string"
+    },
+    "window_gravity": {
+      "type": "string"
+    },
+    "backing_store": {
+      "type": "string"
+    },
+    "save_under": {
+      "type": "boolean"
+    },
+    "map_state": {
+      "type": "string"
+    },
+    "override_redirect": {
+      "type": "boolean"
+    },
+    "corners": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "geometry": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "window_id",
+    "root",
+    "name",
+    "absolute_x",
+    "absolute_y",
+    "relative_x",
+    "relative_y",
+    "width",
+    "height",
+    "depth",
+    "visual",
+    "visual_class",
+    "border_width",
+    "class",
+    "colormap",
+    "colormap_installed",
+    "bit_gravity",
+    "window_gravity",
+    "backing_store",
+    "save_under",
+    "map_state",
+    "override_redirect",
+    "corners",
+    "geometry"
+  ]
+}

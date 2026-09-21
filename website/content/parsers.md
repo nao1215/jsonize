@@ -74,6 +74,7 @@ the same reading with settings of your own.
 | `dumpe2fs` | [`superblock`](../schemas/dumpe2fs/superblock.json) |
 | `e2freefrag` | [`linux`](../schemas/e2freefrag/linux.json) |
 | `efibootmgr` | [`linux`](../schemas/efibootmgr/linux.json) |
+| `eglinfo` | [`brief`](../schemas/eglinfo/brief.json) |
 | `env` | [`null-separated`](../schemas/env/null-separated.json), [`posix`](../schemas/env/posix.json) |
 | `etc` | [`crontab`](../schemas/etc/crontab.json), [`fstab`](../schemas/etc/fstab.json), [`group`](../schemas/etc/group.json), [`hosts`](../schemas/etc/hosts.json), [`nsswitch`](../schemas/etc/nsswitch.json), [`os-release`](../schemas/etc/os-release.json), [`passwd`](../schemas/etc/passwd.json), [`protocols`](../schemas/etc/protocols.json), [`resolv-conf`](../schemas/etc/resolv-conf.json), [`services`](../schemas/etc/services.json) |
 | `ethtool` | [`driver-info`](../schemas/ethtool/driver-info.json), [`features`](../schemas/ethtool/features.json), [`pause`](../schemas/ethtool/pause.json), [`ring`](../schemas/ethtool/ring.json), [`settings`](../schemas/ethtool/settings.json), [`statistics`](../schemas/ethtool/statistics.json) |
@@ -99,6 +100,7 @@ the same reading with settings of your own.
 | `gh` | [`auth-status`](../schemas/gh/auth-status.json), [`issue-list`](../schemas/gh/issue-list.json), [`pr-list`](../schemas/gh/pr-list.json), [`release-list`](../schemas/gh/release-list.json), [`repo-list`](../schemas/gh/repo-list.json), [`run-list`](../schemas/gh/run-list.json), [`workflow-list`](../schemas/gh/workflow-list.json) |
 | `gio` | [`mime`](../schemas/gio/mime.json) |
 | `git` | [`branch`](../schemas/git/branch.json), [`branch-verbose`](../schemas/git/branch-verbose.json), [`cherry`](../schemas/git/cherry.json), [`clean-dry-run`](../schemas/git/clean-dry-run.json), [`config-list`](../schemas/git/config-list.json), [`config-list-origin`](../schemas/git/config-list-origin.json), [`count-objects`](../schemas/git/count-objects.json), [`count-objects-human`](../schemas/git/count-objects-human.json), [`diff-name-status`](../schemas/git/diff-name-status.json), [`diff-numstat`](../schemas/git/diff-numstat.json), [`diff-shortstat`](../schemas/git/diff-shortstat.json), [`diff-stat`](../schemas/git/diff-stat.json), [`diff-summary`](../schemas/git/diff-summary.json), [`for-each-ref`](../schemas/git/for-each-ref.json), [`log`](../schemas/git/log.json), [`log-name-only`](../schemas/git/log-name-only.json), [`log-name-status`](../schemas/git/log-name-status.json), [`log-numstat`](../schemas/git/log-numstat.json), [`log-oneline`](../schemas/git/log-oneline.json), [`log-stat`](../schemas/git/log-stat.json), [`ls-files-eol`](../schemas/git/ls-files-eol.json), [`ls-files-stage`](../schemas/git/ls-files-stage.json), [`ls-remote`](../schemas/git/ls-remote.json), [`ls-tree`](../schemas/git/ls-tree.json), [`ls-tree-long`](../schemas/git/ls-tree-long.json), [`notes-list`](../schemas/git/notes-list.json), [`reflog`](../schemas/git/reflog.json), [`remote-verbose`](../schemas/git/remote-verbose.json), [`shortlog-summary`](../schemas/git/shortlog-summary.json), [`show-ref`](../schemas/git/show-ref.json), [`stash-list`](../schemas/git/stash-list.json), [`status-porcelain`](../schemas/git/status-porcelain.json), [`status-porcelain-v2`](../schemas/git/status-porcelain-v2.json), [`status-short-branch`](../schemas/git/status-short-branch.json), [`submodule-status`](../schemas/git/submodule-status.json), [`worktree-list`](../schemas/git/worktree-list.json), [`worktree-porcelain`](../schemas/git/worktree-porcelain.json) |
+| `glxinfo` | [`brief`](../schemas/glxinfo/brief.json) |
 | `go` | [`bench`](../schemas/go/bench.json), [`dist-list`](../schemas/go/dist-list.json), [`env`](../schemas/go/env.json), [`list-modules`](../schemas/go/list-modules.json), [`mod-graph`](../schemas/go/mod-graph.json), [`test`](../schemas/go/test.json), [`tool-cover-func`](../schemas/go/tool-cover-func.json), [`version`](../schemas/go/version.json), [`version-modules`](../schemas/go/version-modules.json), [`vet`](../schemas/go/vet.json) |
 | `gocyclo` | [`default`](../schemas/gocyclo/default.json) |
 | `golangci-lint` | [`text`](../schemas/golangci-lint/text.json) |
@@ -239,6 +241,7 @@ the same reading with settings of your own.
 | `sockstat` | [`freebsd`](../schemas/sockstat/freebsd.json), [`freebsd-state`](../schemas/sockstat/freebsd-state.json) |
 | `spctl` | [`status`](../schemas/spctl/status.json) |
 | `ss` | [`connected`](../schemas/ss/connected.json), [`linux`](../schemas/ss/linux.json), [`single-protocol`](../schemas/ss/single-protocol.json), [`summary`](../schemas/ss/summary.json) |
+| `ssh` | [`config-dump`](../schemas/ssh/config-dump.json) |
 | `ssh-add` | [`public-keys`](../schemas/ssh-add/public-keys.json) |
 | `ssh-keygen` | [`fingerprint`](../schemas/ssh-keygen/fingerprint.json) |
 | `ssh-keyscan` | [`known-hosts`](../schemas/ssh-keyscan/known-hosts.json) |
@@ -283,6 +286,7 @@ the same reading with settings of your own.
 | `update-alternatives` | [`query`](../schemas/update-alternatives/query.json), [`selections`](../schemas/update-alternatives/selections.json) |
 | `upower` | [`device`](../schemas/upower/device.json), [`dump`](../schemas/upower/dump.json), [`enumerate`](../schemas/upower/enumerate.json) |
 | `uptime` | [`bsd`](../schemas/uptime/bsd.json), [`freebsd`](../schemas/uptime/freebsd.json), [`linux`](../schemas/uptime/linux.json), [`pretty`](../schemas/uptime/pretty.json), [`since`](../schemas/uptime/since.json) |
+| `usb-devices` | [`linux`](../schemas/usb-devices/linux.json) |
 | `uuidparse` | [`linux`](../schemas/uuidparse/linux.json), [`raw`](../schemas/uuidparse/raw.json) |
 | `uv` | [`pip-show`](../schemas/uv/pip-show.json), [`python-list`](../schemas/uv/python-list.json), [`tool-list`](../schemas/uv/tool-list.json), [`tree`](../schemas/uv/tree.json) |
 | `ver` | [`windows`](../schemas/ver/windows.json) |
@@ -295,8 +299,10 @@ the same reading with settings of your own.
 | `wipefs` | [`erase`](../schemas/wipefs/erase.json), [`linux`](../schemas/wipefs/linux.json) |
 | `xinput` | [`list`](../schemas/xinput/list.json) |
 | `xrandr` | [`linux`](../schemas/xrandr/linux.json), [`listmonitors`](../schemas/xrandr/listmonitors.json) |
+| `xwininfo` | [`stats`](../schemas/xwininfo/stats.json) |
 | `xxd` | [`default`](../schemas/xxd/default.json) |
 | `xz` | [`list`](../schemas/xz/list.json), [`list-robot`](../schemas/xz/list-robot.json) |
+| `zdump` | [`current`](../schemas/zdump/current.json), [`verbose`](../schemas/zdump/verbose.json) |
 | `zfs` | [`list`](../schemas/zfs/list.json) |
 | `zipinfo` | [`default`](../schemas/zipinfo/default.json) |
 | `zpool` | [`list`](../schemas/zpool/list.json) |

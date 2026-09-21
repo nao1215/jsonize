@@ -2705,3 +2705,48 @@ scenarios:
           stderr:
             contains: "cannot read input file"
           stdout: {empty: true}
+
+  - name: zdump and zdump -v land on their own definitions
+    only: {os: linux}
+    steps:
+      - run:
+          command: jz run zdump UTC Asia/Tokyo
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$", length: 2 }
+              - { path: "$[0].zone", equals: UTC }
+              - { path: "$[1].abbreviation", equals: JST }
+      # -v prints the transitions of the years -c names, with isdst and
+      # gmtoff as numbers, and the lines where gmtime or localtime failed
+      # with the seconds they failed on.
+      - run:
+          command: jz run --explain zdump -v -c 2025,2026 America/New_York
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose zdump/verbose from embedded"
+          stdout:
+            contains: '"abbreviation":"EDT","isdst":1,"gmtoff":-14400'
+
+  - name: ssh -G lands on the client configuration, one entry per line
+    only: {os: linux}
+    steps:
+      # -F /dev/null leaves out the user's configuration, and -G resolves
+      # it without connecting.
+      - run:
+          command: jz run ssh -G -F /dev/null -p 2222 example.com
+      - assert:
+          exit_code: 0
+          stdout:
+            contains: '{"name":"port","value":"2222"}'
+      # A keyword given twice keeps both values.
+      - run:
+          command: jz run ssh -G -F /dev/null -L 8080:localhost:80 -L 9090:localhost:90 example.com
+      - assert:
+          exit_code: 0
+          stdout:
+            contains:
+              - '{"name":"localforward","value":"8080 [localhost]:80"}'
+              - '{"name":"localforward","value":"9090 [localhost]:90"}'
