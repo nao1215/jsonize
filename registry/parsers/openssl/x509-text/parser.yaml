@@ -1,0 +1,145 @@
+# `openssl x509 -noout -text` prints the whole certificate as an indented
+# report: the version, the serial, the algorithm that signed it, the two
+# names, the validity, what kind of key it carries, the X509v3 extensions
+# and the signature.
+#
+# What is read is what a service decides with: the version, the serial,
+# the signature algorithm, the issuer and the subject as the one string
+# openssl printed, the two dates, the kind of key and its size, and every
+# extension with its name, its critical mark and its value as printed.
+#
+# What is not read is the key material and the signature: the modulus,
+# the EC point, the exponent, the curve names and the signature value.
+# They are printed as hexadecimal folded over a dozen lines or more, and
+# a caller that wants the key asks openssl for it directly (-pubkey,
+# -modulus). `input.ignore` names those lines, so `--explain` reports how
+# many were left out rather than them going missing in silence.
+#
+# A hexadecimal value openssl writes in lower case is key material or a
+# signature; one it writes in upper case is a key identifier or a
+# fingerprint, which stays. That is what separates the lines this
+# definition drops from the ones it keeps, and it holds for the serial
+# too: a serial printed on its own line is folded back onto its label
+# before anything is dropped.
+#
+# The result is an object of three parts rather than one flat object,
+# because the extensions are a list and the rest is not: `certificate`
+# carries the fields, `public_key` the kind and the size, `extensions`
+# one record per extension.
+#
+# Versions: written against OpenSSL 3.5, and the lines it drops are the
+# ones that moved between 3.0 and 3.5 (3.0 prints the signature under
+# the algorithm with no "Signature Value:" heading, and writes
+# "keyid:" in front of an authority key identifier, which stays in the
+# value as printed). `-text` with another -certopt prints a different
+# report and is not read; nor is `-text` without `-noout`, which is
+# followed by the PEM block.
+format: 1
+command: openssl
+variant: x509-text
+description: openssl x509 -noout -text, the fields, the key kind and the extensions
+metadata:
+  tags: [tls, crypto, x509]
+  compatible: [OpenSSL]
+  references:
+    - https://docs.openssl.org/master/man1/openssl-x509/
+detect:
+  args:
+    all: [x509, -text]
+    # -certopt changes which sections are printed and how, so the report
+    # is no longer the one described here.
+    none: ["-certopt", "-certopt=", "-nocert"]
+  signature:
+    window: 24
+    all:
+      - '\ACertificate:\n {4}Data:\n {8}Version: \d+ \(0x[0-9a-f]+\)\n'
+      - '(?m)^ {8}Serial Number:'
+      - '(?m)^ {8}Signature Algorithm: \S'
+      - '(?m)^ {12}Not Before: '
+input:
+  # A serial too long for its label is printed on the next line, and
+  # sometimes on two. Folding it back gives the same shape as the short
+  # form, which openssl prints as "Serial Number: 4096 (0x1000)".
+  fold: '^ {12}[0-9a-f]{2}(?::[0-9a-f]{2})*:?$'
+  ignore:
+    # Headings with nothing of their own to say.
+    - '^Certificate:$'
+    - '^ {4}Data:$'
+    - '^ {8}Validity$'
+    - '^ {8}Subject Public Key Info:$'
+    # The key material and the signature, declared rather than dropped in
+    # silence. Lower case hexadecimal at any depth is one of those; upper
+    # case is a key identifier or a fingerprint and is read.
+    - '^ {16}(?:Modulus|pub):'
+    - '^ {16}Exponent: '
+    - '^ {16}ASN1 OID: '
+    - '^ {16}NIST CURVE: '
+    - '^ {4,}[0-9a-f]{2}(?::[0-9a-f]{2})*:?$'
+    # The algorithm is printed a second time over the signature, and
+    # 3.2 and later put a heading over it.
+    - '^ {4}Signature Algorithm: '
+    - '^ {4}Signature Value:$'
+parse:
+  type: composite
+  parts:
+    - name: certificate
+      select: {until: '^ {8}X509v3 extensions:$'}
+      ignore:
+        # The two lines of the key, read by the part below.
+        - '^ {12}Public Key Algorithm: '
+        - '^ {16}Public-Key: '
+      parse:
+        type: regex
+        each: input
+        # Each blank line inside the expression is one newline of the
+        # report. The order of these lines is fixed by openssl.
+        pattern: '\A {8}Version: (?P<version>\d+) \(0x[0-9a-f]+\)
+
+          [ ]{8}Serial Number: ?(?P<serial>\S[^\n]*)
+
+          [ ]{8}Signature Algorithm: (?P<signature_algorithm>[^\n]+)
+
+          [ ]{8}Issuer: (?P<issuer>[^\n]*)
+
+          [ ]{12}Not Before: (?P<not_before>[^\n]+)
+
+          [ ]{12}Not After : (?P<not_after>[^\n]+)
+
+          [ ]{8}Subject: (?P<subject>[^\n]*)\z'
+      fields:
+        version: {type: int, required: true}
+        serial: {required: true}
+        signature_algorithm: {required: true}
+        issuer: {required: true}
+        subject: {required: true}
+        not_before: {type: time, layout: "Jan _2 15:04:05 2006 MST"}
+        not_after: {type: time, layout: "Jan _2 15:04:05 2006 MST"}
+    - name: public_key
+      select: {after: '^ {8}Subject: [^\n]*$', until: '^ {8}X509v3 extensions:$'}
+      parse:
+        type: regex
+        each: input
+        pattern: '\A {12}Public Key Algorithm: (?P<algorithm>[^\n]+)
+
+          [ ]{16}Public-Key: \((?P<bits>\d+) bit\)\z'
+      fields:
+        algorithm: {required: true}
+        bits: {type: int, required: true}
+    - name: extensions
+      select: {after: '^ {8}X509v3 extensions:$'}
+      parse:
+        type: records
+        start: '^ {12}\S'
+        record:
+          parse:
+            type: regex
+            each: input
+            # The name, the critical mark openssl writes on the same
+            # line, and the value it indents underneath. A value of
+            # several lines keeps its line breaks, since that is how
+            # openssl printed it.
+            pattern: '\A {12}(?P<name>[^:\n]+):(?P<critical>(?: critical)?)[ \t]*(?:\n {16}(?P<value>[^\n]*(?:\n {16}[^\n]*)*))?\z'
+          fields:
+            name: {required: true}
+            critical: {type: bool, true_values: [critical], false_values: [""]}
+            value: {when_missing: omit}

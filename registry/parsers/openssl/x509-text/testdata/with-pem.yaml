@@ -1,0 +1,9 @@
+source: >-
+  captured on Ubuntu 26.04 with OpenSSL 3.5.5, LC_ALL=C openssl x509 -text
+  over the certificate of ec-small-serial, without -noout
+description: >-
+  without -noout the report is followed by the PEM block, which is not part
+  of it and is refused rather than dropped
+os: linux
+args: [x509, -text, -in, ec.pem]
+expect_error: 'input does not match pattern'

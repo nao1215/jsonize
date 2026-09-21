@@ -216,7 +216,7 @@ and 2025; other display languages and code pages are not checked.
 
 | | jc 1.25.7 | jo 1.9 | jz v0.8.0 |
 |---|---|---|---|
-| Command output | 236 parsers in all, 19 of them streaming; named, or taken from the command name | no | 744 definitions under 270 names; detected from the text, generic formats need `--parser` |
+| Command output | 236 parsers in all, 19 of them streaming; named, or taken from the command name | no | 745 definitions under 270 names; detected from the text, generic formats need `--parser` |
 | Commands only one of jc and jz reads | `traceroute`, `iptables`, `dmidecode`, `wg`, `ufw`, `pacman`, ... | no | `systemd-*` tools, `lsfd`, `lsns`, `journalctl`, `sar`, `docker`, ... |
 | File formats | CSV, TSV, INI, YAML, TOML, XML, plist, X.509, ... | no | CSV, TSV, LTSV, JSON, JSON Lines, YAML; INI with `--parser` |
 | Strings (URL, JWT, IP address, timestamp, ...) | yes | no | no |

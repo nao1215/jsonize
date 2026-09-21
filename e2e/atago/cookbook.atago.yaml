@@ -584,6 +584,23 @@ scenarios:
           stdout:
             equals: |
               {"notBefore":"2026-09-14T13:32:06Z","notAfter":"2026-10-14T13:32:06Z"}
+      # The -text form of the same recipe. The jq of the page is left to
+      # the reader here: what this pins is the JSON it reads.
+      - fixture:
+          file: text.txt
+          from: "${specdir}/../../registry/parsers/openssl/x509-text/testdata/rsa-server.txt"
+      - run:
+          command: jz --parser openssl
+          stdin: {file: text.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$.certificate.version", equals: 3 }
+              - { path: "$.public_key.bits", equals: 2048 }
+              - { path: "$.extensions[3].name", equals: "X509v3 Subject Alternative Name" }
+              - { path: "$.extensions[3].critical", equals: false }
+              - { path: "$.extensions[3].value", equals: "DNS:api.example.test, DNS:www.example.test, IP Address:192.0.2.10" }
 
   - name: "Check the type of an upload: file -i names the MIME type of each path"
     steps:

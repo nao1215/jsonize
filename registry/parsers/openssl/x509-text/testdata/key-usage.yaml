@@ -1,0 +1,9 @@
+source: >-
+  captured on Ubuntu 26.04 with OpenSSL 3.5.5, LC_ALL=C openssl x509 -noout
+  -text over a self-signed certificate made for this fixture with
+  keyUsage, extendedKeyUsage and basicConstraints given as -addext
+description: >-
+  a certificate carrying six extensions, three of them critical, whose
+  values are lists of words rather than hexadecimal
+os: linux
+args: [x509, -noout, -text, -in, usage.pem]

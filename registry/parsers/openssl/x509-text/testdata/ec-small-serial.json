@@ -1,0 +1,32 @@
+{
+  "certificate": {
+    "version": 3,
+    "serial": "4096 (0x1000)",
+    "signature_algorithm": "ecdsa-with-SHA256",
+    "issuer": "CN=ec.example.test",
+    "not_before": "2026-09-21T02:23:00Z",
+    "not_after": "2026-10-21T02:23:00Z",
+    "subject": "CN=ec.example.test"
+  },
+  "public_key": {
+    "algorithm": "id-ecPublicKey",
+    "bits": 256
+  },
+  "extensions": [
+    {
+      "name": "X509v3 Subject Key Identifier",
+      "critical": false,
+      "value": "05:DF:33:87:00:04:CD:91:25:C8:F4:F9:4E:05:4F:D6:FF:33:B4:D9"
+    },
+    {
+      "name": "X509v3 Authority Key Identifier",
+      "critical": false,
+      "value": "05:DF:33:87:00:04:CD:91:25:C8:F4:F9:4E:05:4F:D6:FF:33:B4:D9"
+    },
+    {
+      "name": "X509v3 Basic Constraints",
+      "critical": true,
+      "value": "CA:TRUE"
+    }
+  ]
+}
