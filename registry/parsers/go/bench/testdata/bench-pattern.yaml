@@ -1,0 +1,4 @@
+description: -bench given its pattern after "=", the way a single benchmark is picked
+source: captured with LC_ALL=C go test -run=^$ -bench=Sum -benchmem -benchtime=100x . in a one-file module example.com/x on Linux (go1.26.4)
+os: linux
+args: [test, -run=^$, -bench=Sum, -benchmem, -benchtime=100x, .]

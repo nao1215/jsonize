@@ -33,7 +33,10 @@ metadata:
 detect:
   args:
     all: ["test"]
-    any: ["-bench", "-bench=."]
+    # The pattern comes as the next argument or after "=" (-bench=Parse),
+    # and an argument written with "=" holds its name and the "=". Go's
+    # flag package takes two dashes as well as one.
+    any: ["-bench", "-bench=", "--bench", "--bench="]
   signature:
     all:
       # The text opens with the first block, after the result lines of
