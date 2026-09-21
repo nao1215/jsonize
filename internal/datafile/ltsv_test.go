@@ -36,6 +36,8 @@ func TestLTSVRefuses(t *testing.T) {
 		{"a field without a label", "a:1\n2\n", 2, "field 1 has no label"},
 		{"an empty field", "a:1\t\tb:2\n", 1, "field 2 has no label"},
 		{"a trailing tab", "a:1\t\n", 1, "field 2 has no label"},
+		{"a line of spaces", "a:1\n  \nb:2\n", 2, "field 1 has no label"},
+		{"a line of an ideographic space", "a:1\n\u3000\nb:2\n", 2, "field 1 has no label"},
 		{"an empty label", ":v\n", 1, `"" is not an LTSV label`},
 		{"a label with a space", "my key:v\n", 1, `"my key" is not an LTSV label`},
 		{"a label given twice", "a:1\ta:2\n", 1, `the label "a" is given twice`},

@@ -1,0 +1,31 @@
+[
+  {
+    "environment": {
+      "goos": "linux",
+      "goarch": "amd64",
+      "pkg": "example.com/x",
+      "cpu": "AMD RYZEN AI MAX+ 395 w/ Radeon 8060S"
+    },
+    "benchmarks": [
+      {
+        "name": "BenchmarkSum",
+        "gomaxprocs": 32,
+        "iterations": 100,
+        "metrics": [
+          {
+            "value": 6.7,
+            "unit": "ns/op"
+          },
+          {
+            "value": 0,
+            "unit": "B/op"
+          },
+          {
+            "value": 0,
+            "unit": "allocs/op"
+          }
+        ]
+      }
+    ]
+  }
+]
