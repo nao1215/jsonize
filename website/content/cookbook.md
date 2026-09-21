@@ -362,8 +362,15 @@ $ pdfinfo 'report [final].pdf' | jz --extract Pages --extract Encrypted
 it is quoted where it is named, as `--extract 'File size'` here and as
 a quoted key in a jq path.
 
-Needs poppler-utils. Only `pdfinfo FILE` is read; `-box`, `-meta`,
-`-struct` and the other reports print something else and are refused.
+Needs poppler-utils, checked against 26.01. Only `pdfinfo FILE` is read;
+`-box`, `-meta`, `-struct` and the other reports print something else
+and are refused.
+
+`jz run` is the other way to write this recipe and the one to reach for
+in a service: `jz run pdfinfo 'report [final].pdf'` starts the command
+itself, with no shell, and hands the arguments over as they are. The
+rest of this group is written as a pipe because that is shorter to read;
+every one of them has a `jz run` form.
 
 poppler is what opens the file, and an upload is untrusted input to it.
 
@@ -388,9 +395,9 @@ hello.txt
 name with spaces.txt
 ```
 
-Needs 7-Zip, which Debian and Ubuntu package as `7zip`. `7z l -slt -ba`
-prints the blocks without the banner and is read as
-`7z/list-technical-bare`. Which properties a block carries depends on
+Needs 7-Zip, which Debian and Ubuntu package as `7zip`, checked against
+26.00. `7z l -slt -ba` prints the blocks without the banner and is read
+as `7z/list-technical-bare`. Which properties a block carries depends on
 the archive format, so the keys are the names 7-Zip printed.
 
 Listing an archive is not extracting it. A name that is absolute or
@@ -418,6 +425,12 @@ and the fingerprint's key names the hash it was made with
 (`SHA1 Fingerprint`, `sha256 Fingerprint`). `-text`, `-modulus` and
 `-pubkey` print other formats and are refused.
 
+Checked against OpenSSL 3.5. The two dates have the same shape in 3.0,
+but the subject and the issuer do not: 3.0 prints
+`CN = example.test, O = Example` where 3.5 prints
+`CN=example.test, O=Example`. They are the one string OpenSSL printed in
+both, so a check on a name belongs in a comparison that allows either.
+
 ## Check the type of an upload
 
 `file -i` names the MIME type and the character set of each file.
@@ -428,9 +441,11 @@ $ file -i /usr/share/doc/bash/NEWS.gz /usr/bin/stat | jz | jq -r '.[] | [.file, 
 /usr/bin/stat	inode/symlink
 ```
 
-Needs file(1). What it reports is what its magic database made of the
-bytes: agreeing with the type a client declared is a check worth making
-and is not a statement about the file.
+Needs file(1), checked against 5.46. What it reports is what its magic
+database made of the bytes: agreeing with the type a client declared is
+a check worth making and is not a statement about the file. Which types
+it can name depends on a magic database that differs between machines,
+and jz reads the kinds it undertakes to read and refuses the rest.
 
 A name holding a space is one value, in `file -i` and in the sentence
 form `file FILE` alike. A file file(1) could not open is the one case
@@ -448,7 +463,8 @@ $ rsync -a --stats /srv/data/ /srv/backup/ | jz | jq -c '{moved: .regular_files_
 {"moved":3,"bytes":3000018,"deleted":1}
 ```
 
-Needs rsync 3.1.0 or later. `-v`, `-i`, `--progress` and `--out-format`
+Needs rsync 3.1.0 or later, checked against 3.4.1. `-v`, `-i`,
+`--progress` and `--out-format`
 put file names in front of the counts and are refused, which also keeps
 the paths out of the JSON; two or more `-h` options round the sizes and
 are refused as well.
