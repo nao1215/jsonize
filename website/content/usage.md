@@ -133,8 +133,11 @@ file as a command's output.
   what `--parser csv` reads.
 - An LTSV value is everything after the first colon. A label is letters,
   digits and `_ . -`; a missing label, an empty field and a label given
-  twice on one line are refused.
-- JSON Lines is one JSON value per line; blank lines are skipped.
+  twice on one line are refused. An empty line holds no record, and a
+  line of spaces is a field without a label.
+- JSON Lines is one JSON value per line. A line of nothing but spaces
+  and tabs is skipped; a no-break space or a form feed is not JSON's
+  white space, and a line holding only one of these is refused.
 - JSON keeps key order and the digits of numbers (`2.50` stays `2.50`). A
   key given twice in one object, text after the document and nesting
   deeper than 1000 are refused. A `\u` escape naming half of a surrogate
@@ -339,10 +342,10 @@ $ vmstat 1 | jz --stream | jz new --each --string host=server-a sample:=@-
 {"host":"server-a","sample":{"r":0,"b":0,"swpd":0,...}}
 ```
 
-- With `:=@-` a line is a JSON Lines record: blank lines are skipped. With
-  `=@-` every line is a record, an empty one `""`, read as `--format
-  lines` reads it: the line ending and a byte order mark before the first
-  line are not part of it.
+- With `:=@-` a line is a JSON Lines record: a line of spaces and tabs
+  is skipped. With `=@-` every line is a record, an empty one `""`, read
+  as `--format lines` reads it: the line ending and a byte order mark
+  before the first line are not part of it.
 - The first line that is not JSON, or not UTF-8, ends the documents
   there: it is reported (`jz: new: sample:=@-: jsonl: line 3: ...`), the
   documents written before it stand, and the status is 3.

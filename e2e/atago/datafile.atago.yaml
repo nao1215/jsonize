@@ -231,6 +231,15 @@ scenarios:
           stdout:
             equals: |
               {"a":1}
+      # The value of an explicit key may open a list on the line of its ":".
+      - run:
+          command: jz --format yaml
+          stdin: "? a\n: - x\n  - y\n"
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              {"a":["x","y"]}
       - run:
           command: jz --format csv --explain
           stdin: |
@@ -302,6 +311,32 @@ scenarios:
           stdout: {empty: true}
           stderr:
             contains: "jz: yaml: line 2: .inf is not a number JSON can hold"
+      # A list item on the line of its key is not YAML, not the string "- b".
+      - run:
+          command: jz --format yaml
+          stdin: "a: - b\n"
+      - assert:
+          exit_code: 3
+          stdout: {empty: true}
+          stderr:
+            contains: "jz: yaml: line 1: a sequence item cannot start on the line of its key"
+      # A no-break space is not JSON's white space, so its line is not blank.
+      - run:
+          command: jz --format jsonl
+          stdin: "1\n\u00a0\n2\n"
+      - assert:
+          exit_code: 3
+          stdout: {empty: true}
+          stderr:
+            contains: "jz: jsonl: line 2: the line is not one JSON value"
+      - run:
+          command: jz --format ltsv
+          stdin: "a:1\n  \nb:2\n"
+      - assert:
+          exit_code: 3
+          stdout: {empty: true}
+          stderr:
+            contains: "jz: ltsv: line 2: field 1 has no label"
       - fixture:
           file: not-gzip.json.gz
           from: "${specdir}/testdata/not-gzip.json.gz"

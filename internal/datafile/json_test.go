@@ -133,6 +133,10 @@ func TestJSONLines(t *testing.T) {
 		{"1 2\n", 1, "text after the JSON value on the line"},
 		{"{\"a\":1,\"a\":1}\n", 1, `the key "a" is given twice`},
 		{"ok\n", 1, "not one JSON value"},
+		// Only the white space JSON allows between tokens makes a line blank.
+		{"1\n\u00a0\n2\n", 2, "not one JSON value"},
+		{"1\n\f\n2\n", 2, "not one JSON value"},
+		{"1\n\u3000\n", 2, "not one JSON value"},
 		{"[1]\n\xff\n", 2, "not valid UTF-8"},
 		{strings.Repeat("[", MaxDepth+1) + "\n", 1, "nest deeper"},
 	} {

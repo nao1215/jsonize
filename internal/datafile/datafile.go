@@ -358,7 +358,7 @@ func streamCounted(format string, r io.Reader, maxLine int, c *counter, emit fun
 				line = bytes.TrimPrefix(line, []byte("\xEF\xBB\xBF"))
 			}
 			line = bytes.TrimSuffix(line, []byte("\r"))
-			if len(bytes.TrimSpace(line)) > 0 {
+			if !blankLine(format, line) {
 				if ferr := readRecordLine(format, line, num, record, c, emit); ferr != nil {
 					return ferr
 				}
@@ -368,6 +368,17 @@ func streamCounted(format string, r io.Reader, maxLine int, c *counter, emit fun
 			return nil
 		}
 	}
+}
+
+// blankLine reports a line that holds no record. In JSON Lines that is a
+// line of the white space JSON allows between tokens; in LTSV only an
+// empty line, since a line of spaces is a field without a label. Other
+// spaces, a no-break space or a form feed, are text the line holds.
+func blankLine(format string, line []byte) bool {
+	if format == LTSV {
+		return len(line) == 0
+	}
+	return len(bytes.Trim(line, " \t\r")) == 0
 }
 
 // readRecordLine reads one line of JSON Lines or LTSV and hands its record
