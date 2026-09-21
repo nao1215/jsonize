@@ -1,0 +1,885 @@
+[
+  {
+    "bus": 1,
+    "level": 0,
+    "parent": 0,
+    "port": 0,
+    "count": 0,
+    "device": 1,
+    "speed_mbps": 480,
+    "max_children": 1,
+    "usb_version": "2.00",
+    "class": "09",
+    "class_name": "hub",
+    "subclass": "00",
+    "protocol": "01",
+    "max_packet_size": 64,
+    "configurations": 1,
+    "vendor_id": "1d6b",
+    "product_id": "0002",
+    "revision": "07.00",
+    "manufacturer": "Linux 7.0.0-31-generic xhci-hcd",
+    "product": "xHCI Host Controller",
+    "serial_number": "0000:c6:00.4",
+    "interface_count": 1,
+    "configuration": 1,
+    "attributes": "e0",
+    "max_power_ma": 0,
+    "interfaces": [
+      {
+        "number": 0,
+        "alternate_setting": 0,
+        "endpoint_count": 1,
+        "class": "09",
+        "class_name": "hub",
+        "subclass": "00",
+        "protocol": "00",
+        "driver": "hub",
+        "endpoints": [
+          {
+            "address": "81",
+            "direction": "I",
+            "attributes": "03",
+            "type": "Int.",
+            "max_packet_size": 4,
+            "interval": "256ms"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "bus": 1,
+    "level": 1,
+    "parent": 1,
+    "port": 0,
+    "count": 1,
+    "device": 2,
+    "speed_mbps": 12,
+    "max_children": 0,
+    "usb_version": "1.10",
+    "class": "00",
+    "class_name": ">ifc",
+    "subclass": "00",
+    "protocol": "00",
+    "max_packet_size": 8,
+    "configurations": 1,
+    "vendor_id": "0d8c",
+    "product_id": "8100",
+    "revision": "01.00",
+    "manufacturer": "Fonglun",
+    "product": "USB PnP Sound Device",
+    "serial_number": "000000",
+    "interface_count": 4,
+    "configuration": 1,
+    "attributes": "80",
+    "max_power_ma": 100,
+    "interfaces": [
+      {
+        "number": 0,
+        "alternate_setting": 0,
+        "endpoint_count": 0,
+        "class": "01",
+        "class_name": "audio",
+        "subclass": "01",
+        "protocol": "00",
+        "driver": "snd-usb-audio",
+        "endpoints": []
+      },
+      {
+        "number": 1,
+        "alternate_setting": 0,
+        "endpoint_count": 0,
+        "class": "01",
+        "class_name": "audio",
+        "subclass": "02",
+        "protocol": "00",
+        "driver": "snd-usb-audio",
+        "endpoints": []
+      },
+      {
+        "number": 2,
+        "alternate_setting": 0,
+        "endpoint_count": 0,
+        "class": "01",
+        "class_name": "audio",
+        "subclass": "02",
+        "protocol": "00",
+        "driver": "snd-usb-audio",
+        "endpoints": []
+      },
+      {
+        "number": 3,
+        "alternate_setting": 0,
+        "endpoint_count": 1,
+        "class": "03",
+        "class_name": "HID",
+        "subclass": "00",
+        "protocol": "00",
+        "driver": "usbhid",
+        "endpoints": [
+          {
+            "address": "87",
+            "direction": "I",
+            "attributes": "03",
+            "type": "Int.",
+            "max_packet_size": 4,
+            "interval": "2ms"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "bus": 2,
+    "level": 0,
+    "parent": 0,
+    "port": 0,
+    "count": 0,
+    "device": 1,
+    "speed_mbps": 10000,
+    "max_children": 1,
+    "usb_version": "3.10",
+    "class": "09",
+    "class_name": "hub",
+    "subclass": "00",
+    "protocol": "03",
+    "max_packet_size": 9,
+    "configurations": 1,
+    "vendor_id": "1d6b",
+    "product_id": "0003",
+    "revision": "07.00",
+    "manufacturer": "Linux 7.0.0-31-generic xhci-hcd",
+    "product": "xHCI Host Controller",
+    "serial_number": "0000:c6:00.4",
+    "interface_count": 1,
+    "configuration": 1,
+    "attributes": "e0",
+    "max_power_ma": 0,
+    "interfaces": [
+      {
+        "number": 0,
+        "alternate_setting": 0,
+        "endpoint_count": 1,
+        "class": "09",
+        "class_name": "hub",
+        "subclass": "00",
+        "protocol": "00",
+        "driver": "hub",
+        "endpoints": [
+          {
+            "address": "81",
+            "direction": "I",
+            "attributes": "03",
+            "type": "Int.",
+            "max_packet_size": 2,
+            "interval": "256ms"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "bus": 3,
+    "level": 0,
+    "parent": 0,
+    "port": 0,
+    "count": 0,
+    "device": 1,
+    "speed_mbps": 480,
+    "max_children": 5,
+    "usb_version": "2.00",
+    "class": "09",
+    "class_name": "hub",
+    "subclass": "00",
+    "protocol": "01",
+    "max_packet_size": 64,
+    "configurations": 1,
+    "vendor_id": "1d6b",
+    "product_id": "0002",
+    "revision": "07.00",
+    "manufacturer": "Linux 7.0.0-31-generic xhci-hcd",
+    "product": "xHCI Host Controller",
+    "serial_number": "0000:c8:00.0",
+    "interface_count": 1,
+    "configuration": 1,
+    "attributes": "e0",
+    "max_power_ma": 0,
+    "interfaces": [
+      {
+        "number": 0,
+        "alternate_setting": 0,
+        "endpoint_count": 1,
+        "class": "09",
+        "class_name": "hub",
+        "subclass": "00",
+        "protocol": "00",
+        "driver": "hub",
+        "endpoints": [
+          {
+            "address": "81",
+            "direction": "I",
+            "attributes": "03",
+            "type": "Int.",
+            "max_packet_size": 4,
+            "interval": "256ms"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "bus": 3,
+    "level": 1,
+    "parent": 1,
+    "port": 0,
+    "count": 1,
+    "device": 2,
+    "speed_mbps": 12,
+    "max_children": 0,
+    "usb_version": "2.00",
+    "class": "00",
+    "class_name": ">ifc",
+    "subclass": "00",
+    "protocol": "00",
+    "max_packet_size": 64,
+    "configurations": 1,
+    "vendor_id": "056e",
+    "product_id": "011a",
+    "revision": "01.11",
+    "manufacturer": "ELECOM",
+    "product": "ELECOM BlueLED Mouse",
+    "serial_number": null,
+    "interface_count": 1,
+    "configuration": 1,
+    "attributes": "a0",
+    "max_power_ma": 100,
+    "interfaces": [
+      {
+        "number": 0,
+        "alternate_setting": 0,
+        "endpoint_count": 1,
+        "class": "03",
+        "class_name": "HID",
+        "subclass": "01",
+        "protocol": "02",
+        "driver": "usbhid",
+        "endpoints": [
+          {
+            "address": "81",
+            "direction": "I",
+            "attributes": "03",
+            "type": "Int.",
+            "max_packet_size": 8,
+            "interval": "1ms"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "bus": 3,
+    "level": 1,
+    "parent": 1,
+    "port": 1,
+    "count": 2,
+    "device": 3,
+    "speed_mbps": 12,
+    "max_children": 0,
+    "usb_version": "1.01",
+    "class": "00",
+    "class_name": ">ifc",
+    "subclass": "00",
+    "protocol": "00",
+    "max_packet_size": 8,
+    "configurations": 1,
+    "vendor_id": "0853",
+    "product_id": "0141",
+    "revision": "00.01",
+    "manufacturer": "Topre",
+    "product": "REALFORCE 91 JP",
+    "serial_number": null,
+    "interface_count": 3,
+    "configuration": 1,
+    "attributes": "a0",
+    "max_power_ma": 100,
+    "interfaces": [
+      {
+        "number": 0,
+        "alternate_setting": 0,
+        "endpoint_count": 1,
+        "class": "03",
+        "class_name": "HID",
+        "subclass": "01",
+        "protocol": "01",
+        "driver": "usbhid",
+        "endpoints": [
+          {
+            "address": "81",
+            "direction": "I",
+            "attributes": "03",
+            "type": "Int.",
+            "max_packet_size": 8,
+            "interval": "1ms"
+          }
+        ]
+      },
+      {
+        "number": 1,
+        "alternate_setting": 0,
+        "endpoint_count": 1,
+        "class": "03",
+        "class_name": "HID",
+        "subclass": "00",
+        "protocol": "00",
+        "driver": "usbhid",
+        "endpoints": [
+          {
+            "address": "82",
+            "direction": "I",
+            "attributes": "03",
+            "type": "Int.",
+            "max_packet_size": 32,
+            "interval": "1ms"
+          }
+        ]
+      },
+      {
+        "number": 2,
+        "alternate_setting": 0,
+        "endpoint_count": 2,
+        "class": "03",
+        "class_name": "HID",
+        "subclass": "00",
+        "protocol": "00",
+        "driver": "usbhid",
+        "endpoints": [
+          {
+            "address": "04",
+            "direction": "O",
+            "attributes": "03",
+            "type": "Int.",
+            "max_packet_size": 64,
+            "interval": "1ms"
+          },
+          {
+            "address": "83",
+            "direction": "I",
+            "attributes": "03",
+            "type": "Int.",
+            "max_packet_size": 64,
+            "interval": "1ms"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "bus": 3,
+    "level": 1,
+    "parent": 1,
+    "port": 2,
+    "count": 3,
+    "device": 4,
+    "speed_mbps": 480,
+    "max_children": 0,
+    "usb_version": "2.00",
+    "class": "ef",
+    "class_name": "misc",
+    "subclass": "02",
+    "protocol": "01",
+    "max_packet_size": 64,
+    "configurations": 1,
+    "vendor_id": "046d",
+    "product_id": "0892",
+    "revision": "00.19",
+    "manufacturer": null,
+    "product": "HD Pro Webcam C920",
+    "serial_number": "00000000",
+    "interface_count": 4,
+    "configuration": 1,
+    "attributes": "80",
+    "max_power_ma": 500,
+    "interfaces": [
+      {
+        "number": 0,
+        "alternate_setting": 0,
+        "endpoint_count": 1,
+        "class": "0e",
+        "class_name": "video",
+        "subclass": "01",
+        "protocol": "00",
+        "driver": "uvcvideo",
+        "endpoints": [
+          {
+            "address": "86",
+            "direction": "I",
+            "attributes": "03",
+            "type": "Int.",
+            "max_packet_size": 64,
+            "interval": "16ms"
+          }
+        ]
+      },
+      {
+        "number": 1,
+        "alternate_setting": 0,
+        "endpoint_count": 0,
+        "class": "0e",
+        "class_name": "video",
+        "subclass": "02",
+        "protocol": "00",
+        "driver": "uvcvideo",
+        "endpoints": []
+      },
+      {
+        "number": 2,
+        "alternate_setting": 0,
+        "endpoint_count": 0,
+        "class": "01",
+        "class_name": "audio",
+        "subclass": "01",
+        "protocol": "00",
+        "driver": "snd-usb-audio",
+        "endpoints": []
+      },
+      {
+        "number": 3,
+        "alternate_setting": 0,
+        "endpoint_count": 0,
+        "class": "01",
+        "class_name": "audio",
+        "subclass": "02",
+        "protocol": "00",
+        "driver": "snd-usb-audio",
+        "endpoints": []
+      }
+    ]
+  },
+  {
+    "bus": 3,
+    "level": 1,
+    "parent": 1,
+    "port": 3,
+    "count": 4,
+    "device": 5,
+    "speed_mbps": 12,
+    "max_children": 0,
+    "usb_version": "1.10",
+    "class": "00",
+    "class_name": ">ifc",
+    "subclass": "00",
+    "protocol": "00",
+    "max_packet_size": 8,
+    "configurations": 1,
+    "vendor_id": "0d8c",
+    "product_id": "0103",
+    "revision": "00.10",
+    "manufacturer": "C-Media INC.",
+    "product": "USB Sound Device",
+    "serial_number": null,
+    "interface_count": 2,
+    "configuration": 1,
+    "attributes": "80",
+    "max_power_ma": 500,
+    "interfaces": [
+      {
+        "number": 0,
+        "alternate_setting": 0,
+        "endpoint_count": 0,
+        "class": "01",
+        "class_name": "audio",
+        "subclass": "01",
+        "protocol": "00",
+        "driver": "snd-usb-audio",
+        "endpoints": []
+      },
+      {
+        "number": 1,
+        "alternate_setting": 1,
+        "endpoint_count": 1,
+        "class": "01",
+        "class_name": "audio",
+        "subclass": "02",
+        "protocol": "00",
+        "driver": "snd-usb-audio",
+        "endpoints": [
+          {
+            "address": "06",
+            "direction": "O",
+            "attributes": "09",
+            "type": "Isoc",
+            "max_packet_size": 192,
+            "interval": "1ms"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "bus": 3,
+    "level": 1,
+    "parent": 1,
+    "port": 4,
+    "count": 5,
+    "device": 6,
+    "speed_mbps": 480,
+    "max_children": 0,
+    "usb_version": "2.10",
+    "class": "ef",
+    "class_name": "misc",
+    "subclass": "02",
+    "protocol": "01",
+    "max_packet_size": 64,
+    "configurations": 1,
+    "vendor_id": "0e8d",
+    "product_id": "0717",
+    "revision": "01.00",
+    "manufacturer": "MediaTek Inc.",
+    "product": "Wireless_Device",
+    "serial_number": "000000000",
+    "interface_count": 3,
+    "configuration": 1,
+    "attributes": "e0",
+    "max_power_ma": 100,
+    "interfaces": [
+      {
+        "number": 0,
+        "alternate_setting": 0,
+        "endpoint_count": 3,
+        "class": "e0",
+        "class_name": "wlcon",
+        "subclass": "01",
+        "protocol": "01",
+        "driver": "btusb",
+        "endpoints": [
+          {
+            "address": "02",
+            "direction": "O",
+            "attributes": "02",
+            "type": "Bulk",
+            "max_packet_size": 512,
+            "interval": "0ms"
+          },
+          {
+            "address": "81",
+            "direction": "I",
+            "attributes": "03",
+            "type": "Int.",
+            "max_packet_size": 16,
+            "interval": "125us"
+          },
+          {
+            "address": "82",
+            "direction": "I",
+            "attributes": "02",
+            "type": "Bulk",
+            "max_packet_size": 512,
+            "interval": "0ms"
+          }
+        ]
+      },
+      {
+        "number": 1,
+        "alternate_setting": 0,
+        "endpoint_count": 2,
+        "class": "e0",
+        "class_name": "wlcon",
+        "subclass": "01",
+        "protocol": "01",
+        "driver": "btusb",
+        "endpoints": [
+          {
+            "address": "03",
+            "direction": "O",
+            "attributes": "01",
+            "type": "Isoc",
+            "max_packet_size": 0,
+            "interval": "1ms"
+          },
+          {
+            "address": "83",
+            "direction": "I",
+            "attributes": "01",
+            "type": "Isoc",
+            "max_packet_size": 0,
+            "interval": "1ms"
+          }
+        ]
+      },
+      {
+        "number": 2,
+        "alternate_setting": 1,
+        "endpoint_count": 2,
+        "class": "e0",
+        "class_name": "wlcon",
+        "subclass": "01",
+        "protocol": "01",
+        "driver": "btusb",
+        "endpoints": [
+          {
+            "address": "0a",
+            "direction": "O",
+            "attributes": "03",
+            "type": "Int.",
+            "max_packet_size": 512,
+            "interval": "125us"
+          },
+          {
+            "address": "8a",
+            "direction": "I",
+            "attributes": "03",
+            "type": "Int.",
+            "max_packet_size": 512,
+            "interval": "125us"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "bus": 4,
+    "level": 0,
+    "parent": 0,
+    "port": 0,
+    "count": 0,
+    "device": 1,
+    "speed_mbps": 10000,
+    "max_children": 2,
+    "usb_version": "3.10",
+    "class": "09",
+    "class_name": "hub",
+    "subclass": "00",
+    "protocol": "03",
+    "max_packet_size": 9,
+    "configurations": 1,
+    "vendor_id": "1d6b",
+    "product_id": "0003",
+    "revision": "07.00",
+    "manufacturer": "Linux 7.0.0-31-generic xhci-hcd",
+    "product": "xHCI Host Controller",
+    "serial_number": "0000:c8:00.0",
+    "interface_count": 1,
+    "configuration": 1,
+    "attributes": "e0",
+    "max_power_ma": 0,
+    "interfaces": [
+      {
+        "number": 0,
+        "alternate_setting": 0,
+        "endpoint_count": 1,
+        "class": "09",
+        "class_name": "hub",
+        "subclass": "00",
+        "protocol": "00",
+        "driver": "hub",
+        "endpoints": [
+          {
+            "address": "81",
+            "direction": "I",
+            "attributes": "03",
+            "type": "Int.",
+            "max_packet_size": 2,
+            "interval": "256ms"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "bus": 5,
+    "level": 0,
+    "parent": 0,
+    "port": 0,
+    "count": 0,
+    "device": 1,
+    "speed_mbps": 480,
+    "max_children": 1,
+    "usb_version": "2.00",
+    "class": "09",
+    "class_name": "hub",
+    "subclass": "00",
+    "protocol": "01",
+    "max_packet_size": 64,
+    "configurations": 1,
+    "vendor_id": "1d6b",
+    "product_id": "0002",
+    "revision": "07.00",
+    "manufacturer": "Linux 7.0.0-31-generic xhci-hcd",
+    "product": "xHCI Host Controller",
+    "serial_number": "0000:c8:00.3",
+    "interface_count": 1,
+    "configuration": 1,
+    "attributes": "e0",
+    "max_power_ma": 0,
+    "interfaces": [
+      {
+        "number": 0,
+        "alternate_setting": 0,
+        "endpoint_count": 1,
+        "class": "09",
+        "class_name": "hub",
+        "subclass": "00",
+        "protocol": "00",
+        "driver": "hub",
+        "endpoints": [
+          {
+            "address": "81",
+            "direction": "I",
+            "attributes": "03",
+            "type": "Int.",
+            "max_packet_size": 4,
+            "interval": "256ms"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "bus": 6,
+    "level": 0,
+    "parent": 0,
+    "port": 0,
+    "count": 0,
+    "device": 1,
+    "speed_mbps": 10000,
+    "max_children": 1,
+    "usb_version": "3.10",
+    "class": "09",
+    "class_name": "hub",
+    "subclass": "00",
+    "protocol": "03",
+    "max_packet_size": 9,
+    "configurations": 1,
+    "vendor_id": "1d6b",
+    "product_id": "0003",
+    "revision": "07.00",
+    "manufacturer": "Linux 7.0.0-31-generic xhci-hcd",
+    "product": "xHCI Host Controller",
+    "serial_number": "0000:c8:00.3",
+    "interface_count": 1,
+    "configuration": 1,
+    "attributes": "e0",
+    "max_power_ma": 0,
+    "interfaces": [
+      {
+        "number": 0,
+        "alternate_setting": 0,
+        "endpoint_count": 1,
+        "class": "09",
+        "class_name": "hub",
+        "subclass": "00",
+        "protocol": "00",
+        "driver": "hub",
+        "endpoints": [
+          {
+            "address": "81",
+            "direction": "I",
+            "attributes": "03",
+            "type": "Int.",
+            "max_packet_size": 2,
+            "interval": "256ms"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "bus": 7,
+    "level": 0,
+    "parent": 0,
+    "port": 0,
+    "count": 0,
+    "device": 1,
+    "speed_mbps": 480,
+    "max_children": 1,
+    "usb_version": "2.00",
+    "class": "09",
+    "class_name": "hub",
+    "subclass": "00",
+    "protocol": "01",
+    "max_packet_size": 64,
+    "configurations": 1,
+    "vendor_id": "1d6b",
+    "product_id": "0002",
+    "revision": "07.00",
+    "manufacturer": "Linux 7.0.0-31-generic xhci-hcd",
+    "product": "xHCI Host Controller",
+    "serial_number": "0000:c8:00.4",
+    "interface_count": 1,
+    "configuration": 1,
+    "attributes": "e0",
+    "max_power_ma": 0,
+    "interfaces": [
+      {
+        "number": 0,
+        "alternate_setting": 0,
+        "endpoint_count": 1,
+        "class": "09",
+        "class_name": "hub",
+        "subclass": "00",
+        "protocol": "00",
+        "driver": "hub",
+        "endpoints": [
+          {
+            "address": "81",
+            "direction": "I",
+            "attributes": "03",
+            "type": "Int.",
+            "max_packet_size": 4,
+            "interval": "256ms"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "bus": 8,
+    "level": 0,
+    "parent": 0,
+    "port": 0,
+    "count": 0,
+    "device": 1,
+    "speed_mbps": 10000,
+    "max_children": 1,
+    "usb_version": "3.10",
+    "class": "09",
+    "class_name": "hub",
+    "subclass": "00",
+    "protocol": "03",
+    "max_packet_size": 9,
+    "configurations": 1,
+    "vendor_id": "1d6b",
+    "product_id": "0003",
+    "revision": "07.00",
+    "manufacturer": "Linux 7.0.0-31-generic xhci-hcd",
+    "product": "xHCI Host Controller",
+    "serial_number": "0000:c8:00.4",
+    "interface_count": 1,
+    "configuration": 1,
+    "attributes": "e0",
+    "max_power_ma": 0,
+    "interfaces": [
+      {
+        "number": 0,
+        "alternate_setting": 0,
+        "endpoint_count": 1,
+        "class": "09",
+        "class_name": "hub",
+        "subclass": "00",
+        "protocol": "00",
+        "driver": "hub",
+        "endpoints": [
+          {
+            "address": "81",
+            "direction": "I",
+            "attributes": "03",
+            "type": "Int.",
+            "max_packet_size": 2,
+            "interval": "256ms"
+          }
+        ]
+      }
+    ]
+  }
+]
