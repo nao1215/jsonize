@@ -1,0 +1,8 @@
+description: >-
+  Every validity gpg pads to eight characters inside the brackets, among
+  them "  full  " and " unknown", with a key that expired, a key that was
+  revoked, a key with two user IDs and two subkeys, and a user ID with a
+  name outside ASCII.
+source: "gpg -k, GnuPG 2.4.8 on Ubuntu 26.04 with LC_ALL=C.UTF-8 (the locale jz run gives gpg), in a GNUPGHOME made for the fixture with keys generated for it; one key signed by another to make it fully valid, two imported from a second GNUPGHOME; the GNUPGHOME path replaced with /home/user/.gnupg and the rule shortened to match"
+os: linux
+args: [-k]
