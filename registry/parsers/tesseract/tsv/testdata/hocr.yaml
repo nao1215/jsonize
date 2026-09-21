@@ -1,0 +1,8 @@
+source: >-
+  captured on Ubuntu 26.04 with tesseract 5.5.0 (eng), LC_ALL=C tesseract
+  invoice.png stdout hocr over the PNG of the invoice fixture
+description: >-
+  hOCR, which is XHTML rather than a table
+os: linux
+args: [invoice.png, stdout, hocr]
+expect_error: 'does not describe this input'

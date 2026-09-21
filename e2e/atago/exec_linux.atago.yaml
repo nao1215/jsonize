@@ -2651,3 +2651,57 @@ scenarios:
           stderr:
             contains: "which does not read the output of -i"
           stdout: {empty: true}
+
+  # OCR over an image a client sent: unbounded work on untrusted input,
+  # which is why the cookbook entry beside it is about limits. The PNG
+  # is committed rather than drawn here, so the page geometry the
+  # assertions name is the one this file has.
+  - name: tesseract reads a page into one row per word
+    only: {os: linux}
+    steps:
+      - fixture:
+          file: "up loads/receipt [1].png"
+          from: "${specdir}/testdata/ocr-invoice.png"
+      - run:
+          command: jz run --explain tesseract "${workdir}/up loads/receipt [1].png" stdout tsv
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose tesseract/tsv from embedded"
+          stdout:
+            json:
+              # The first row is the page, whose box is the image and
+              # which carries no text and tesseract's own -1 for "this
+              # is not a word". What the recogniser made of the words is
+              # not asserted here: that moves between models.
+              - { path: "$[0].level", equals: 1 }
+              - { path: "$[0].page_num", equals: 1 }
+              - { path: "$[0].width", equals: 700 }
+              - { path: "$[0].height", equals: 200 }
+              - { path: "$[0].conf", equals: -1 }
+              - { path: "$[0].text", equals: "" }
+      # A page has as many rows as it has words, so --stream writes each
+      # as it is read.
+      - run:
+          command: jz run --stream tesseract "${workdir}/up loads/receipt [1].png" stdout tsv
+      - assert:
+          exit_code: 0
+          stdout:
+            contains: '"level":5'
+      # With no output configuration named tesseract writes the plain
+      # text, which is not the table: the command was happy and the
+      # conversion was not.
+      - run:
+          command: jz run tesseract "${workdir}/up loads/receipt [1].png" stdout
+      - assert:
+          exit_code: 4
+          stdout: {empty: true}
+      # An image that is not there is tesseract's own failure, and its
+      # status is what comes back.
+      - run:
+          command: jz run tesseract "${workdir}/up loads/missing.png" stdout tsv
+      - assert:
+          exit_code: 1
+          stderr:
+            contains: "cannot read input file"
+          stdout: {empty: true}

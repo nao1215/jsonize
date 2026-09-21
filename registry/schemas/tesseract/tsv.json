@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/tesseract/tsv.json",
+  "title": "tesseract/tsv",
+  "description": "tesseract TSV, one row per page, block, paragraph, line and word",
+  "x-jsonize": {
+    "definition": "tesseract/tsv",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "block_num": {
+        "type": "integer"
+      },
+      "conf": {
+        "type": "number"
+      },
+      "height": {
+        "type": "integer"
+      },
+      "left": {
+        "type": "integer"
+      },
+      "level": {
+        "type": "integer"
+      },
+      "line_num": {
+        "type": "integer"
+      },
+      "page_num": {
+        "type": "integer"
+      },
+      "par_num": {
+        "type": "integer"
+      },
+      "top": {
+        "type": "integer"
+      },
+      "width": {
+        "type": "integer"
+      },
+      "word_num": {
+        "type": "integer"
+      }
+    },
+    "additionalProperties": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

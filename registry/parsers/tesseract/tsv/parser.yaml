@@ -1,0 +1,55 @@
+# `tesseract IMAGE stdout tsv` prints what the recogniser found as a
+# table with a header line: one row per element of the layout it built,
+# from the page down to the word, with the box it occupies and, for a
+# word, how confident it is.
+#
+# The five numbers that open a row say where the row sits in that
+# layout, and `level` says what it is: 1 a page, 2 a block, 3 a
+# paragraph, 4 a line, 5 a word. Only a word carries text and a
+# confidence; every other row leaves the text column empty and prints -1
+# for the confidence, which is tesseract's own value for "this is not a
+# word" and stays the number it printed rather than becoming null.
+#
+# The text column is the last one and is taken as it stands, so a word
+# holding a comma or a character outside ASCII arrives as tesseract
+# wrote it. The confidence is a float: tesseract 4 printed it as a whole
+# number and 5 prints it with six decimals.
+#
+# `stdout` has to be the output base, since with any other one tesseract
+# writes a file and prints nothing. The other output configurations
+# (`hocr`, `alto`, `pdf`, and the plain text tesseract writes when no
+# configuration is named) are other formats and are refused.
+format: 1
+command: tesseract
+variant: tsv
+description: tesseract TSV, one row per page, block, paragraph, line and word
+metadata:
+  tags: [ocr, media, image]
+  compatible: [Tesseract 4, Tesseract 5]
+  references:
+    - https://tesseract-ocr.github.io/tessdoc/FAQ.html
+detect:
+  args:
+    all: [stdout, tsv]
+    none: [hocr, alto, pdf]
+  signature:
+    all:
+      # The header line names twelve columns in this order and nothing
+      # else does.
+      - '\Alevel\tpage_num\tblock_num\tpar_num\tline_num\tword_num\tleft\ttop\twidth\theight\tconf\ttext\n'
+parse:
+  type: table
+  split: delimiter
+  delimiter: "\t"
+fields:
+  level: {type: int, required: true}
+  page_num: {type: int, required: true}
+  block_num: {type: int, required: true}
+  par_num: {type: int, required: true}
+  line_num: {type: int, required: true}
+  word_num: {type: int, required: true}
+  left: {type: int, required: true}
+  top: {type: int, required: true}
+  width: {type: int, required: true}
+  height: {type: int, required: true}
+  conf: {type: float, required: true}

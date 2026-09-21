@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head>
+  <title></title>
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+  <meta name='ocr-system' content='tesseract 5.5.0' />
+  <meta name='ocr-capabilities' content='ocr_page ocr_carea ocr_par ocr_line ocrx_word ocrp_dir ocrp_lang ocrp_wconf'/>
+ </head>
+ <body>
+  <div class='ocr_page' id='page_1' title='image "invoice.png"; bbox 0 0 700 200; ppageno 0; scan_res 70 70'>
+   <div class='ocr_carea' id='block_1_1' title="bbox 31 44 283 145">
+    <p class='ocr_par' id='par_1_1' lang='eng' title="bbox 31 44 283 145">
+     <span class='ocr_line' id='line_1_1' title="bbox 34 44 283 70; baseline 0 0; x_size 31.358974; x_descenders 5.3589745; x_ascenders 7">
+      <span class='ocrx_word' id='word_1_1' title='bbox 34 44 141 70; x_wconf 95'>Invoice</span>
+      <span class='ocrx_word' id='word_1_2' title='bbox 154 44 283 70; x_wconf 96'>2026-09</span>
+     </span>
+     <span class='ocr_line' id='line_1_2' title="bbox 31 114 282 145; baseline 0 -5; x_size 32.5; x_descenders 5.5; x_ascenders 7.5">
+      <span class='ocrx_word' id='word_1_3' title='bbox 31 114 105 140; x_wconf 96'>Total</span>
+      <span class='ocrx_word' id='word_1_4' title='bbox 121 114 205 145; x_wconf 96'>1,280</span>
+      <span class='ocrx_word' id='word_1_5' title='bbox 218 114 282 140; x_wconf 95'>JPY</span>
+     </span>
+    </p>
+   </div>
+  </div>
+ </body>
+</html>

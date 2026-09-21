@@ -1,0 +1,9 @@
+source: >-
+  captured on Ubuntu 26.04 with tesseract 5.5.0 (eng), LC_ALL=C tesseract
+  utf8.png stdout tsv over a PNG drawn with "Café Ausmaß" for this fixture
+description: >-
+  a word outside ASCII, kept as tesseract wrote it; the second word is what
+  the English model made of "Ausmaß", which is the recogniser's answer and
+  not something the conversion changes
+os: linux
+args: [utf8.png, stdout, tsv]

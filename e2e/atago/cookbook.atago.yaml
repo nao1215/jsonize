@@ -622,6 +622,25 @@ scenarios:
               /dev/null	inode/chardevice
               /usr/bin/stat	inode/symlink
 
+  - name: "Read the words out of an uploaded image: a confidence threshold picks the words"
+    steps:
+      - fixture:
+          file: ocr.txt
+          from: "${specdir}/../../registry/parsers/tesseract/tsv/testdata/invoice.txt"
+      - run:
+          command: >-
+            bash -c "set -o pipefail; jz --file '${workdir}/ocr.txt' |
+            jq -r '.[] | select(.conf > 80) | .text'"
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              Invoice
+              2026-09
+              Total
+              1,280
+              JPY
+
   - name: "Record what a backup run moved: the rsync --stats counts are numbers"
     steps:
       - fixture:

@@ -21,7 +21,7 @@ so the output shown is what jz prints.
 | make JSON in a script | [Build a JSON body for an API call](#build-a-json-body-for-an-api-call), [Pass a variable that may start with @](#pass-a-variable-that-may-start-with-), [Put a file's contents into JSON](#put-a-files-contents-into-json), [Keep a file's line endings](#keep-a-files-line-endings), [Build nested JSON](#build-nested-json), [Make a JSON array](#make-a-json-array) |
 | hand the JSON to jq | [Pick the records you want with jq](#pick-the-records-you-want-with-jq), [List installed packages by licence](#list-installed-packages-by-licence), [Fail a step when a value is out of range](#fail-a-step-when-a-value-is-out-of-range) |
 | send or store the JSON | [Send JSON to an HTTP API](#send-json-to-an-http-api), [Save a report for a later step](#save-a-report-for-a-later-step) |
-| inspect what a server received | [Check an uploaded PDF before rendering it](#check-an-uploaded-pdf-before-rendering-it), [List an archive before extracting it](#list-an-archive-before-extracting-it), [Check when a certificate expires](#check-when-a-certificate-expires), [Check the type of an upload](#check-the-type-of-an-upload), [Record what a backup run moved](#record-what-a-backup-run-moved), [Tell a failed command from output jz could not read](#tell-a-failed-command-from-output-jz-could-not-read) |
+| inspect what a server received | [Check an uploaded PDF before rendering it](#check-an-uploaded-pdf-before-rendering-it), [List an archive before extracting it](#list-an-archive-before-extracting-it), [Check when a certificate expires](#check-when-a-certificate-expires), [Check the type of an upload](#check-the-type-of-an-upload), [Read the words out of an uploaded image](#read-the-words-out-of-an-uploaded-image), [Record what a backup run moved](#record-what-a-backup-run-moved), [Tell a failed command from output jz could not read](#tell-a-failed-command-from-output-jz-could-not-read) |
 | use jz in CI | [Fail a CI step when jz cannot read the output](#fail-a-ci-step-when-jz-cannot-read-the-output), [Read the explanation in a script](#read-the-explanation-in-a-script), [Get the JSON Schema of an output](#get-the-json-schema-of-an-output) |
 | read a format jz does not know | [Add a parser of your own](#add-a-parser-of-your-own) |
 
@@ -472,6 +472,34 @@ form `file FILE` alike. A file file(1) could not open is the one case
 to watch: it writes the reason where the type would be and still exits
 0, so `jz run file -i` answers exit 4 there rather than a record whose
 `mime_type` is missing.
+
+## Read the words out of an uploaded image
+
+`tesseract IMAGE stdout tsv` prints one row per page, block, paragraph,
+line and word. Only a word carries text and a confidence, so a threshold
+picks the words and leaves the layout behind.
+
+```console
+$ tesseract 'receipt [1].png' stdout tsv | jz | jq -r '.[] | select(.conf > 80) | .text'
+Invoice
+2026-09
+Total
+1,280
+JPY
+```
+
+Needs tesseract and a model for the language, checked against 5.5.0 with
+`eng`. `stdout` has to be the output base, since with any other one
+tesseract writes a file and prints nothing; `hocr`, `alto`, `pdf` and the
+plain text it writes when no configuration is named are other formats and
+are refused. A row that is not a word prints `-1` for the confidence,
+which is tesseract's own value and stays the number it printed.
+
+OCR over an image a client sent is unbounded work: a large or adversarial
+image can take minutes of CPU and a lot of memory. `jz run --timeout`
+bounds the time; the rest is the caller's. The words themselves are
+whatever the recogniser made of the pixels, so treat them as untrusted
+input and not as a reading of the document.
 
 ## Record what a backup run moved
 

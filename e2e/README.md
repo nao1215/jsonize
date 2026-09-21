@@ -70,6 +70,7 @@ lacks:
 | `7z` | `7zip` (`p7zip-full` before Ubuntu 23.04) | `exec_linux` |
 | `pdfinfo` | `poppler-utils` | `exec_linux` |
 | `openssl`, `file` | on every runner | `exec_linux` |
+| `tesseract` | `tesseract-ocr`, `tesseract-ocr-eng` | `exec_linux`, over `testdata/ocr-invoice.png` (700x200, drawn with ImageMagick for the suite, reading "Invoice 2026-09" and "Total 1,280 JPY") |
 | a running systemd | the runner boots with it; a container usually does not | `exec_linux` (`systemctl`) |
 | `ipconfig`, `systeminfo`, `hostname`, `powershell` | part of Windows | `exec_windows` |
 | `go` | the toolchain | `scripts/run_e2e.sh` builds `jz` and `e2ehelper` |
