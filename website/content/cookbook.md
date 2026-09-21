@@ -400,9 +400,10 @@ Needs 7-Zip, which Debian and Ubuntu package as `7zip`, checked against
 as `7z/list-technical-bare`. Which properties a block carries depends on
 the archive format, so the keys are the names 7-Zip printed.
 
-An archive holds as many members as it holds, and `jz run --stream 7z l
--slt -ba` writes each entry as soon as its block has been read instead
-of building one array out of the listing.
+An archive holds as many members as it holds, so this is one of the
+formats `--stream` is for: `jz run --stream 7z l -slt -ba ARCHIVE`
+writes each entry as soon as its block has been read, instead of
+building one array out of the listing.
 
 Listing an archive is not extracting it. A name that is absolute or
 climbs out of the destination is the one to refuse, and an archive whose
