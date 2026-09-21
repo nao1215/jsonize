@@ -527,6 +527,115 @@ scenarios:
             equals: |
               /
 
+  # The five server-side recipes read captured output of the real
+  # commands, the same files the registry tests read, so the page shows
+  # what poppler, 7-Zip, OpenSSL, file(1) and rsync actually printed. The
+  # scenarios in exec_linux.atago.yaml run those binaries.
+  - name: "Check an uploaded PDF before rendering it: the page count and the size are numbers"
+    steps:
+      - fixture:
+          file: pdfinfo.txt
+          from: "${specdir}/../../registry/parsers/pdfinfo/poppler/testdata/latex.txt"
+      - run:
+          command: jz --extract Pages --extract Encrypted
+          stdin: {file: pdfinfo.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              {"Pages":19,"Encrypted":"no"}
+
+  - name: "List an archive before extracting it: the members and their sizes come out of 7z l -slt"
+    steps:
+      - fixture:
+          file: 7z.txt
+          from: "${specdir}/../../registry/parsers/7z/list-technical/testdata/zip.txt"
+      - run:
+          command: >-
+            bash -c "set -o pipefail; jz --file '${workdir}/7z.txt' |
+            jq '[.entries[].Size] | add'"
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              31
+      - run:
+          command: >-
+            bash -c "set -o pipefail; jz --file '${workdir}/7z.txt' |
+            jq -r '.entries[].Path'"
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              empty.txt
+              hello.txt
+              name with spaces.txt
+
+  - name: "Check when a certificate expires: openssl x509 -noout -dates becomes two RFC 3339 timestamps"
+    steps:
+      - fixture:
+          file: dates.txt
+          from: "${specdir}/../../registry/parsers/openssl/x509-fields/testdata/dates-only.txt"
+      - run:
+          command: jz --parser openssl
+          stdin: {file: dates.txt}
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              {"notBefore":"2026-09-14T13:32:06Z","notAfter":"2026-10-14T13:32:06Z"}
+
+  - name: "Check the type of an upload: file -i names the MIME type of each path"
+    steps:
+      - fixture:
+          file: mime.txt
+          from: "${specdir}/../../registry/parsers/file/mime/testdata/file-5.46.txt"
+      - run:
+          command: >-
+            bash -c "set -o pipefail; jz --file '${workdir}/mime.txt' |
+            jq -r '.[] | [.file, .mime_type] | @tsv'"
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              /usr/share/doc/bash/copyright	text/plain
+              /usr/share/doc/bash/NEWS.gz	application/gzip
+              /usr/bin/gnustat	application/x-pie-executable
+              /usr/share/doc	inode/directory
+              /dev/null	inode/chardevice
+              /usr/bin/stat	inode/symlink
+
+  - name: "Record what a backup run moved: the rsync --stats counts are numbers"
+    steps:
+      - fixture:
+          file: rsync.txt
+          from: "${specdir}/../../registry/parsers/rsync/stats/testdata/deletions.txt"
+      - run:
+          command: >-
+            bash -c "set -o pipefail; jz --file '${workdir}/rsync.txt' |
+            jq -c '{moved: .regular_files_transferred, bytes: .total_transferred_file_size, deleted: .deleted_files}'"
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              {"moved":3,"bytes":3000018,"deleted":1}
+
+  - name: "Tell a failed command from output jz could not read: the status says which happened"
+    skip: {os: windows}
+    steps:
+      - run:
+          command: jz run --parser pdfinfo -- false
+      - assert:
+          exit_code: 1
+          stderr:
+            contains: "false exited with status 1"
+          stdout: {empty: true}
+      - run:
+          command: jz run --parser pdfinfo -- echo hello
+      - assert:
+          exit_code: 4
+          stdout: {empty: true}
+
   - name: "Read the explanation in a script: --explain=json is read with sed and jq"
     steps:
       - fixture:

@@ -35,11 +35,21 @@ metadata:
     - https://man7.org/linux/man-pages/man1/file.1.html
 detect:
   auto_detect: false
+  args:
+    # With any of these file(1) prints a MIME type or a list of
+    # extensions instead of a sentence, and file/mime reads the first of
+    # those. Saying so here is what keeps a report file(1) writes for a
+    # file it could not open, which is a sentence whatever the options
+    # were, from being read as the answer to a question nobody asked.
+    none: ["-i", "--mime", "--mime-type", "--mime-encoding", "--extension", "--apple"]
   signature:
     window: 200
     all:
-      # Every line is a path, a colon and a description.
-      - '\A(?:\S+:[ \t]+\S[^\n]*\n)*\S+:[ \t]+\S[^\n]*\z'
+      # Every line is a path, a colon and a description. The path is
+      # whatever stands before the colon, spaces included: an upload is
+      # often named "quarterly report.pdf", and the expression that
+      # reads the line has always taken such a name.
+      - '\A(?:[^:\n]+:[ \t]+\S[^\n]*\n)*[^:\n]+:[ \t]+\S[^\n]*\z'
       # Some description names a kind of file jz undertakes to read. Case
       # is ignored because file(1) capitalises a description that opens
       # with a proper noun ("Composite Document File V2 Document"). A
@@ -52,7 +62,7 @@ detect:
       # `link-netnsid` in `ip -o link`, whose every line is also "word:
       # text", or a MIME type, which `file -i` prints and this definition
       # does not undertake to read.
-      - '(?i)^\S+:[ \t]+[^\n]*\b(?:text|data|empty|directory|link|executable|script|archive|image|document|database|socket|fifo|special|font|compressed)(?:[ \t,;:.()]|$)'
+      - '(?i)^[^:\n]+:[ \t]+[^\n]*\b(?:text|data|empty|directory|link|executable|script|archive|image|document|database|socket|fifo|special|font|compressed)(?:[ \t,;:.()]|$)'
       # And every description does, or is one of the two file(1) writes
       # for a file it was given but could not identify. One line naming a
       # kind is not evidence on its own: any dump of a file's bytes has
@@ -61,7 +71,7 @@ detect:
       # long paths until this expression covered the whole text. An error
       # message rarer than these two is refused, which is the same answer
       # this definition gives for a kind it does not name.
-      - '(?i)\A(?:\S+:[ \t]+[^\n]*\b(?:text|data|empty|directory|link|executable|script|archive|image|document|database|socket|fifo|special|font|compressed|cannot open|no read permission)(?:[ \t,;:.()][^\n]*)?\n)*\S+:[ \t]+[^\n]*\b(?:text|data|empty|directory|link|executable|script|archive|image|document|database|socket|fifo|special|font|compressed|cannot open|no read permission)(?:[ \t,;:.()][^\n]*)?\z'
+      - '(?i)\A(?:[^:\n]+:[ \t]+[^\n]*\b(?:text|data|empty|directory|link|executable|script|archive|image|document|database|socket|fifo|special|font|compressed|cannot open|no read permission)(?:[ \t,;:.()][^\n]*)?\n)*[^:\n]+:[ \t]+[^\n]*\b(?:text|data|empty|directory|link|executable|script|archive|image|document|database|socket|fifo|special|font|compressed|cannot open|no read permission)(?:[ \t,;:.()][^\n]*)?\z'
 exec:
   env:
     # In the C locale file writes each byte of a name outside ASCII as a
