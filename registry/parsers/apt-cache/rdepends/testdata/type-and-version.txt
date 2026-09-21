@@ -1,0 +1,11 @@
+libc-dev-bin
+Reverse Depends:
+  Depends: libc6-dev (= 2.43-2ubuntu2.4)
+    libc-dev-bin:i386
+  Breaks: rpcsvc-proto (<< 2.31-14)
+  Replaces: rpcsvc-proto (<< 2.31-14)
+  Depends: libc6-dev (= 2.43-2ubuntu2)
+sl
+Reverse Depends:
+  Recommends: games-toys
+  Recommends: junior-games-text

@@ -1,0 +1,8 @@
+games-all
+Reverse Depends:
+sl
+Reverse Depends:
+  games-toys
+  junior-games-text
+ubuntu-gnome-desktop
+Reverse Depends:

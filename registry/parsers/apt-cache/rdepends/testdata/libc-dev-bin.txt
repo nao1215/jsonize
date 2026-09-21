@@ -1,0 +1,7 @@
+libc-dev-bin
+Reverse Depends:
+  libc6-dev
+    libc-dev-bin:i386
+  rpcsvc-proto
+  rpcsvc-proto
+  libc6-dev

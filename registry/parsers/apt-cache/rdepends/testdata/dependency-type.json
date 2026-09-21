@@ -1,0 +1,44 @@
+[
+  {
+    "package": {
+      "virtual": false,
+      "name": "libc-dev-bin"
+    },
+    "reverse_depends": [
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libc6-dev",
+        "operator": null,
+        "version": null,
+        "other_targets": [
+          "libc-dev-bin:i386"
+        ]
+      },
+      {
+        "alternative": false,
+        "relation": "Breaks",
+        "package": "rpcsvc-proto",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": "Replaces",
+        "package": "rpcsvc-proto",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libc6-dev",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      }
+    ]
+  }
+]

@@ -1,0 +1,4 @@
+description: The installed reverse relationships followed recursively, which repeats the block for every package reached, a foreign-architecture package among them.
+source: lines 1 to 114 (the first 19 blocks) of `apt-cache rdepends --installed --recurse libc-dev-bin` captured on Ubuntu 26.04 (APT 3.2.0) with LC_ALL=C
+os: linux
+args: ["rdepends", "--installed", "--recurse", "libc-dev-bin"]

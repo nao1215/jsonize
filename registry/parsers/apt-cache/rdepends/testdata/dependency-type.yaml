@@ -1,0 +1,4 @@
+description: The relationship kind without the version, whose entries have the shape of apt-cache depends lines under a Reverse Depends heading.
+source: output of `apt-cache rdepends -o APT::Cache::ShowDependencyType=true libc-dev-bin` captured on Ubuntu 26.04 (APT 3.2.0) with LC_ALL=C
+os: linux
+args: ["rdepends", "-o", "APT::Cache::ShowDependencyType=true", "libc-dev-bin"]

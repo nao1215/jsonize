@@ -1,0 +1,114 @@
+libc-dev-bin
+Reverse Depends:
+  libc6-dev
+    libc-dev-bin:i386
+  rpcsvc-proto
+  rpcsvc-proto
+  libc6-dev
+libc6-dev
+Reverse Depends:
+  rpcsvc-proto
+ |build-essential
+  libgcc-14-dev
+  gcc-14-x86-64-linux-gnu
+  gcc-14
+  rpcsvc-proto
+  libstdc++-15-dev
+  libcrypt-dev
+ |libncurses-dev
+  libgcc-15-dev
+  libcrypt-dev
+  gcc-15
+  gcc-x86-64-linux-gnu
+  gcc-15-x86-64-linux-gnu
+  binutils
+ |gcc
+ |build-essential
+  bpftrace
+libc-dev-bin:i386
+Reverse Depends:
+rpcsvc-proto
+Reverse Depends:
+  libc6-dev
+    rpcsvc-proto:i386
+  libc6-dev
+    rpcsvc-proto:i386
+build-essential
+Reverse Depends:
+  node-gyp
+  dpkg-dev
+libgcc-14-dev
+Reverse Depends:
+  gcc-14-x86-64-linux-gnu
+gcc-14-x86-64-linux-gnu
+Reverse Depends:
+  gcc-14
+gcc-14
+Reverse Depends:
+libstdc++-15-dev
+Reverse Depends:
+  g++-15-x86-64-linux-gnu
+libcrypt-dev
+Reverse Depends:
+  build-essential
+libncurses-dev
+Reverse Depends:
+libgcc-15-dev
+Reverse Depends:
+  gcc-15-x86-64-linux-gnu
+  libstdc++-15-dev
+gcc-15
+Reverse Depends:
+  g++-15
+  gcc
+  g++
+gcc-x86-64-linux-gnu
+Reverse Depends:
+  g++-x86-64-linux-gnu
+    gcc-x86-64-linux-gnu:i386
+  gcc
+    gcc-x86-64-linux-gnu:i386
+gcc-15-x86-64-linux-gnu
+Reverse Depends:
+  g++-15-x86-64-linux-gnu
+  gcc-x86-64-linux-gnu
+    gcc-15-x86-64-linux-gnu:i386
+  gcc-15
+binutils
+Reverse Depends:
+  python3.14
+  lintian
+  dracut-core
+  gcc-14
+  python3.14
+  lintian
+  libdpkg-perl
+  libbinutils
+  libbinutils
+  gcc-15
+  dracut-core
+  dpkg-dev
+  crash
+  binutils-x86-64-linux-gnu
+  binutils-x86-64-linux-gnu
+  binutils-common
+  binutils-common
+gcc
+Reverse Depends:
+  build-essential
+ |lcov
+  python3-numpy
+ |libfile-fcntllock-perl
+ |libdpkg-perl
+  gcc-x86-64-linux-gnu
+  gcc-x86-64-linux-gnu
+  cpp
+  g++
+ |dpkg-dev
+  build-essential
+bpftrace
+Reverse Depends:
+  ubuntu-kernel-accessories
+  ubuntu-kernel-accessories
+rpcsvc-proto:i386
+Reverse Depends:

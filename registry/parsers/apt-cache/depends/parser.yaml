@@ -13,10 +13,15 @@ metadata:
     - https://manpages.debian.org/apt-cache
 detect:
   args:
-    any: ["depends", "rdepends"]
+    any: ["depends"]
   signature:
     all:
-      - '\A\S+[ \t]*$'
+      # The package line is followed by an indented relationship, the
+      # next package, a virtual package in angle brackets, or nothing.
+      # `apt-cache rdepends` follows it with a "Reverse Depends:"
+      # heading, and with APT::Cache::ShowDependencyType set its entries
+      # are "  Depends: pkg" lines like these; apt-cache/rdepends reads it.
+      - '\A\S+[ \t]*(?:\n[ <a-z0-9]|\z)'
       - '^  (?:Pre)?Depends: \S+[ \t]*$'
 parse:
   type: tree

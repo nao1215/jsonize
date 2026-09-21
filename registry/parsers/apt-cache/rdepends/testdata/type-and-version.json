@@ -1,0 +1,68 @@
+[
+  {
+    "package": {
+      "virtual": false,
+      "name": "libc-dev-bin"
+    },
+    "reverse_depends": [
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libc6-dev",
+        "operator": "=",
+        "version": "2.43-2ubuntu2.4",
+        "other_targets": [
+          "libc-dev-bin:i386"
+        ]
+      },
+      {
+        "alternative": false,
+        "relation": "Breaks",
+        "package": "rpcsvc-proto",
+        "operator": "<<",
+        "version": "2.31-14",
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": "Replaces",
+        "package": "rpcsvc-proto",
+        "operator": "<<",
+        "version": "2.31-14",
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": "Depends",
+        "package": "libc6-dev",
+        "operator": "=",
+        "version": "2.43-2ubuntu2",
+        "other_targets": []
+      }
+    ]
+  },
+  {
+    "package": {
+      "virtual": false,
+      "name": "sl"
+    },
+    "reverse_depends": [
+      {
+        "alternative": false,
+        "relation": "Recommends",
+        "package": "games-toys",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": "Recommends",
+        "package": "junior-games-text",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      }
+    ]
+  }
+]

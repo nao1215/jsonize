@@ -1,0 +1,19 @@
+Package: sl
+Versions: 
+5.02-1build1 (/var/lib/apt/lists/jp.archive.ubuntu.com_ubuntu_dists_resolute_universe_binary-amd64_Packages)
+ Description Language: 
+                 File: /var/lib/apt/lists/jp.archive.ubuntu.com_ubuntu_dists_resolute_universe_binary-amd64_Packages
+                  MD5: 64964faf22f36fbd8983fb5015010c0b
+ Description Language: en
+                 File: /var/lib/apt/lists/jp.archive.ubuntu.com_ubuntu_dists_resolute_universe_i18n_Translation-en
+                  MD5: 64964faf22f36fbd8983fb5015010c0b
+
+
+Reverse Depends: 
+  games-toys,sl
+  junior-games-text,sl
+Dependencies: 
+5.02-1build1 - libc6 (2 2.34) libncurses6 (2 6) libtinfo6 (2 6) 
+Provides: 
+5.02-1build1 - 
+Reverse Provides: 

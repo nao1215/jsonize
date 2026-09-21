@@ -1,0 +1,4 @@
+description: One package, with a line for another architecture under an entry and an entry listed twice.
+source: output of `apt-cache rdepends libc-dev-bin` captured on Ubuntu 26.04 (APT 3.2.0) with LC_ALL=C
+os: linux
+args: ["rdepends", "libc-dev-bin"]

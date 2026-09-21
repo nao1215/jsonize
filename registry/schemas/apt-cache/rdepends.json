@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/apt-cache/rdepends.json",
+  "title": "apt-cache/rdepends",
+  "description": "apt-cache rdepends, the packages that refer to a package",
+  "x-jsonize": {
+    "definition": "apt-cache/rdepends",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "package": {
+        "type": "object",
+        "properties": {
+          "virtual": {
+            "type": "boolean"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "virtual",
+          "name"
+        ]
+      },
+      "reverse_depends": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "alternative": {
+              "type": "boolean"
+            },
+            "relation": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "package": {
+              "type": "string"
+            },
+            "operator": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "version": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "other_targets": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "alternative",
+            "relation",
+            "package",
+            "operator",
+            "version",
+            "other_targets"
+          ]
+        }
+      }
+    },
+    "required": [
+      "package",
+      "reverse_depends"
+    ]
+  }
+}

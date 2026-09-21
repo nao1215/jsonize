@@ -1,0 +1,722 @@
+[
+  {
+    "package": {
+      "virtual": false,
+      "name": "libc-dev-bin"
+    },
+    "reverse_depends": [
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "libc6-dev",
+        "operator": null,
+        "version": null,
+        "other_targets": [
+          "libc-dev-bin:i386"
+        ]
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "rpcsvc-proto",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "rpcsvc-proto",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "libc6-dev",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      }
+    ]
+  },
+  {
+    "package": {
+      "virtual": false,
+      "name": "libc6-dev"
+    },
+    "reverse_depends": [
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "rpcsvc-proto",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": true,
+        "relation": null,
+        "package": "build-essential",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "libgcc-14-dev",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "gcc-14-x86-64-linux-gnu",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "gcc-14",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "rpcsvc-proto",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "libstdc++-15-dev",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "libcrypt-dev",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": true,
+        "relation": null,
+        "package": "libncurses-dev",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "libgcc-15-dev",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "libcrypt-dev",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "gcc-15",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "gcc-x86-64-linux-gnu",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "gcc-15-x86-64-linux-gnu",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "binutils",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": true,
+        "relation": null,
+        "package": "gcc",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": true,
+        "relation": null,
+        "package": "build-essential",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "bpftrace",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      }
+    ]
+  },
+  {
+    "package": {
+      "virtual": false,
+      "name": "libc-dev-bin:i386"
+    },
+    "reverse_depends": []
+  },
+  {
+    "package": {
+      "virtual": false,
+      "name": "rpcsvc-proto"
+    },
+    "reverse_depends": [
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "libc6-dev",
+        "operator": null,
+        "version": null,
+        "other_targets": [
+          "rpcsvc-proto:i386"
+        ]
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "libc6-dev",
+        "operator": null,
+        "version": null,
+        "other_targets": [
+          "rpcsvc-proto:i386"
+        ]
+      }
+    ]
+  },
+  {
+    "package": {
+      "virtual": false,
+      "name": "build-essential"
+    },
+    "reverse_depends": [
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "node-gyp",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "dpkg-dev",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      }
+    ]
+  },
+  {
+    "package": {
+      "virtual": false,
+      "name": "libgcc-14-dev"
+    },
+    "reverse_depends": [
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "gcc-14-x86-64-linux-gnu",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      }
+    ]
+  },
+  {
+    "package": {
+      "virtual": false,
+      "name": "gcc-14-x86-64-linux-gnu"
+    },
+    "reverse_depends": [
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "gcc-14",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      }
+    ]
+  },
+  {
+    "package": {
+      "virtual": false,
+      "name": "gcc-14"
+    },
+    "reverse_depends": []
+  },
+  {
+    "package": {
+      "virtual": false,
+      "name": "libstdc++-15-dev"
+    },
+    "reverse_depends": [
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "g++-15-x86-64-linux-gnu",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      }
+    ]
+  },
+  {
+    "package": {
+      "virtual": false,
+      "name": "libcrypt-dev"
+    },
+    "reverse_depends": [
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "build-essential",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      }
+    ]
+  },
+  {
+    "package": {
+      "virtual": false,
+      "name": "libncurses-dev"
+    },
+    "reverse_depends": []
+  },
+  {
+    "package": {
+      "virtual": false,
+      "name": "libgcc-15-dev"
+    },
+    "reverse_depends": [
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "gcc-15-x86-64-linux-gnu",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "libstdc++-15-dev",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      }
+    ]
+  },
+  {
+    "package": {
+      "virtual": false,
+      "name": "gcc-15"
+    },
+    "reverse_depends": [
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "g++-15",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "gcc",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "g++",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      }
+    ]
+  },
+  {
+    "package": {
+      "virtual": false,
+      "name": "gcc-x86-64-linux-gnu"
+    },
+    "reverse_depends": [
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "g++-x86-64-linux-gnu",
+        "operator": null,
+        "version": null,
+        "other_targets": [
+          "gcc-x86-64-linux-gnu:i386"
+        ]
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "gcc",
+        "operator": null,
+        "version": null,
+        "other_targets": [
+          "gcc-x86-64-linux-gnu:i386"
+        ]
+      }
+    ]
+  },
+  {
+    "package": {
+      "virtual": false,
+      "name": "gcc-15-x86-64-linux-gnu"
+    },
+    "reverse_depends": [
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "g++-15-x86-64-linux-gnu",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "gcc-x86-64-linux-gnu",
+        "operator": null,
+        "version": null,
+        "other_targets": [
+          "gcc-15-x86-64-linux-gnu:i386"
+        ]
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "gcc-15",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      }
+    ]
+  },
+  {
+    "package": {
+      "virtual": false,
+      "name": "binutils"
+    },
+    "reverse_depends": [
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "python3.14",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "lintian",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "dracut-core",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "gcc-14",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "python3.14",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "lintian",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "libdpkg-perl",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "libbinutils",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "libbinutils",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "gcc-15",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "dracut-core",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "dpkg-dev",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "crash",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "binutils-x86-64-linux-gnu",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "binutils-x86-64-linux-gnu",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "binutils-common",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "binutils-common",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      }
+    ]
+  },
+  {
+    "package": {
+      "virtual": false,
+      "name": "gcc"
+    },
+    "reverse_depends": [
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "build-essential",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": true,
+        "relation": null,
+        "package": "lcov",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "python3-numpy",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": true,
+        "relation": null,
+        "package": "libfile-fcntllock-perl",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": true,
+        "relation": null,
+        "package": "libdpkg-perl",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "gcc-x86-64-linux-gnu",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "gcc-x86-64-linux-gnu",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "cpp",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "g++",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": true,
+        "relation": null,
+        "package": "dpkg-dev",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "build-essential",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      }
+    ]
+  },
+  {
+    "package": {
+      "virtual": false,
+      "name": "bpftrace"
+    },
+    "reverse_depends": [
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "ubuntu-kernel-accessories",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "ubuntu-kernel-accessories",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      }
+    ]
+  },
+  {
+    "package": {
+      "virtual": false,
+      "name": "rpcsvc-proto:i386"
+    },
+    "reverse_depends": []
+  }
+]
