@@ -1,0 +1,156 @@
+{
+  "platforms": [
+    {
+      "platform": {
+        "name": "GBM platform"
+      },
+      "errors": [],
+      "properties": {
+        "EGL API version": "1.5",
+        "EGL vendor string": "Mesa Project",
+        "EGL version string": "1.5",
+        "EGL client APIs": "OpenGL OpenGL_ES",
+        "OpenGL core profile vendor": "Mesa",
+        "OpenGL core profile renderer": "llvmpipe (LLVM 21.1.8, 256 bits)",
+        "OpenGL core profile version": "4.5 (Core Profile) Mesa 26.0.8-1ubuntu0.3",
+        "OpenGL core profile shading language version": "4.50",
+        "OpenGL compatibility profile vendor": "Mesa",
+        "OpenGL compatibility profile renderer": "llvmpipe (LLVM 21.1.8, 256 bits)",
+        "OpenGL compatibility profile version": "4.5 (Compatibility Profile) Mesa 26.0.8-1ubuntu0.3",
+        "OpenGL compatibility profile shading language version": "4.50",
+        "OpenGL ES profile vendor": "Mesa",
+        "OpenGL ES profile renderer": "llvmpipe (LLVM 21.1.8, 256 bits)",
+        "OpenGL ES profile version": "OpenGL ES 3.2 Mesa 26.0.8-1ubuntu0.3",
+        "OpenGL ES profile shading language version": "OpenGL ES GLSL ES 3.20"
+      }
+    },
+    {
+      "platform": {
+        "name": "Wayland platform"
+      },
+      "errors": [],
+      "properties": {
+        "EGL API version": "1.5",
+        "EGL vendor string": "Mesa Project",
+        "EGL version string": "1.5",
+        "EGL client APIs": "OpenGL OpenGL_ES",
+        "OpenGL core profile vendor": "AMD",
+        "OpenGL core profile renderer": "AMD Radeon Graphics (radeonsi, strix_halo, ACO, DRM 3.64, 7.0.0-31-generic)",
+        "OpenGL core profile version": "4.6 (Core Profile) Mesa 26.0.8-1ubuntu0.3",
+        "OpenGL core profile shading language version": "4.60",
+        "OpenGL compatibility profile vendor": "AMD",
+        "OpenGL compatibility profile renderer": "AMD Radeon Graphics (radeonsi, strix_halo, ACO, DRM 3.64, 7.0.0-31-generic)",
+        "OpenGL compatibility profile version": "4.6 (Compatibility Profile) Mesa 26.0.8-1ubuntu0.3",
+        "OpenGL compatibility profile shading language version": "4.60",
+        "OpenGL ES profile vendor": "AMD",
+        "OpenGL ES profile renderer": "AMD Radeon Graphics (radeonsi, strix_halo, ACO, DRM 3.64, 7.0.0-31-generic)",
+        "OpenGL ES profile version": "OpenGL ES 3.2 Mesa 26.0.8-1ubuntu0.3",
+        "OpenGL ES profile shading language version": "OpenGL ES GLSL ES 3.20"
+      }
+    },
+    {
+      "platform": {
+        "name": "X11 platform"
+      },
+      "errors": [],
+      "properties": {
+        "EGL API version": "1.5",
+        "EGL vendor string": "Mesa Project",
+        "EGL version string": "1.5",
+        "EGL client APIs": "OpenGL OpenGL_ES",
+        "OpenGL core profile vendor": "AMD",
+        "OpenGL core profile renderer": "AMD Radeon Graphics (radeonsi, strix_halo, ACO, DRM 3.64, 7.0.0-31-generic)",
+        "OpenGL core profile version": "4.6 (Core Profile) Mesa 26.0.8-1ubuntu0.3",
+        "OpenGL core profile shading language version": "4.60",
+        "OpenGL compatibility profile vendor": "AMD",
+        "OpenGL compatibility profile renderer": "AMD Radeon Graphics (radeonsi, strix_halo, ACO, DRM 3.64, 7.0.0-31-generic)",
+        "OpenGL compatibility profile version": "4.6 (Compatibility Profile) Mesa 26.0.8-1ubuntu0.3",
+        "OpenGL compatibility profile shading language version": "4.60",
+        "OpenGL ES profile vendor": "AMD",
+        "OpenGL ES profile renderer": "AMD Radeon Graphics (radeonsi, strix_halo, ACO, DRM 3.64, 7.0.0-31-generic)",
+        "OpenGL ES profile version": "OpenGL ES 3.2 Mesa 26.0.8-1ubuntu0.3",
+        "OpenGL ES profile shading language version": "OpenGL ES GLSL ES 3.20"
+      }
+    },
+    {
+      "platform": {
+        "name": "Surfaceless platform"
+      },
+      "errors": [],
+      "properties": {
+        "EGL API version": "1.5",
+        "EGL vendor string": "Mesa Project",
+        "EGL version string": "1.5",
+        "EGL client APIs": "OpenGL OpenGL_ES",
+        "OpenGL core profile vendor": "AMD",
+        "OpenGL core profile renderer": "AMD Radeon Graphics (radeonsi, strix_halo, ACO, DRM 3.64, 7.0.0-31-generic)",
+        "OpenGL core profile version": "4.6 (Core Profile) Mesa 26.0.8-1ubuntu0.3",
+        "OpenGL core profile shading language version": "4.60",
+        "OpenGL compatibility profile vendor": "AMD",
+        "OpenGL compatibility profile renderer": "AMD Radeon Graphics (radeonsi, strix_halo, ACO, DRM 3.64, 7.0.0-31-generic)",
+        "OpenGL compatibility profile version": "4.6 (Compatibility Profile) Mesa 26.0.8-1ubuntu0.3",
+        "OpenGL compatibility profile shading language version": "4.60",
+        "OpenGL ES profile vendor": "AMD",
+        "OpenGL ES profile renderer": "AMD Radeon Graphics (radeonsi, strix_halo, ACO, DRM 3.64, 7.0.0-31-generic)",
+        "OpenGL ES profile version": "OpenGL ES 3.2 Mesa 26.0.8-1ubuntu0.3",
+        "OpenGL ES profile shading language version": "OpenGL ES GLSL ES 3.20"
+      }
+    }
+  ],
+  "devices": [
+    {
+      "device": {
+        "index": 0
+      },
+      "platform": {
+        "name": "Platform Device platform"
+      },
+      "errors": [],
+      "properties": {
+        "EGL API version": "1.5",
+        "EGL vendor string": "Mesa Project",
+        "EGL version string": "1.5",
+        "EGL client APIs": "OpenGL OpenGL_ES",
+        "OpenGL core profile vendor": "AMD",
+        "OpenGL core profile renderer": "AMD Radeon Graphics (radeonsi, strix_halo, ACO, DRM 3.64, 7.0.0-31-generic)",
+        "OpenGL core profile version": "4.6 (Core Profile) Mesa 26.0.8-1ubuntu0.3",
+        "OpenGL core profile shading language version": "4.60",
+        "OpenGL compatibility profile vendor": "AMD",
+        "OpenGL compatibility profile renderer": "AMD Radeon Graphics (radeonsi, strix_halo, ACO, DRM 3.64, 7.0.0-31-generic)",
+        "OpenGL compatibility profile version": "4.6 (Compatibility Profile) Mesa 26.0.8-1ubuntu0.3",
+        "OpenGL compatibility profile shading language version": "4.60",
+        "OpenGL ES profile vendor": "AMD",
+        "OpenGL ES profile renderer": "AMD Radeon Graphics (radeonsi, strix_halo, ACO, DRM 3.64, 7.0.0-31-generic)",
+        "OpenGL ES profile version": "OpenGL ES 3.2 Mesa 26.0.8-1ubuntu0.3",
+        "OpenGL ES profile shading language version": "OpenGL ES GLSL ES 3.20"
+      }
+    },
+    {
+      "device": {
+        "index": 1
+      },
+      "platform": {
+        "name": "Platform Device platform"
+      },
+      "errors": [],
+      "properties": {
+        "EGL API version": "1.5",
+        "EGL vendor string": "Mesa Project",
+        "EGL version string": "1.5",
+        "EGL client APIs": "OpenGL OpenGL_ES",
+        "OpenGL core profile vendor": "Mesa",
+        "OpenGL core profile renderer": "llvmpipe (LLVM 21.1.8, 256 bits)",
+        "OpenGL core profile version": "4.5 (Core Profile) Mesa 26.0.8-1ubuntu0.3",
+        "OpenGL core profile shading language version": "4.50",
+        "OpenGL compatibility profile vendor": "Mesa",
+        "OpenGL compatibility profile renderer": "llvmpipe (LLVM 21.1.8, 256 bits)",
+        "OpenGL compatibility profile version": "4.5 (Compatibility Profile) Mesa 26.0.8-1ubuntu0.3",
+        "OpenGL compatibility profile shading language version": "4.50",
+        "OpenGL ES profile vendor": "Mesa",
+        "OpenGL ES profile renderer": "llvmpipe (LLVM 21.1.8, 256 bits)",
+        "OpenGL ES profile version": "OpenGL ES 3.2 Mesa 26.0.8-1ubuntu0.3",
+        "OpenGL ES profile shading language version": "OpenGL ES GLSL ES 3.20"
+      }
+    }
+  ]
+}

@@ -2831,3 +2831,39 @@ scenarios:
       - assert:
           exit_code: 4
           stdout: {empty: true}
+
+  # The runners have no USB devices and no display, so these two are read
+  # from output captured on a desktop.
+  - name: usb-devices is read as devices holding their interfaces and endpoints
+    steps:
+      - fixture:
+          file: usb-devices.txt
+          from: "${specdir}/testdata/usb-devices-one-device.txt"
+      - run:
+          command: jz --file usb-devices.txt
+      - assert:
+          exit_code: 0
+          stderr: {empty: true}
+          stdout:
+            json:
+              - { path: "$", length: 1 }
+              - { path: "$[0].vendor_id", equals: "0e8d" }
+              - { path: "$[0].speed_mbps", equals: 480 }
+              - { path: "$[0].interfaces[0].driver", equals: btusb }
+              - { path: "$[0].interfaces[0].endpoints[1].interval", equals: 125us }
+
+  - name: glxinfo -B keeps every section a driver prints
+    steps:
+      - fixture:
+          file: glxinfo.txt
+          from: "${specdir}/testdata/glxinfo-brief-llvmpipe.txt"
+      - run:
+          command: jz --file glxinfo.txt
+      - assert:
+          exit_code: 0
+          stderr: {empty: true}
+          stdout:
+            json:
+              - { path: "$.display.direct_rendering", equals: true }
+              - { path: "$.sections[0].heading.extension", equals: GLX_MESA_query_renderer }
+              - { path: "$.sections[1].heading.title", equals: Memory info }

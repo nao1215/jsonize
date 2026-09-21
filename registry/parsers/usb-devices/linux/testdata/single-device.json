@@ -1,0 +1,123 @@
+[
+  {
+    "bus": 3,
+    "level": 1,
+    "parent": 1,
+    "port": 4,
+    "count": 5,
+    "device": 6,
+    "speed_mbps": 480,
+    "max_children": 0,
+    "usb_version": "2.10",
+    "class": "ef",
+    "class_name": "misc",
+    "subclass": "02",
+    "protocol": "01",
+    "max_packet_size": 64,
+    "configurations": 1,
+    "vendor_id": "0e8d",
+    "product_id": "0717",
+    "revision": "01.00",
+    "manufacturer": "MediaTek Inc.",
+    "product": "Wireless_Device",
+    "serial_number": "000000000",
+    "interface_count": 3,
+    "configuration": 1,
+    "attributes": "e0",
+    "max_power_ma": 100,
+    "interfaces": [
+      {
+        "number": 0,
+        "alternate_setting": 0,
+        "endpoint_count": 3,
+        "class": "e0",
+        "class_name": "wlcon",
+        "subclass": "01",
+        "protocol": "01",
+        "driver": "btusb",
+        "endpoints": [
+          {
+            "address": "02",
+            "direction": "O",
+            "attributes": "02",
+            "type": "Bulk",
+            "max_packet_size": 512,
+            "interval": "0ms"
+          },
+          {
+            "address": "81",
+            "direction": "I",
+            "attributes": "03",
+            "type": "Int.",
+            "max_packet_size": 16,
+            "interval": "125us"
+          },
+          {
+            "address": "82",
+            "direction": "I",
+            "attributes": "02",
+            "type": "Bulk",
+            "max_packet_size": 512,
+            "interval": "0ms"
+          }
+        ]
+      },
+      {
+        "number": 1,
+        "alternate_setting": 0,
+        "endpoint_count": 2,
+        "class": "e0",
+        "class_name": "wlcon",
+        "subclass": "01",
+        "protocol": "01",
+        "driver": "btusb",
+        "endpoints": [
+          {
+            "address": "03",
+            "direction": "O",
+            "attributes": "01",
+            "type": "Isoc",
+            "max_packet_size": 0,
+            "interval": "1ms"
+          },
+          {
+            "address": "83",
+            "direction": "I",
+            "attributes": "01",
+            "type": "Isoc",
+            "max_packet_size": 0,
+            "interval": "1ms"
+          }
+        ]
+      },
+      {
+        "number": 2,
+        "alternate_setting": 1,
+        "endpoint_count": 2,
+        "class": "e0",
+        "class_name": "wlcon",
+        "subclass": "01",
+        "protocol": "01",
+        "driver": "btusb",
+        "endpoints": [
+          {
+            "address": "0a",
+            "direction": "O",
+            "attributes": "03",
+            "type": "Int.",
+            "max_packet_size": 512,
+            "interval": "125us"
+          },
+          {
+            "address": "8a",
+            "direction": "I",
+            "attributes": "03",
+            "type": "Int.",
+            "max_packet_size": 512,
+            "interval": "125us"
+          }
+        ]
+      }
+    ]
+  }
+]

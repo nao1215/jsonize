@@ -1,0 +1,31 @@
+{
+  "window_id": "0x400001",
+  "root": false,
+  "name": "ibus-x11",
+  "absolute_x": 10,
+  "absolute_y": 10,
+  "relative_x": 10,
+  "relative_y": 10,
+  "width": 10,
+  "height": 10,
+  "depth": 0,
+  "visual": "0x2d0",
+  "visual_class": "TrueColor",
+  "border_width": 0,
+  "class": "InputOnly",
+  "colormap": "0x0",
+  "colormap_installed": false,
+  "bit_gravity": "ForgetGravity",
+  "window_gravity": "NorthWestGravity",
+  "backing_store": "NotUseful",
+  "save_under": false,
+  "map_state": "IsUnMapped",
+  "override_redirect": false,
+  "corners": [
+    "+10+10",
+    "-2540+10",
+    "-2540-1060",
+    "+10-1060"
+  ],
+  "geometry": "10x10+10+10"
+}

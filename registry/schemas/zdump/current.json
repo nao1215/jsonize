@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/zdump/current.json",
+  "title": "zdump/current",
+  "description": "zdump ZONE..., the current time in each zone",
+  "x-jsonize": {
+    "definition": "zdump/current",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "zone": {
+        "type": "string"
+      },
+      "local": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "abbreviation": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "local_seconds": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "zone",
+      "local",
+      "abbreviation",
+      "local_seconds"
+    ]
+  }
+}

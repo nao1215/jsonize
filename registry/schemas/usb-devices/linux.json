@@ -1,0 +1,217 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/usb-devices/linux.json",
+  "title": "usb-devices/linux",
+  "description": "usb-devices, one object per USB device with its interfaces and endpoints",
+  "x-jsonize": {
+    "definition": "usb-devices/linux",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "bus": {
+        "type": "integer"
+      },
+      "level": {
+        "type": "integer"
+      },
+      "parent": {
+        "type": "integer"
+      },
+      "port": {
+        "type": "integer"
+      },
+      "count": {
+        "type": "integer"
+      },
+      "device": {
+        "type": "integer"
+      },
+      "speed_mbps": {
+        "type": [
+          "number",
+          "null"
+        ]
+      },
+      "max_children": {
+        "type": "integer"
+      },
+      "usb_version": {
+        "type": "string"
+      },
+      "class": {
+        "type": "string"
+      },
+      "class_name": {
+        "type": "string"
+      },
+      "subclass": {
+        "type": "string"
+      },
+      "protocol": {
+        "type": "string"
+      },
+      "max_packet_size": {
+        "type": "integer"
+      },
+      "configurations": {
+        "type": "integer"
+      },
+      "vendor_id": {
+        "type": "string"
+      },
+      "product_id": {
+        "type": "string"
+      },
+      "revision": {
+        "type": "string"
+      },
+      "manufacturer": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "product": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "serial_number": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "interface_count": {
+        "type": "integer"
+      },
+      "configuration": {
+        "type": "integer"
+      },
+      "attributes": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "max_power_ma": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "interfaces": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "number": {
+              "type": "integer"
+            },
+            "alternate_setting": {
+              "type": "integer"
+            },
+            "endpoint_count": {
+              "type": "integer"
+            },
+            "class": {
+              "type": "string"
+            },
+            "class_name": {
+              "type": "string"
+            },
+            "subclass": {
+              "type": "string"
+            },
+            "protocol": {
+              "type": "string"
+            },
+            "driver": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "endpoints": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "address": {
+                    "type": "string"
+                  },
+                  "direction": {
+                    "type": "string"
+                  },
+                  "attributes": {
+                    "type": "string"
+                  },
+                  "type": {
+                    "type": "string"
+                  },
+                  "max_packet_size": {
+                    "type": "integer"
+                  },
+                  "interval": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "address",
+                  "direction",
+                  "attributes",
+                  "type",
+                  "max_packet_size",
+                  "interval"
+                ]
+              }
+            }
+          },
+          "required": [
+            "number",
+            "alternate_setting",
+            "endpoint_count",
+            "class",
+            "class_name",
+            "subclass",
+            "protocol",
+            "driver",
+            "endpoints"
+          ]
+        }
+      }
+    },
+    "required": [
+      "bus",
+      "level",
+      "parent",
+      "port",
+      "count",
+      "device",
+      "speed_mbps",
+      "max_children",
+      "usb_version",
+      "class",
+      "class_name",
+      "subclass",
+      "protocol",
+      "max_packet_size",
+      "configurations",
+      "vendor_id",
+      "product_id",
+      "revision",
+      "manufacturer",
+      "product",
+      "serial_number",
+      "interface_count",
+      "configuration",
+      "attributes",
+      "max_power_ma",
+      "interfaces"
+    ]
+  }
+}

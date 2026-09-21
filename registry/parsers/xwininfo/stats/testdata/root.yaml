@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (xwininfo 1.1.6, Xwayland under KDE Plasma) as xwininfo -root with LC_ALL=C
+description: the root window, which has no name
+os: linux
+args: [-root]

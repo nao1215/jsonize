@@ -1,0 +1,3 @@
+source: standard output of WAYLAND_DISPLAY=nonexistent-0 DISPLAY=:99 LC_ALL=C eglinfo -B on Ubuntu 26.04 (mesa-utils 9.0.0, Mesa 26.0.8), which exited with status 2
+description: the Wayland and X11 platforms have no display to connect to and print only the failure under their headings
+os: linux

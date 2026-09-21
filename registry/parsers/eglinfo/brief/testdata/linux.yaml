@@ -1,0 +1,4 @@
+source: standard output of LC_ALL=C eglinfo -B on Ubuntu 26.04 (mesa-utils 9.0.0, Mesa 26.0.8, radeonsi) in a Wayland session with Xwayland; the amdgpu and MESA diagnostics went to standard error
+description: four platforms, then the device platform with a hardware device and the software one
+os: linux
+args: ["-B"]

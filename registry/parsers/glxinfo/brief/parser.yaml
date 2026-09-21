@@ -1,0 +1,80 @@
+# `glxinfo -B` prints three lines about the display and the context,
+# then zero or more sections a GL extension adds (a heading such as
+# "Memory info (GL_ATI_meminfo):" with indented "Label: value" lines
+# under it), then the "OpenGL ... string:" lines, one blank line after
+# each profile.
+#
+# Which sections appear depends on the driver: Mesa prints the renderer
+# info of GLX_MESA_query_renderer and both memory sections, the NVIDIA
+# driver only the GL_NVX_gpu_memory_info one. The sections are therefore
+# read as a list of blocks, each keeping its heading, rather than as
+# fixed keys. The labels hold blanks and brackets ("Max GLES[23] profile
+# version"), so the values stay strings under the labels as printed, the
+# way lscpu is read.
+format: 1
+command: glxinfo
+variant: brief
+description: glxinfo -B, the display, the renderer sections and the OpenGL strings
+metadata:
+  tags: [linux, graphics, opengl, x11]
+  compatible: [mesa-utils]
+  references:
+    - https://manpages.debian.org/unstable/mesa-utils/glxinfo.1.en.html
+    - https://gitlab.freedesktop.org/mesa/demos/-/blob/main/src/xdemos/glxinfo.c
+detect:
+  os: [linux, freebsd]
+  signature:
+    all:
+      # The three opening lines, and then a section heading or the first
+      # OpenGL string. Without -B glxinfo continues with the server and
+      # client GLX strings instead, and its extension lists and visual
+      # tables are not read by this definition.
+      - '\Aname of display: [^\n]*\ndisplay: [^\n]*  screen: [0-9]+\ndirect rendering: [^\n]*\n(?:[A-Z][^:\n]* \([A-Za-z0-9_]+\):\n|OpenGL vendor string: )'
+parse:
+  type: composite
+  parts:
+    - name: display
+      select: {limit: 3}
+      parse:
+        type: regex
+        each: input
+        # Without a direct context glxinfo says why in brackets:
+        # "No (LIBGL_ALWAYS_INDIRECT set)", "No (-i specified)", or a hint
+        # to set LIBGL_DEBUG.
+        pattern: '\Aname of display: (?P<name>\S+)\ndisplay: (?P<display>\S+)  screen: (?P<screen>[0-9]+)\ndirect rendering: (?P<direct_rendering>Yes|No)(?: \((?P<direct_rendering_note>[^\n]*)\))?[ \t]*\z'
+      fields:
+        screen: {type: int}
+        direct_rendering: {type: bool}
+    - name: sections
+      select: {skip: 3, until: '^OpenGL '}
+      parse:
+        type: records
+        # A heading is a name, the extension in brackets and a colon, at
+        # the left edge; the lines of the section are indented.
+        start: '^[A-Z][^:\n]* \([A-Za-z0-9_]+\):$'
+        parts:
+          - name: heading
+            select: {limit: 1}
+            parse:
+              type: regex
+              each: input
+              pattern: '\A(?P<title>[A-Z][^:\n]*?) \((?P<extension>[A-Za-z0-9_]+)\):\z'
+          # GL_ATI_meminfo prints two numbers on a line ("VBO free memory -
+          # total: 64289 MB, largest block: 64289 MB"); the label is what
+          # comes before the first colon and the rest is the value.
+          - name: properties
+            select: {skip: 1}
+            parse:
+              type: kv
+              separator: ":"
+              as: map
+    - name: opengl
+      select: {skip: 3}
+      # The sections above are read by the part before this one.
+      ignore:
+        - '^[ \t]'
+        - '^[A-Z][^:\n]* \([A-Za-z0-9_]+\):$'
+      parse:
+        type: kv
+        separator: ":"
+        as: map

@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (glibc zdump 2.43) as zdump Asia/Tokyo with LC_ALL=C
+description: one zone, a single line
+os: linux
+args: [Asia/Tokyo]

@@ -1,0 +1,8 @@
+Europe/London        Sun Mar 29 00:59:59 2026 UT = Sun Mar 29 00:59:59 2026 GMT isdst=0 gmtoff=0
+Europe/London        Sun Mar 29 01:00:00 2026 UT = Sun Mar 29 02:00:00 2026 BST isdst=1 gmtoff=3600
+Europe/London        Sun Oct 25 00:59:59 2026 UT = Sun Oct 25 01:59:59 2026 BST isdst=1 gmtoff=3600
+Europe/London        Sun Oct 25 01:00:00 2026 UT = Sun Oct 25 01:00:00 2026 GMT isdst=0 gmtoff=0
+Australia/Lord_Howe  Sat Apr  4 14:59:59 2026 UT = Sun Apr  5 01:59:59 2026 +11 isdst=1 gmtoff=39600
+Australia/Lord_Howe  Sat Apr  4 15:00:00 2026 UT = Sun Apr  5 01:30:00 2026 +1030 isdst=0 gmtoff=37800
+Australia/Lord_Howe  Sat Oct  3 15:29:59 2026 UT = Sun Oct  4 01:59:59 2026 +1030 isdst=0 gmtoff=37800
+Australia/Lord_Howe  Sat Oct  3 15:30:00 2026 UT = Sun Oct  4 02:30:00 2026 +11 isdst=1 gmtoff=39600

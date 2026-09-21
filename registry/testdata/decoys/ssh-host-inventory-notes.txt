@@ -1,0 +1,7 @@
+host web01
+user deploy
+hostname 10.0.0.5
+port 22
+notes the key was rotated on monday
+owner platform team
+ask before rebooting it during business hours

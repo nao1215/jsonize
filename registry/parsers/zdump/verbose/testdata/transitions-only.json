@@ -1,0 +1,82 @@
+[
+  {
+    "zone": "Europe/London",
+    "ut": "Sun Mar 29 00:59:59 2026",
+    "ut_seconds": null,
+    "local": "Sun Mar 29 00:59:59 2026",
+    "abbreviation": "GMT",
+    "isdst": 0,
+    "gmtoff": 0,
+    "local_seconds": null
+  },
+  {
+    "zone": "Europe/London",
+    "ut": "Sun Mar 29 01:00:00 2026",
+    "ut_seconds": null,
+    "local": "Sun Mar 29 02:00:00 2026",
+    "abbreviation": "BST",
+    "isdst": 1,
+    "gmtoff": 3600,
+    "local_seconds": null
+  },
+  {
+    "zone": "Europe/London",
+    "ut": "Sun Oct 25 00:59:59 2026",
+    "ut_seconds": null,
+    "local": "Sun Oct 25 01:59:59 2026",
+    "abbreviation": "BST",
+    "isdst": 1,
+    "gmtoff": 3600,
+    "local_seconds": null
+  },
+  {
+    "zone": "Europe/London",
+    "ut": "Sun Oct 25 01:00:00 2026",
+    "ut_seconds": null,
+    "local": "Sun Oct 25 01:00:00 2026",
+    "abbreviation": "GMT",
+    "isdst": 0,
+    "gmtoff": 0,
+    "local_seconds": null
+  },
+  {
+    "zone": "Australia/Lord_Howe",
+    "ut": "Sat Apr  4 14:59:59 2026",
+    "ut_seconds": null,
+    "local": "Sun Apr  5 01:59:59 2026",
+    "abbreviation": "+11",
+    "isdst": 1,
+    "gmtoff": 39600,
+    "local_seconds": null
+  },
+  {
+    "zone": "Australia/Lord_Howe",
+    "ut": "Sat Apr  4 15:00:00 2026",
+    "ut_seconds": null,
+    "local": "Sun Apr  5 01:30:00 2026",
+    "abbreviation": "+1030",
+    "isdst": 0,
+    "gmtoff": 37800,
+    "local_seconds": null
+  },
+  {
+    "zone": "Australia/Lord_Howe",
+    "ut": "Sat Oct  3 15:29:59 2026",
+    "ut_seconds": null,
+    "local": "Sun Oct  4 01:59:59 2026",
+    "abbreviation": "+1030",
+    "isdst": 0,
+    "gmtoff": 37800,
+    "local_seconds": null
+  },
+  {
+    "zone": "Australia/Lord_Howe",
+    "ut": "Sat Oct  3 15:30:00 2026",
+    "ut_seconds": null,
+    "local": "Sun Oct  4 02:30:00 2026",
+    "abbreviation": "+11",
+    "isdst": 1,
+    "gmtoff": 39600,
+    "local_seconds": null
+  }
+]

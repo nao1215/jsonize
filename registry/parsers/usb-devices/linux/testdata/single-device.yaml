@@ -1,0 +1,5 @@
+source: the Bluetooth adapter's block of LC_ALL=C usb-devices on Ubuntu 26.04 (usbutils 019), with the blank line that opens it
+description: >-
+  A single device that is not a root hub: three interfaces, one on an
+  alternate setting, and bulk, interrupt and isochronous endpoints.
+os: linux

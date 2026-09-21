@@ -1,0 +1,102 @@
+# `eglinfo -B` prints one block per EGL platform the client library
+# supports (GBM, Wayland, X11, Surfaceless, and Android where it
+# exists), each a heading followed by the EGL strings and the strings of
+# every OpenGL and OpenGL ES profile it could create a context for. A
+# platform whose display cannot be initialised prints
+# "eglinfo: eglInitialize failed" under its heading instead.
+#
+# The device platform comes last and repeats the block once per device,
+# under "Device #N:" and a "Platform Device platform:" heading, so the
+# devices are a list of their own after the platforms.
+#
+# The labels hold blanks ("OpenGL core profile renderer"), so the values
+# stay strings under the labels as printed, the way lscpu is read. The
+# diagnostics a driver writes while probing (MESA: error: ...) go to
+# standard error and are not part of the text.
+format: 1
+command: eglinfo
+variant: brief
+description: eglinfo -B, the EGL and OpenGL strings of each platform and device
+metadata:
+  tags: [linux, graphics, egl, opengl]
+  compatible: [mesa-utils]
+  references:
+    - https://manpages.debian.org/unstable/mesa-utils/eglinfo.1.en.html
+    - https://gitlab.freedesktop.org/mesa/demos/-/blob/main/src/egl/opengl/eglinfo.c
+detect:
+  os: [linux, freebsd]
+  signature:
+    all:
+      # A platform heading and the first line under it, the EGL API
+      # version or the failure to initialise. Without -B eglinfo opens
+      # with the client extension list instead, and lists every config
+      # of every display, which this definition does not read.
+      - '\A(?:(?:(?:Device [0-9]+ on )?[A-Za-z0-9]+ platform|Default display):\n(?:EGL API version: [0-9]|eglinfo: )|Device platform:\nDevice #[0-9]+:\n)'
+parse:
+  type: composite
+  parts:
+    - name: platforms
+      select: {until: '^Device platform:$'}
+      parse:
+        type: records
+        # A heading of one word and "platform", or "Default display" from
+        # a client library without platform extensions. With -e and
+        # EGL_EXT_explicit_device, eglinfo prints one block per device of
+        # each platform, headed "Device 0 on GBM platform:" (eglinfo.c in
+        # mesa-demos).
+        # "Platform Device platform" belongs to a device and is below the
+        # range of this part.
+        start: '^(?:(?:Device [0-9]+ on )?[A-Za-z0-9]+ platform|Default display):$'
+        parts:
+          - name: platform
+            select: {limit: 1}
+            parse:
+              type: regex
+              each: input
+              pattern: '\A(?P<name>[^:\n]+):\z'
+          - name: errors
+            select: {skip: 1}
+            ignore: ['^(?:EGL|OpenGL) ']
+            parse:
+              type: regex
+              pattern: '^eglinfo: (?P<message>.+?)[ \t]*$'
+          - name: properties
+            select: {skip: 1}
+            ignore: ['^eglinfo: ']
+            parse:
+              type: kv
+              separator: ":"
+              as: map
+    - name: devices
+      select: {after: '^Device platform:$'}
+      parse:
+        type: records
+        start: '^Device #[0-9]+:$'
+        parts:
+          - name: device
+            select: {limit: 1}
+            parse:
+              type: regex
+              each: input
+              pattern: '\ADevice #(?P<index>[0-9]+):\z'
+            fields:
+              index: {type: int}
+          - name: platform
+            select: {skip: 1, limit: 1}
+            parse:
+              type: regex
+              each: input
+              pattern: '\A(?P<name>[^:\n]+ platform):\z'
+          - name: errors
+            select: {skip: 2}
+            ignore: ['^(?:EGL|OpenGL) ']
+            parse:
+              type: regex
+              pattern: '^eglinfo: (?P<message>.+?)[ \t]*$'
+          - name: properties
+            select: {skip: 2}
+            ignore: ['^eglinfo: ']
+            parse:
+              type: kv
+              separator: ":"
+              as: map

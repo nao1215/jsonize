@@ -1,0 +1,8 @@
+xwininfo: Window id: 0x3a00007 "Save As"
+
+  Absolute upper-left X:  2561
+  Absolute upper-left Y:  -40
+
+The popup above opens off screen on the second monitor: it is placed
+one pixel past the right edge of the first output and forty pixels
+above the top. Moving it with the keyboard works.

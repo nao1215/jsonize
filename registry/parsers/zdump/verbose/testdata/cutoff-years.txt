@@ -1,0 +1,28 @@
+Asia/Tokyo        -9223372036854775808 (gmtime failed) = -9223372036854775808 (localtime failed)
+Asia/Tokyo        -67768040609774340 (gmtime failed) = -67768040609774340 (localtime failed)
+Asia/Tokyo        -67768040609774339 (gmtime failed) = Thu Jan  1 00:00:00 -2147481748 LMT isdst=0 gmtoff=33539
+Asia/Tokyo        -67768040609740801 (gmtime failed) = Thu Jan  1 09:18:58 -2147481748 LMT isdst=0 gmtoff=33539
+Asia/Tokyo        Thu Jan  1 00:00:00 -2147481748 UT = Thu Jan  1 09:18:59 -2147481748 LMT isdst=0 gmtoff=33539
+Asia/Tokyo        Wed Dec 31 14:59:59 2147485547 UT = Wed Dec 31 23:59:59 2147485547 JST isdst=0 gmtoff=32400
+Asia/Tokyo        Wed Dec 31 15:00:00 2147485547 UT = 67768036191644400 (localtime failed)
+Asia/Tokyo        Wed Dec 31 23:59:59 2147485547 UT = 67768036191676799 (localtime failed)
+Asia/Tokyo        67768036191676800 (gmtime failed) = 67768036191676800 (localtime failed)
+Asia/Tokyo        9223372036854775807 (gmtime failed) = 9223372036854775807 (localtime failed)
+America/New_York  -9223372036854775808 (gmtime failed) = -9223372036854775808 (localtime failed)
+America/New_York  -67768040609740801 (gmtime failed) = -67768040609740801 (localtime failed)
+America/New_York  Thu Jan  1 00:00:00 -2147481748 UT = -67768040609740800 (localtime failed)
+America/New_York  Thu Jan  1 04:56:01 -2147481748 UT = -67768040609723039 (localtime failed)
+America/New_York  Thu Jan  1 04:56:02 -2147481748 UT = Thu Jan  1 00:00:00 -2147481748 LMT isdst=0 gmtoff=-17762
+America/New_York  Sun Mar  9 06:59:59 2025 UT = Sun Mar  9 01:59:59 2025 EST isdst=0 gmtoff=-18000
+America/New_York  Sun Mar  9 07:00:00 2025 UT = Sun Mar  9 03:00:00 2025 EDT isdst=1 gmtoff=-14400
+America/New_York  Sun Nov  2 05:59:59 2025 UT = Sun Nov  2 01:59:59 2025 EDT isdst=1 gmtoff=-14400
+America/New_York  Sun Nov  2 06:00:00 2025 UT = Sun Nov  2 01:00:00 2025 EST isdst=0 gmtoff=-18000
+America/New_York  Sun Mar  8 06:59:59 2026 UT = Sun Mar  8 01:59:59 2026 EST isdst=0 gmtoff=-18000
+America/New_York  Sun Mar  8 07:00:00 2026 UT = Sun Mar  8 03:00:00 2026 EDT isdst=1 gmtoff=-14400
+America/New_York  Sun Nov  1 05:59:59 2026 UT = Sun Nov  1 01:59:59 2026 EDT isdst=1 gmtoff=-14400
+America/New_York  Sun Nov  1 06:00:00 2026 UT = Sun Nov  1 01:00:00 2026 EST isdst=0 gmtoff=-18000
+America/New_York  Wed Dec 31 23:59:59 2147485547 UT = Wed Dec 31 18:59:59 2147485547 EST isdst=0 gmtoff=-18000
+America/New_York  67768036191676800 (gmtime failed) = Wed Dec 31 19:00:00 2147485547 EST isdst=0 gmtoff=-18000
+America/New_York  67768036191694799 (gmtime failed) = Wed Dec 31 23:59:59 2147485547 EST isdst=0 gmtoff=-18000
+America/New_York  67768036191694800 (gmtime failed) = 67768036191694800 (localtime failed)
+America/New_York  9223372036854775807 (gmtime failed) = 9223372036854775807 (localtime failed)

@@ -1,0 +1,12 @@
+America/New_York  -9223372036854775808 = NULL
+America/New_York  -9223372036854689408 = NULL
+America/New_York  Sun Mar  9 06:59:59 2025 UT = Sun Mar  9 01:59:59 2025 EST isdst=0 gmtoff=-18000
+America/New_York  Sun Mar  9 07:00:00 2025 UT = Sun Mar  9 03:00:00 2025 EDT isdst=1 gmtoff=-14400
+America/New_York  Sun Nov  2 05:59:59 2025 UT = Sun Nov  2 01:59:59 2025 EDT isdst=1 gmtoff=-14400
+America/New_York  Sun Nov  2 06:00:00 2025 UT = Sun Nov  2 01:00:00 2025 EST isdst=0 gmtoff=-18000
+America/New_York  9223372036854689407 = NULL
+America/New_York  9223372036854775807 = NULL
+UTC               -9223372036854775808 = NULL
+UTC               -9223372036854689408 = NULL
+UTC               9223372036854689407 = NULL
+UTC               9223372036854775807 = NULL

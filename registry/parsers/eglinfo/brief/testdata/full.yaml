@@ -1,0 +1,7 @@
+source: the first 40 lines of the standard output of LC_ALL=C eglinfo (without -B) on Ubuntu 26.04 (mesa-utils 9.0.0)
+description: >-
+  Without -B eglinfo opens with the client extension list and prints the
+  extensions and configs of every display, which this definition does
+  not read.
+os: linux
+expect_error: 'does not describe this input'

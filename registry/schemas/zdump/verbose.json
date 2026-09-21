@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/zdump/verbose.json",
+  "title": "zdump/verbose",
+  "description": "zdump -v or -V, the UT and local time around each transition",
+  "x-jsonize": {
+    "definition": "zdump/verbose",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "zone": {
+        "type": "string"
+      },
+      "ut": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "ut_seconds": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "local": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "abbreviation": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "isdst": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "gmtoff": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      },
+      "local_seconds": {
+        "type": [
+          "integer",
+          "null"
+        ]
+      }
+    },
+    "required": [
+      "zone",
+      "ut",
+      "ut_seconds",
+      "local",
+      "abbreviation",
+      "isdst",
+      "gmtoff",
+      "local_seconds"
+    ]
+  }
+}

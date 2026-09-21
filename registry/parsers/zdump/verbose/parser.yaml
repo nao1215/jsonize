@@ -1,0 +1,46 @@
+# zdump -v and -V: one line per sampled instant, the time in UT and the
+# local time it maps to, with isdst= and gmtoff= after the local time.
+# -V is -v without the lines for the extreme time_t values and year
+# boundaries, so both print this form.
+#
+# Either side of " = " is a count of seconds followed by "(gmtime
+# failed)" or "(localtime failed)" when the C library cannot represent
+# that instant; -v prints such lines for the two extreme time_t values
+# of every zone. They are read into ut_seconds and local_seconds, and
+# the time, abbreviation, isdst and gmtoff of that side are null.
+# An older zdump (glibc 2.39, the one in Ubuntu 24.04) prints a UT it
+# cannot represent as the bare count of seconds, and a local time it
+# cannot represent as NULL: "America/New_York  9223372036854775807 =
+# NULL". The seconds go to ut_seconds and the local side is null.
+#
+# The times stay strings: the years run from -2147481748 to 2147485547
+# here, and the abbreviation is not an offset. gmtoff is the offset in
+# seconds east of Greenwich that the abbreviation stands for.
+format: 1
+command: zdump
+variant: verbose
+description: zdump -v or -V, the UT and local time around each transition
+metadata:
+  tags: [time, timezone, tzcode]
+  compatible: [tzcode zdump, glibc zdump]
+  references:
+    - https://man7.org/linux/man-pages/man8/zdump.8.html
+    - https://data.iana.org/time-zones/tz-link.html
+detect:
+  # No argument list: " = " between two times sets this form apart from
+  # the one-line-per-zone output of zdump without -v, so the text decides.
+  signature:
+    all:
+      - '\A(?:\S+ {2,}(?:(?:[A-Z][a-z]{2}|\?{3}) (?:[A-Z][a-z]{2}|\?{3}) [ \d]\d \d{2}:\d{2}:\d{2} -?\d+ UT|-?\d+(?: \(gmtime failed\))?) = (?:(?:[A-Z][a-z]{2}|\?{3}) (?:[A-Z][a-z]{2}|\?{3}) [ \d]\d \d{2}:\d{2}:\d{2} -?\d+(?: \S+)? isdst=-?\d+(?: gmtoff=-?\d+)?|-?\d+ \(localtime failed\)|NULL)(?:\n|\z))+\z'
+parse:
+  type: regex
+  # The abbreviation is printed only when it is not empty, and gmtoff=
+  # only when zdump can work the offset out (zdump(8)); isdst= is always
+  # printed after a local time, and is negative for an unknown type.
+  pattern: '^(?P<zone>\S+) {2,}(?:(?P<ut>(?:[A-Z][a-z]{2}|\?{3}) (?:[A-Z][a-z]{2}|\?{3}) [ \d]\d \d{2}:\d{2}:\d{2} -?\d+) UT|(?P<ut_seconds>-?\d+)(?: \(gmtime failed\))?) = (?:(?P<local>(?:[A-Z][a-z]{2}|\?{3}) (?:[A-Z][a-z]{2}|\?{3}) [ \d]\d \d{2}:\d{2}:\d{2} -?\d+)(?: (?P<abbreviation>\S+))? isdst=(?P<isdst>-?\d+)(?: gmtoff=(?P<gmtoff>-?\d+))?|(?P<local_seconds>-?\d+) \(localtime failed\)|NULL)$'
+fields:
+  zone: {required: true}
+  ut_seconds: {type: int}
+  local_seconds: {type: int}
+  isdst: {type: int}
+  gmtoff: {type: int}

@@ -1,0 +1,45 @@
+# ssh -G HOST prints the client configuration it would use for HOST
+# after evaluating ssh_config(5) and the command line, one "keyword
+# value" per line, and exits without connecting.
+#
+# A list of {name, value} rather than an object: several keywords are
+# printed once per value (identityfile, certificatefile, sendenv,
+# setenv, localforward, remoteforward, dynamicforward, permitremoteopen
+# entries), and an object would have to drop all but one of them. The
+# order of the lines is kept, which is also the order ssh tries the
+# identity files in.
+#
+# Values stay strings. Most are words (yes, no, ask, none) or lists
+# that ssh_config(5) spells differently per keyword (a comma list for
+# ciphers, a space list for globalknownhostsfile, two words for ipqos
+# and rekeylimit), and one value column in the list would otherwise
+# change type from line to line.
+format: 1
+command: ssh
+variant: config-dump
+description: ssh -G HOST, the resolved client configuration
+metadata:
+  tags: [ssh, network, openssh]
+  compatible: [OpenSSH]
+  references:
+    - https://man.openbsd.org/ssh.1
+    - https://man.openbsd.org/ssh_config.5
+detect:
+  # No argument list: what ssh prints without -G is the remote session,
+  # which the signature refuses on its own.
+  signature:
+    all:
+      # dump_client_config() in readconf.c prints user, hostname and port
+      # first, then the flag options starting with addressfamily and
+      # batchmode. Current releases print the host argument above them;
+      # the line is optional here for older ones that start at user (not
+      # verified on such a release). The two flag lines are what keep a
+      # lower-case note that happens to open with host, user, hostname
+      # and port out.
+      - '\A(?:host [^\n]+\n)?user [^\n]+\nhostname [^\n]+\nport \d+\naddressfamily (?:any|inet|inet6)\nbatchmode (?:yes|no)\n'
+      # every line is a lower-case keyword, one space and a value
+      - '\A(?:[a-z][a-zA-Z0-9]* [^\n]*(?:\n|\z))+\z'
+parse:
+  type: kv
+  separator: " "
+  as: list
