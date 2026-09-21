@@ -1,0 +1,662 @@
+[
+  {
+    "property": {
+      "separator": "=",
+      "name": "_VARIABLE_REFRESH",
+      "type": "CARDINAL",
+      "value": "1",
+      "error": null
+    },
+    "lines": []
+  },
+  {
+    "property": {
+      "separator": "=",
+      "name": "_NET_WM_OPAQUE_REGION",
+      "type": "CARDINAL",
+      "value": "40, 22, 264, 226",
+      "error": null
+    },
+    "lines": []
+  },
+  {
+    "property": {
+      "separator": "=",
+      "name": "_NET_WM_ALLOWED_ACTIONS",
+      "type": "ATOM",
+      "value": "_NET_WM_ACTION_MOVE, _NET_WM_ACTION_MINIMIZE, _NET_WM_ACTION_FULLSCREEN, _NET_WM_ACTION_CHANGE_DESKTOP, _NET_WM_ACTION_CLOSE",
+      "error": null
+    },
+    "lines": []
+  },
+  {
+    "property": {
+      "separator": "=",
+      "name": "_NET_WM_DESKTOP",
+      "type": "CARDINAL",
+      "value": "0",
+      "error": null
+    },
+    "lines": []
+  },
+  {
+    "property": {
+      "separator": ":",
+      "name": "WM_STATE",
+      "type": "WM_STATE",
+      "value": "",
+      "error": null
+    },
+    "lines": [
+      {
+        "text": "window state: Normal"
+      },
+      {
+        "text": "icon window: 0x0"
+      }
+    ]
+  },
+  {
+    "property": {
+      "separator": "=",
+      "name": "_KDE_NET_WM_ACTIVITIES",
+      "type": "STRING",
+      "value": "\"5f0c2a1e-7d3b-4c8a-9e21-0b6d4f3a8c17\"",
+      "error": null
+    },
+    "lines": []
+  },
+  {
+    "property": {
+      "separator": "=",
+      "name": "_GTK_THEME_VARIANT",
+      "type": "UTF8_STRING",
+      "value": "",
+      "error": null
+    },
+    "lines": []
+  },
+  {
+    "property": {
+      "separator": "=",
+      "name": "_XWAYLAND_ALLOW_COMMITS",
+      "type": "CARDINAL",
+      "value": "1",
+      "error": null
+    },
+    "lines": []
+  },
+  {
+    "property": {
+      "separator": "=",
+      "name": "_NET_WM_STATE",
+      "type": "ATOM",
+      "value": "_NET_WM_STATE_MODAL",
+      "error": null
+    },
+    "lines": []
+  },
+  {
+    "property": {
+      "separator": ":",
+      "name": "WM_HINTS",
+      "type": "WM_HINTS",
+      "value": "",
+      "error": null
+    },
+    "lines": [
+      {
+        "text": "Client accepts input or input focus: True"
+      },
+      {
+        "text": "Initial state is Normal State."
+      },
+      {
+        "text": "bitmap id # to use for icon: 0x1a00008"
+      },
+      {
+        "text": "bitmap id # of mask for icon: 0x1a00013"
+      },
+      {
+        "text": "window id # of group leader: 0x1a00002"
+      }
+    ]
+  },
+  {
+    "property": {
+      "separator": "=",
+      "name": "_GTK_FRAME_EXTENTS",
+      "type": "CARDINAL",
+      "value": "22, 22, 22, 22",
+      "error": null
+    },
+    "lines": []
+  },
+  {
+    "property": {
+      "separator": "=",
+      "name": "_NET_WM_ICON",
+      "type": "CARDINAL",
+      "value": "Icon (16 x 16):",
+      "error": null
+    },
+    "lines": [
+      {
+        "text": "                                "
+      },
+      {
+        "text": "                                "
+      },
+      {
+        "text": "    !!]]]]]]]]]]]]]]]]]]]]!!    "
+      },
+      {
+        "text": "    ]]]]]]]]]]]]]]]]]]]]]]]]    "
+      },
+      {
+        "text": "    ]]]]]]]]]]    ]]]]]]]]]]    "
+      },
+      {
+        "text": "    ]]]]]]]]]]    ]]]]]]]]]]    "
+      },
+      {
+        "text": "    ]]]]]]]]]]]]]]]]]]]]]]]]    "
+      },
+      {
+        "text": "    ]]]]]]]]]]    ]]]]]]]]]]    "
+      },
+      {
+        "text": "    ]]]]]]]]]]    ]]]]]]]]]]    "
+      },
+      {
+        "text": "    ]]]]]]]]]]    ]]]]]]]]]]    "
+      },
+      {
+        "text": "    ]]]]]]]]]]    ]]]]]]]]]]    "
+      },
+      {
+        "text": "    ]]]]]]]]]]    ]]]]]]]]]]    "
+      },
+      {
+        "text": "    ]]]]]]]]]]]]]]]]]]]]]]]]    "
+      },
+      {
+        "text": "    !!]]]]]]]]]]]]]]]]]]]]!!    "
+      },
+      {
+        "text": "                                "
+      },
+      {
+        "text": "                                "
+      },
+      {
+        "text": "Icon (22 x 22):"
+      },
+      {
+        "text": "                                            "
+      },
+      {
+        "text": "                                            "
+      },
+      {
+        "text": "                                            "
+      },
+      {
+        "text": "      !!]]]]]]]]]]]]]]]]]]]]]]]]]]]]!!      "
+      },
+      {
+        "text": "      ]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]      "
+      },
+      {
+        "text": "      ]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]      "
+      },
+      {
+        "text": "      ]]]]]]]]]]]]]]    ]]]]]]]]]]]]]]      "
+      },
+      {
+        "text": "      ]]]]]]]]]]]]]]    ]]]]]]]]]]]]]]      "
+      },
+      {
+        "text": "      ]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]      "
+      },
+      {
+        "text": "      ]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]      "
+      },
+      {
+        "text": "      ]]]]]]]]]]]]]]    ]]]]]]]]]]]]]]      "
+      },
+      {
+        "text": "      ]]]]]]]]]]]]]]    ]]]]]]]]]]]]]]      "
+      },
+      {
+        "text": "      ]]]]]]]]]]]]]]    ]]]]]]]]]]]]]]      "
+      },
+      {
+        "text": "      ]]]]]]]]]]]]]]    ]]]]]]]]]]]]]]      "
+      },
+      {
+        "text": "      ]]]]]]]]]]]]]]    ]]]]]]]]]]]]]]      "
+      },
+      {
+        "text": "      ]]]]]]]]]]]]]]    ]]]]]]]]]]]]]]      "
+      },
+      {
+        "text": "      ]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]      "
+      },
+      {
+        "text": "      ]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]      "
+      },
+      {
+        "text": "      !!]]]]]]]]]]]]]]]]]]]]]]]]]]]]!!      "
+      },
+      {
+        "text": "                                            "
+      },
+      {
+        "text": "                                            "
+      },
+      {
+        "text": "                                            "
+      },
+      {
+        "text": "Icon (24 x 24):"
+      },
+      {
+        "text": "                                                "
+      },
+      {
+        "text": "                                                "
+      },
+      {
+        "text": "                                                "
+      },
+      {
+        "text": "                                                "
+      },
+      {
+        "text": "        !!]]]]]]]]]]]]]]]]]]]]]]]]]]]]!!        "
+      },
+      {
+        "text": "        ]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]        "
+      },
+      {
+        "text": "        ]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]        "
+      },
+      {
+        "text": "        ]]]]]]]]]]]]]]    ]]]]]]]]]]]]]]        "
+      },
+      {
+        "text": "        ]]]]]]]]]]]]]]    ]]]]]]]]]]]]]]        "
+      },
+      {
+        "text": "        ]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]        "
+      },
+      {
+        "text": "        ]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]        "
+      },
+      {
+        "text": "        ]]]]]]]]]]]]]]    ]]]]]]]]]]]]]]        "
+      },
+      {
+        "text": "        ]]]]]]]]]]]]]]    ]]]]]]]]]]]]]]        "
+      },
+      {
+        "text": "        ]]]]]]]]]]]]]]    ]]]]]]]]]]]]]]        "
+      },
+      {
+        "text": "        ]]]]]]]]]]]]]]    ]]]]]]]]]]]]]]        "
+      },
+      {
+        "text": "        ]]]]]]]]]]]]]]    ]]]]]]]]]]]]]]        "
+      },
+      {
+        "text": "        ]]]]]]]]]]]]]]    ]]]]]]]]]]]]]]        "
+      },
+      {
+        "text": "        ]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]        "
+      },
+      {
+        "text": "        ]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]        "
+      },
+      {
+        "text": "        !!]]]]]]]]]]]]]]]]]]]]]]]]]]]]!!        "
+      },
+      {
+        "text": "                                                "
+      },
+      {
+        "text": "                                                "
+      },
+      {
+        "text": "                                                "
+      },
+      {
+        "text": "                                                "
+      },
+      {
+        "text": "Icon (48 x 48):"
+      },
+      {
+        "text": "                                                                                                "
+      },
+      {
+        "text": "                                                                                                "
+      },
+      {
+        "text": "                                                                                                "
+      },
+      {
+        "text": "                                                                                                "
+      },
+      {
+        "text": "                                      ..--II||))))||II--..                                      "
+      },
+      {
+        "text": "                                ``//rrvvccccvvvvvvvvvvvvvvrr//``                                "
+      },
+      {
+        "text": "                            ^^{{ccccccccccvvvvvvvvvvvvvvvvvvuuuu{{^^                            "
+      },
+      {
+        "text": "                          ||ccccccccccccvvvvvvvvvvvvvvvvvvuuuuuuuuuu||                          "
+      },
+      {
+        "text": "                      ^^rrccccccccccccvvvvvvvvvvvvvvvvvvuuuuuuuuuuuuuucc^^                      "
+      },
+      {
+        "text": "                    ;;ccccccccccccccvvvvvvvvvvvvvvvvvvuuuuuuuuuuuuuuuuuuuu~~                    "
+      },
+      {
+        "text": "                  ~~ccccccccccccccvvvvvvvvvvvvvvvvvvuuuuuuuuuuuuuuuuuunnnnnn~~                  "
+      },
+      {
+        "text": "                ^^ccccccccccccccvvvvvvvvvv}}~~~~~~~~[[uuuuuuuuuuuuuunnnnnnnnnn^^                "
+      },
+      {
+        "text": "                ccccccccccccccvvvvvvvvvvvv11        [[xxuuuuuuuuuunnnnnnnnnnnnuu                "
+      },
+      {
+        "text": "              ))ccccccccccccvvvvvvvvvvvvvv11        [[jjxxuuuuuunnnnnnnnnnnnnnnn))              "
+      },
+      {
+        "text": "            ^^ccccccccccccvvvvvvvvvvvvvvvv11        [[jjffzzuunnnnnnnnnnnnnnnnnnxx^^            "
+      },
+      {
+        "text": "            [[ccccccccccvvvvvvvvvvvvvvvvvv}}--------ccffffffzznnnnnnnnnnnnnnnnxxxx]]            "
+      },
+      {
+        "text": "          ``ccccccccccvvvvvvvvvvvvvvvvvvuuuuxxjjjjjjffffffffffzznnnnnnnnnnnnxxxxxxxx''          "
+      },
+      {
+        "text": "          ))ccccccccvvvvvvvvvvvvvvvvvvuuuuuuuuxxjjffffffffffffffzznnnnnnnnxxxxxxxxxx((          "
+      },
+      {
+        "text": "          vvccccccvvvvvvvvvvvvvvvvvvuuuuuucc1111{{[[xxffffffffffffzznnnnxxxxxxxxxxxxxx          "
+      },
+      {
+        "text": "        ..vvccccvvvvvvvvvvvvvvvvvvuuuuuuuu11'''''''']]ffffffffffffffzzxxxxxxxxxxxxxxzz          "
+      },
+      {
+        "text": "        <<ccccvvvvvvvvvvvvvvvvvvuuuuuuuuuu11'''''''']]ffffffffffffffffzzxxxxxxxxxxxxzz<<        "
+      },
+      {
+        "text": "        11ccvvvvvvvvvvvvvvvvvvuuuuuuuuuuuu11'''''''']]ffffffffffffffffjjzzxxxxxxxxzzzz11        "
+      },
+      {
+        "text": "        rrvvvvvvvvvvvvvvvvvvuuuuuuuuuuuuuu11'''''''']]ffffffffffffffjjjjjjzzxxxxzzzzzzvv        "
+      },
+      {
+        "text": "        vvvvvvvvvvvvvvvvvvuuuuuuuuuuuuuuuu{{'''''''']]ffffffffffffjjjjjjjjjjjjzzzzzzzznn        "
+      },
+      {
+        "text": "        vvvvvvvvvvvvvvvvuuuuuuuuuuuuuuuuuu{{'''''''']]ffffffffffjjjjjjjjjjjjjjjjzzzzzznn        "
+      },
+      {
+        "text": "        vvvvvvvvvvvvvvuuuuuuuuuuuuuuuuuunn{{'''''''']]ffffffffjjjjjjjjjjjjjjjjjjjjzzzzuu        "
+      },
+      {
+        "text": "        rrvvvvvvvvvvuuuuuuuuuuuuuuuuuunnnn{{````````]]ffffffjjjjjjjjjjjjjjjjjjjjjjjjzzcc        "
+      },
+      {
+        "text": "        ))vvvvvvvvuuuuuuuuuuuuuuuuuunnnnnn{{````````]]ffffjjjjjjjjjjjjjjjjjjjjjjjjjjjj))        "
+      },
+      {
+        "text": "        --uuvvvvuuuuuuuuuuuuuuuuuunnnnnnnn{{````````]]ffjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj~~        "
+      },
+      {
+        "text": "          nnvvuuuuuuuuuuuuuuuuuunnnnnnnnnn{{````````]]jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjff          "
+      },
+      {
+        "text": "          nnuuuuuuuuuuuuuuuuuunnnnnnnnnnnn}},,,,,,,,]]jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjzz          "
+      },
+      {
+        "text": "          //uuuuuuuuuuuuuuuunnnnnnnnnnnnnn}},,,,,,,,]]jjjjjjjjjjjjjjjjjjjjjjjjjjjjjj//          "
+      },
+      {
+        "text": "          ..xxuuuuuuuuuuuunnnnnnnnnnnnnnnn}},,,,,,,,]]jjjjjjjjjjjjjjjjjjjjjjjjjjjjtt..          "
+      },
+      {
+        "text": "            }}uuuuuuuuuunnnnnnnnnnnnnnnnnn}},,,,,,,,]]jjjjjjjjjjjjjjjjjjjjjjjjjjjj}}            "
+      },
+      {
+        "text": "            ''zzuuuuuunnnnnnnnnnnnnnnnnnxx}},,,,,,,,]]jjjjjjjjjjjjjjjjjjjjjjjjjjtt..            "
+      },
+      {
+        "text": "              IIxxuunnnnnnnnnnnnnnnnnnxxxx}},,,,,,,,]]jjjjjjjjjjjjjjjjjjjjjjjjttll              "
+      },
+      {
+        "text": "                ccxxnnnnnnnnnnnnnnnnxxxxxx}}^^^^^^^^]]jjjjjjjjjjjjjjjjjjjjjjffcc                "
+      },
+      {
+        "text": "                ..zznnnnnnnnnnnnnnxxxxxxxxcc??//////uujjjjjjjjjjjjjjjjjjjjffjj..                "
+      },
+      {
+        "text": "                  ``zzxxnnnnnnnnxxxxxxxxxxxxzzjjjjjjjjjjjjjjjjjjjjjjjjjjffff``                  "
+      },
+      {
+        "text": "                    ''xxzznnnnxxxxxxxxxxxxxxxxzzjjjjjjjjjjjjjjjjjjjjjjttzz''                    "
+      },
+      {
+        "text": "                        [[ffxxxxxxxxxxxxxxxxzzzzzzjjjjjjjjjjjjjjjjjjCC[[                        "
+      },
+      {
+        "text": "                          <<jjffxxxxxxxxxxzzzzzzzzzzjjjjjjjjjjffLLff++                          "
+      },
+      {
+        "text": "                              ??jjttjjzzzzzzzzzzzzzzzzjjjjttCCffII                              "
+      },
+      {
+        "text": "                                  ;;}}zzLLLLLLttttLLLLCCjj}};;                                  "
+      },
+      {
+        "text": "                                          ^^++iiii++^^                                          "
+      },
+      {
+        "text": "                                                                                                "
+      },
+      {
+        "text": "                                                                                                "
+      },
+      {
+        "text": "                                                                                                "
+      }
+    ]
+  },
+  {
+    "property": {
+      "separator": "=",
+      "name": "_KDE_NET_WM_USER_CREATION_TIME",
+      "type": "CARDINAL",
+      "value": "219015296",
+      "error": null
+    },
+    "lines": []
+  },
+  {
+    "property": {
+      "separator": "=",
+      "name": "_MOTIF_WM_HINTS",
+      "type": "_MOTIF_WM_HINTS",
+      "value": "0x3, 0x1, 0x0, 0x0, 0x0",
+      "error": null
+    },
+    "lines": []
+  },
+  {
+    "property": {
+      "separator": "=",
+      "name": "_NET_WM_WINDOW_TYPE",
+      "type": "ATOM",
+      "value": "_NET_WM_WINDOW_TYPE_NORMAL",
+      "error": null
+    },
+    "lines": []
+  },
+  {
+    "property": {
+      "separator": "=",
+      "name": "XdndAware",
+      "type": "ATOM",
+      "value": "BITMAP",
+      "error": null
+    },
+    "lines": []
+  },
+  {
+    "property": {
+      "separator": "=",
+      "name": "_NET_WM_SYNC_REQUEST_COUNTER",
+      "type": "CARDINAL",
+      "value": "27262982, 27262983",
+      "error": null
+    },
+    "lines": []
+  },
+  {
+    "property": {
+      "separator": ":",
+      "name": "_NET_WM_USER_TIME_WINDOW",
+      "type": "WINDOW",
+      "value": "window id # 0x1a00005",
+      "error": null
+    },
+    "lines": []
+  },
+  {
+    "property": {
+      "separator": ":",
+      "name": "WM_CLIENT_LEADER",
+      "type": "WINDOW",
+      "value": "window id # 0x1a00002",
+      "error": null
+    },
+    "lines": []
+  },
+  {
+    "property": {
+      "separator": "=",
+      "name": "_NET_WM_PID",
+      "type": "CARDINAL",
+      "value": "2155686",
+      "error": null
+    },
+    "lines": []
+  },
+  {
+    "property": {
+      "separator": "=",
+      "name": "WM_LOCALE_NAME",
+      "type": "STRING",
+      "value": "\"ja_JP.UTF-8\"",
+      "error": null
+    },
+    "lines": []
+  },
+  {
+    "property": {
+      "separator": "=",
+      "name": "WM_CLIENT_MACHINE",
+      "type": "STRING",
+      "value": "\"examplehost\"",
+      "error": null
+    },
+    "lines": []
+  },
+  {
+    "property": {
+      "separator": ":",
+      "name": "WM_NORMAL_HINTS",
+      "type": "WM_SIZE_HINTS",
+      "value": "",
+      "error": null
+    },
+    "lines": [
+      {
+        "text": "program specified minimum size: 344 by 270"
+      },
+      {
+        "text": "program specified maximum size: 344 by 270"
+      }
+    ]
+  },
+  {
+    "property": {
+      "separator": ":",
+      "name": "WM_PROTOCOLS",
+      "type": "ATOM",
+      "value": "protocols  WM_DELETE_WINDOW, WM_TAKE_FOCUS, _NET_WM_PING, _NET_WM_SYNC_REQUEST",
+      "error": null
+    },
+    "lines": []
+  },
+  {
+    "property": {
+      "separator": "=",
+      "name": "WM_CLASS",
+      "type": "STRING",
+      "value": "\"zenity\", \"zenity\"",
+      "error": null
+    },
+    "lines": []
+  },
+  {
+    "property": {
+      "separator": "=",
+      "name": "WM_ICON_NAME",
+      "type": "STRING",
+      "value": "\"Sample\"",
+      "error": null
+    },
+    "lines": []
+  },
+  {
+    "property": {
+      "separator": "=",
+      "name": "_NET_WM_ICON_NAME",
+      "type": "UTF8_STRING",
+      "value": "\"Sample\"",
+      "error": null
+    },
+    "lines": []
+  },
+  {
+    "property": {
+      "separator": "=",
+      "name": "WM_NAME",
+      "type": "STRING",
+      "value": "\"Sample\"",
+      "error": null
+    },
+    "lines": []
+  },
+  {
+    "property": {
+      "separator": "=",
+      "name": "_NET_WM_NAME",
+      "type": "UTF8_STRING",
+      "value": "\"Sample\"",
+      "error": null
+    },
+    "lines": []
+  }
+]

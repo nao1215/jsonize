@@ -1,0 +1,5 @@
+source: "xprop -id of a zenity dialog titled in Japanese, run with GDK_BACKEND=x11, xprop 1.2.7 on Ubuntu 26.04 (Xwayland), LC_ALL=C.UTF-8 and COLORTERM unset; the host name replaced with examplehost and an activity UUID with a made-up one"
+description: >-
+  A UTF-8 locale: the window names in Japanese, as UTF8_STRING and as
+  COMPOUND_TEXT, and the icons drawn with shade characters.
+os: linux

@@ -1,0 +1,26 @@
+_NET_WM_ALLOWED_ACTIONS(ATOM) = _NET_WM_ACTION_MOVE, _NET_WM_ACTION_RESIZE, _NET_WM_ACTION_MAXIMIZE_VERT, _NET_WM_ACTION_MAXIMIZE_HORZ, _NET_WM_ACTION_FULLSCREEN, _NET_WM_ACTION_CHANGE_DESKTOP, _NET_WM_ACTION_CLOSE
+_KDE_NET_WM_FRAME_STRUT(CARDINAL) = 0, 0, 28, 0
+_NET_FRAME_EXTENTS(CARDINAL) = 0, 0, 28, 0
+_NET_WM_DESKTOP(CARDINAL) = 0
+WM_STATE(WM_STATE):
+		window state: Normal
+		icon window: 0x0
+_NET_WM_STATE(ATOM) = 
+_KDE_NET_WM_ACTIVITIES(STRING) = "5f0c2a1e-7d3b-4c8a-9e21-0b6d4f3a8c17"
+WM_PROTOCOLS(ATOM): protocols  WM_DELETE_WINDOW
+WM_CLIENT_LEADER(WINDOW): window id # 0x160000a
+_KDE_NET_WM_USER_CREATION_TIME(CARDINAL) = 219011755
+WM_LOCALE_NAME(STRING) = "ja_JP.UTF-8"
+WM_CLASS(STRING) = "jzeyes", "XEyes"
+WM_HINTS(WM_HINTS):
+		Client accepts input or input focus: False
+		Initial state is Normal State.
+		bitmap id # to use for icon: 0x1600001
+		bitmap id # of mask for icon: 0x1600003
+WM_NORMAL_HINTS(WM_SIZE_HINTS):
+		user specified size: 60 by 60
+		window gravity: NorthWest
+WM_CLIENT_MACHINE(STRING) = "examplehost"
+WM_COMMAND(STRING) = { "xeyes", "-geometry", "60x60", "-name", "jzeyes" }
+WM_ICON_NAME(STRING) = "jzeyes"
+WM_NAME(STRING) = "jzeyes"

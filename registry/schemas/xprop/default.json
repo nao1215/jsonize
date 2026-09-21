@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nao1215.github.io/jsonize/schemas/xprop/default.json",
+  "title": "xprop/default",
+  "description": "xprop -root and -id, one record per window property with the lines under it",
+  "x-jsonize": {
+    "definition": "xprop/default",
+    "version": 1
+  },
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "property": {
+        "type": "object",
+        "properties": {
+          "separator": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "error": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "separator",
+          "name",
+          "type",
+          "value",
+          "error"
+        ]
+      },
+      "lines": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "text": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "text"
+          ]
+        }
+      }
+    },
+    "required": [
+      "property",
+      "lines"
+    ]
+  }
+}

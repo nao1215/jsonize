@@ -1,0 +1,5 @@
+source: "xprop -id of a zenity dialog run with GDK_BACKEND=x11, xprop 1.2.7 on Ubuntu 26.04 (Xwayland), LC_ALL=C and COLORTERM unset, as jz run runs it; the host name replaced with examplehost and an activity UUID with a made-up one"
+description: >-
+  _NET_WM_ICON with four icons drawn in ASCII, their rows of transparent
+  pixels kept as lines of spaces.
+os: linux

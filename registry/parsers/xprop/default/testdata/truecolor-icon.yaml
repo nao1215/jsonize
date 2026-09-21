@@ -1,0 +1,6 @@
+source: "xprop -id of a zenity dialog run with GDK_BACKEND=x11, xprop 1.2.7 on Ubuntu 26.04 (Xwayland), LC_ALL=C with COLORTERM=truecolor; the first 40 lines, up to rows of the first icon; the host name replaced with examplehost and an activity UUID with a made-up one"
+description: >-
+  With COLORTERM=truecolor xprop draws every pixel as two full blocks
+  coloured by an escape sequence. Without the escapes the rows say nothing
+  of the icon, so the output is refused rather than read.
+expect_error: 'part "lines": line does not match'
