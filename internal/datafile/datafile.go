@@ -371,9 +371,10 @@ func streamCounted(format string, r io.Reader, maxLine int, c *counter, emit fun
 }
 
 // blankLine reports a line that holds no record. In JSON Lines that is a
-// line of the white space JSON allows between tokens; in LTSV only an
-// empty line, since a line of spaces is a field without a label. Other
-// spaces, a no-break space or a form feed, are text the line holds.
+// line of the white space JSON allows between tokens (space, tab and CR);
+// in LTSV only an empty line, since a line of spaces is a field without a
+// label. Other spaces, a no-break space or a form feed, are text the line
+// holds.
 func blankLine(format string, line []byte) bool {
 	if format == LTSV {
 		return len(line) == 0
