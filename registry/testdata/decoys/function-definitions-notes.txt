@@ -1,0 +1,6 @@
+f(x) = 3x^2 + 2x - 5
+g(x) = sqrt(x + 1)
+h(t): distance travelled after t seconds
+area(r) = pi * r^2
+	with r in metres
+cost(n): the price of n items, before tax

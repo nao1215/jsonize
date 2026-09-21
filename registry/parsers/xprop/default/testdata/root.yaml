@@ -1,0 +1,6 @@
+source: "xprop -root, xprop 1.2.7 on Ubuntu 26.04 (KDE Plasma on Wayland, Xwayland), LC_ALL=C; a D-Bus guid replaced with a made-up value of the same shape"
+description: >-
+  The root window with no X11 client open, so the two client lists are the
+  sentence xprop prints with nothing after it.
+os: linux
+args: [-root]

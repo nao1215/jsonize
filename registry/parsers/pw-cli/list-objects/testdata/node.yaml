@@ -1,0 +1,3 @@
+source: "pw-cli ls Node on Ubuntu 26.04 with PipeWire 1.6.2, LC_ALL=C; a webcam serial in a node name replaced with 0123ABCD"
+os: linux
+args: ["ls", "Node"]

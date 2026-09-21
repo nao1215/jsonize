@@ -1,0 +1,209 @@
+[
+  {
+    "property": {
+      "separator": "=",
+      "name": "_NET_WM_ALLOWED_ACTIONS",
+      "type": "ATOM",
+      "value": "_NET_WM_ACTION_MOVE, _NET_WM_ACTION_RESIZE, _NET_WM_ACTION_MAXIMIZE_VERT, _NET_WM_ACTION_MAXIMIZE_HORZ, _NET_WM_ACTION_FULLSCREEN, _NET_WM_ACTION_CHANGE_DESKTOP, _NET_WM_ACTION_CLOSE",
+      "error": null
+    },
+    "lines": []
+  },
+  {
+    "property": {
+      "separator": "=",
+      "name": "_KDE_NET_WM_FRAME_STRUT",
+      "type": "CARDINAL",
+      "value": "0, 0, 28, 0",
+      "error": null
+    },
+    "lines": []
+  },
+  {
+    "property": {
+      "separator": "=",
+      "name": "_NET_FRAME_EXTENTS",
+      "type": "CARDINAL",
+      "value": "0, 0, 28, 0",
+      "error": null
+    },
+    "lines": []
+  },
+  {
+    "property": {
+      "separator": "=",
+      "name": "_NET_WM_DESKTOP",
+      "type": "CARDINAL",
+      "value": "0",
+      "error": null
+    },
+    "lines": []
+  },
+  {
+    "property": {
+      "separator": ":",
+      "name": "WM_STATE",
+      "type": "WM_STATE",
+      "value": "",
+      "error": null
+    },
+    "lines": [
+      {
+        "text": "window state: Normal"
+      },
+      {
+        "text": "icon window: 0x0"
+      }
+    ]
+  },
+  {
+    "property": {
+      "separator": "=",
+      "name": "_NET_WM_STATE",
+      "type": "ATOM",
+      "value": "",
+      "error": null
+    },
+    "lines": []
+  },
+  {
+    "property": {
+      "separator": "=",
+      "name": "_KDE_NET_WM_ACTIVITIES",
+      "type": "STRING",
+      "value": "\"5f0c2a1e-7d3b-4c8a-9e21-0b6d4f3a8c17\"",
+      "error": null
+    },
+    "lines": []
+  },
+  {
+    "property": {
+      "separator": ":",
+      "name": "WM_PROTOCOLS",
+      "type": "ATOM",
+      "value": "protocols  WM_DELETE_WINDOW",
+      "error": null
+    },
+    "lines": []
+  },
+  {
+    "property": {
+      "separator": ":",
+      "name": "WM_CLIENT_LEADER",
+      "type": "WINDOW",
+      "value": "window id # 0x160000a",
+      "error": null
+    },
+    "lines": []
+  },
+  {
+    "property": {
+      "separator": "=",
+      "name": "_KDE_NET_WM_USER_CREATION_TIME",
+      "type": "CARDINAL",
+      "value": "219011755",
+      "error": null
+    },
+    "lines": []
+  },
+  {
+    "property": {
+      "separator": "=",
+      "name": "WM_LOCALE_NAME",
+      "type": "STRING",
+      "value": "\"ja_JP.UTF-8\"",
+      "error": null
+    },
+    "lines": []
+  },
+  {
+    "property": {
+      "separator": "=",
+      "name": "WM_CLASS",
+      "type": "STRING",
+      "value": "\"jzeyes\", \"XEyes\"",
+      "error": null
+    },
+    "lines": []
+  },
+  {
+    "property": {
+      "separator": ":",
+      "name": "WM_HINTS",
+      "type": "WM_HINTS",
+      "value": "",
+      "error": null
+    },
+    "lines": [
+      {
+        "text": "Client accepts input or input focus: False"
+      },
+      {
+        "text": "Initial state is Normal State."
+      },
+      {
+        "text": "bitmap id # to use for icon: 0x1600001"
+      },
+      {
+        "text": "bitmap id # of mask for icon: 0x1600003"
+      }
+    ]
+  },
+  {
+    "property": {
+      "separator": ":",
+      "name": "WM_NORMAL_HINTS",
+      "type": "WM_SIZE_HINTS",
+      "value": "",
+      "error": null
+    },
+    "lines": [
+      {
+        "text": "user specified size: 60 by 60"
+      },
+      {
+        "text": "window gravity: NorthWest"
+      }
+    ]
+  },
+  {
+    "property": {
+      "separator": "=",
+      "name": "WM_CLIENT_MACHINE",
+      "type": "STRING",
+      "value": "\"examplehost\"",
+      "error": null
+    },
+    "lines": []
+  },
+  {
+    "property": {
+      "separator": "=",
+      "name": "WM_COMMAND",
+      "type": "STRING",
+      "value": "{ \"xeyes\", \"-geometry\", \"60x60\", \"-name\", \"jzeyes\" }",
+      "error": null
+    },
+    "lines": []
+  },
+  {
+    "property": {
+      "separator": "=",
+      "name": "WM_ICON_NAME",
+      "type": "STRING",
+      "value": "\"jzeyes\"",
+      "error": null
+    },
+    "lines": []
+  },
+  {
+    "property": {
+      "separator": "=",
+      "name": "WM_NAME",
+      "type": "STRING",
+      "value": "\"jzeyes\"",
+      "error": null
+    },
+    "lines": []
+  }
+]

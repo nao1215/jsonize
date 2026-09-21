@@ -1,0 +1,268 @@
+[
+  {
+    "object": {
+      "id": 33,
+      "type": "PipeWire:Interface:Client",
+      "version": 3
+    },
+    "properties": {
+      "object.serial": "33",
+      "module.id": "2",
+      "pipewire.protocol": "protocol-native",
+      "pipewire.sec.pid": "7818",
+      "pipewire.sec.uid": "1000",
+      "pipewire.sec.gid": "1000",
+      "pipewire.sec.label": "unconfined",
+      "pipewire.sec.socket": "pipewire-0-manager",
+      "application.name": "WirePlumber",
+      "pipewire.access": "unrestricted"
+    }
+  },
+  {
+    "object": {
+      "id": 38,
+      "type": "PipeWire:Interface:Client",
+      "version": 3
+    },
+    "properties": {
+      "object.serial": "38",
+      "module.id": "2",
+      "pipewire.protocol": "protocol-native",
+      "pipewire.sec.pid": "7818",
+      "pipewire.sec.uid": "1000",
+      "pipewire.sec.gid": "1000",
+      "pipewire.sec.label": "unconfined",
+      "pipewire.sec.socket": "pipewire-0-manager",
+      "application.name": "WirePlumber [export]",
+      "pipewire.access": "unrestricted"
+    }
+  },
+  {
+    "object": {
+      "id": 39,
+      "type": "PipeWire:Interface:Client",
+      "version": 3
+    },
+    "properties": {
+      "object.serial": "39",
+      "module.id": "2",
+      "pipewire.protocol": "protocol-native",
+      "pipewire.sec.pid": "7822",
+      "pipewire.sec.uid": "1000",
+      "pipewire.sec.gid": "1000",
+      "pipewire.sec.label": "unconfined",
+      "pipewire.sec.socket": "pipewire-0",
+      "application.name": "pipewire",
+      "pipewire.access": "unrestricted"
+    }
+  },
+  {
+    "object": {
+      "id": 85,
+      "type": "PipeWire:Interface:Client",
+      "version": 3
+    },
+    "properties": {
+      "object.serial": "90",
+      "module.id": "2",
+      "pipewire.protocol": "protocol-native",
+      "pipewire.sec.pid": "8341",
+      "pipewire.sec.uid": "1000",
+      "pipewire.sec.gid": "1000",
+      "pipewire.sec.label": "unconfined",
+      "pipewire.sec.socket": "pipewire-0",
+      "application.name": "kwin_wayland",
+      "pipewire.access": "unrestricted"
+    }
+  },
+  {
+    "object": {
+      "id": 88,
+      "type": "PipeWire:Interface:Client",
+      "version": 3
+    },
+    "properties": {
+      "object.serial": "93",
+      "module.id": "2",
+      "pipewire.protocol": "protocol-native",
+      "pipewire.sec.pid": "7822",
+      "pipewire.sec.uid": "1000",
+      "pipewire.sec.gid": "1000",
+      "pipewire.sec.label": "unconfined",
+      "pipewire.sec.socket": "pipewire-0",
+      "application.name": "libcanberra",
+      "pipewire.access": "unrestricted"
+    }
+  },
+  {
+    "object": {
+      "id": 89,
+      "type": "PipeWire:Interface:Client",
+      "version": 3
+    },
+    "properties": {
+      "object.serial": "94",
+      "module.id": "2",
+      "pipewire.protocol": "protocol-native",
+      "pipewire.sec.pid": "7822",
+      "pipewire.sec.uid": "1000",
+      "pipewire.sec.gid": "1000",
+      "pipewire.sec.label": "unconfined",
+      "pipewire.sec.socket": "pipewire-0",
+      "application.name": "",
+      "pipewire.access": "unrestricted"
+    }
+  },
+  {
+    "object": {
+      "id": 90,
+      "type": "PipeWire:Interface:Client",
+      "version": 3
+    },
+    "properties": {
+      "object.serial": "95",
+      "module.id": "2",
+      "pipewire.protocol": "protocol-native",
+      "pipewire.sec.pid": "8994",
+      "pipewire.sec.uid": "1000",
+      "pipewire.sec.gid": "1000",
+      "pipewire.sec.label": "unconfined",
+      "pipewire.sec.socket": "pipewire-0",
+      "application.name": "xdg-desktop-portal",
+      "pipewire.access": "unrestricted"
+    }
+  },
+  {
+    "object": {
+      "id": 91,
+      "type": "PipeWire:Interface:Client",
+      "version": 3
+    },
+    "properties": {
+      "object.serial": "96",
+      "module.id": "2",
+      "pipewire.protocol": "protocol-native",
+      "pipewire.sec.pid": "7822",
+      "pipewire.sec.uid": "1000",
+      "pipewire.sec.gid": "1000",
+      "pipewire.sec.label": "unconfined",
+      "pipewire.sec.socket": "pipewire-0",
+      "application.name": "Blueman",
+      "pipewire.access": "unrestricted"
+    }
+  },
+  {
+    "object": {
+      "id": 92,
+      "type": "PipeWire:Interface:Client",
+      "version": 3
+    },
+    "properties": {
+      "object.serial": "97",
+      "module.id": "2",
+      "pipewire.protocol": "protocol-native",
+      "pipewire.sec.pid": "8615",
+      "pipewire.sec.uid": "1000",
+      "pipewire.sec.gid": "1000",
+      "pipewire.sec.label": "plasmashell (enforce)",
+      "pipewire.sec.socket": "pipewire-0",
+      "application.name": "plasmashell",
+      "pipewire.access": "unrestricted"
+    }
+  },
+  {
+    "object": {
+      "id": 93,
+      "type": "PipeWire:Interface:Client",
+      "version": 3
+    },
+    "properties": {
+      "object.serial": "98",
+      "module.id": "2",
+      "pipewire.protocol": "protocol-native",
+      "pipewire.sec.pid": "7822",
+      "pipewire.sec.uid": "1000",
+      "pipewire.sec.gid": "1000",
+      "pipewire.sec.label": "unconfined",
+      "pipewire.sec.socket": "pipewire-0",
+      "application.name": "libcanberra",
+      "pipewire.access": "unrestricted"
+    }
+  },
+  {
+    "object": {
+      "id": 94,
+      "type": "PipeWire:Interface:Client",
+      "version": 3
+    },
+    "properties": {
+      "object.serial": "99",
+      "module.id": "2",
+      "pipewire.protocol": "protocol-native",
+      "pipewire.sec.pid": "7822",
+      "pipewire.sec.uid": "1000",
+      "pipewire.sec.gid": "1000",
+      "pipewire.sec.label": "unconfined",
+      "pipewire.sec.socket": "pipewire-0",
+      "application.name": "",
+      "pipewire.access": "unrestricted"
+    }
+  },
+  {
+    "object": {
+      "id": 117,
+      "type": "PipeWire:Interface:Client",
+      "version": 3
+    },
+    "properties": {
+      "object.serial": "6901",
+      "module.id": "2",
+      "pipewire.protocol": "protocol-native",
+      "pipewire.sec.pid": "7822",
+      "pipewire.sec.uid": "1000",
+      "pipewire.sec.gid": "1000",
+      "pipewire.sec.label": "unconfined",
+      "pipewire.sec.socket": "pipewire-0",
+      "application.name": "",
+      "pipewire.access": "unrestricted"
+    }
+  },
+  {
+    "object": {
+      "id": 118,
+      "type": "PipeWire:Interface:Client",
+      "version": 3
+    },
+    "properties": {
+      "object.serial": "6798",
+      "module.id": "2",
+      "pipewire.protocol": "protocol-native",
+      "pipewire.sec.pid": "7822",
+      "pipewire.sec.uid": "1000",
+      "pipewire.sec.gid": "1000",
+      "pipewire.sec.label": "unconfined",
+      "pipewire.sec.socket": "pipewire-0",
+      "application.name": "Google Chrome input",
+      "pipewire.access": "unrestricted"
+    }
+  },
+  {
+    "object": {
+      "id": 121,
+      "type": "PipeWire:Interface:Client",
+      "version": 3
+    },
+    "properties": {
+      "object.serial": "6922",
+      "module.id": "2",
+      "pipewire.protocol": "protocol-native",
+      "pipewire.sec.pid": "2145563",
+      "pipewire.sec.uid": "1000",
+      "pipewire.sec.gid": "1000",
+      "pipewire.sec.label": "unconfined",
+      "pipewire.sec.socket": "pipewire-0",
+      "application.name": "pw-cli",
+      "pipewire.access": "unrestricted"
+    }
+  }
+]

@@ -1,0 +1,7 @@
+description: >-
+  The keyring of validity-levels listed in the C locale, where gpg writes
+  each byte of a user ID outside ASCII as a \xNN escape. The escapes
+  are kept as printed, since jz run avoids them by running gpg in C.UTF-8.
+source: "gpg -k, GnuPG 2.4.8 on Ubuntu 26.04 with LC_ALL=C, in a GNUPGHOME made for the fixture; the GNUPGHOME path replaced with /home/user/.gnupg and the rule shortened to match"
+os: linux
+args: [-k]

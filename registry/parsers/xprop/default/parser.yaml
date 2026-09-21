@@ -1,0 +1,80 @@
+# `xprop -root` and `xprop -id WIN` print one property per line as
+# NAME(TYPE) followed by " = " and the value, or by ":" and a sentence
+# that describes the value ("window id # 0x200002"). A property xprop
+# knows how to spell out (WM_HINTS, WM_NORMAL_HINTS, WM_STATE) puts its
+# fields on the lines below, each indented with two tabs, and
+# _NET_WM_ICON draws each icon below its "Icon (W x H):" line, one row of
+# pixels per line indented with a tab. A property asked for by name that
+# the window does not have is a line of its own: "NAME:  not found." or
+# "NAME:  no such atom on any window.".
+#
+# Each property is a record: the first line, and the lines under it as
+# printed after the tabs, blank rows of an icon included. The values are
+# kept as text, because the text is xprop's rendering of the value in a
+# format chosen per property, and the same type prints as a number, a
+# list or a sentence depending on it.
+#
+# An icon is drawn with ASCII characters, with shade characters in a
+# UTF-8 locale, or, when COLORTERM is "truecolor", with a full block per
+# pixel coloured by an escape sequence. jz takes the escape sequences off
+# before it reads a line, which leaves nothing of the picture but blocks,
+# so a row made only of full blocks is refused rather than read. A row of
+# the shade drawing that is dark from one edge to the other looks the
+# same and is refused as well. jz run clears COLORTERM for this reason.
+# In the C locale jz run uses, xprop writes a UTF8_STRING outside ASCII
+# with octal escapes ("\343\202\265"), which are kept as printed.
+format: 1
+command: xprop
+variant: default
+description: xprop -root and -id, one record per window property with the lines under it
+metadata:
+  tags: [x11, desktop]
+  compatible: [xprop]
+  references:
+    - https://www.x.org/releases/current/doc/man/man1/xprop.1.xhtml
+detect:
+  args:
+    # -notype drops the type, which the records are found by; -font and
+    # -frame were not tried.
+    none: ["-notype", "-font", "-frame"]
+  signature:
+    all:
+      # Every line of the window is a property line, a not-found line, a
+      # line indented with a tab, or empty, and the first is one of the
+      # first two. The type is an atom named in capitals, as every type
+      # seen was, which is what keeps notes such as "f(x) = x + 1" out;
+      # the parser itself reads a type of any spelling.
+      - '\A(?:[^\s()]+\(_?[A-Z][A-Z0-9_]*\)(?: =|:)[^\n]*|[^\s():]+:  (?:not found|no such atom on any window)\.)(?:\n(?:[^\s()]+\(_?[A-Z][A-Z0-9_]*\)(?: =|:)[^\n]*|[^\s():]+:  (?:not found|no such atom on any window)\.|\t[^\n]*|))*\z'
+exec:
+  env:
+    COLORTERM: ""
+input:
+  # An icon row of transparent pixels is a line of spaces, which is part
+  # of the picture; only the empty line xprop prints after each icon is
+  # left out.
+  skip_blank: false
+  ignore: ['^$']
+parse:
+  type: records
+  start: '^[^\t]'
+  parts:
+    - name: property
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        patterns:
+          - pattern: '\A(?P<name>[^\s()]+)\((?P<type>[^\s()]+)\) =[ \t]*(?P<value>.*?)[ \t]*(?P<error>)??\z'
+            values: {separator: "="}
+          - pattern: '\A(?P<name>[^\s()]+)\((?P<type>[^\s()]+)\):[ \t]*(?P<value>.*?)[ \t]*(?P<error>)??\z'
+            values: {separator: ":"}
+          # The empty groups come first so that the keys are in the order
+          # the two alternatives above give them.
+          - '\A(?P<separator>)??(?P<name>[^\s():]+)(?P<type>)??(?P<value>)??:  (?P<error>not found|no such atom on any window)\.\z'
+    - name: lines
+      select: {skip: 1}
+      parse:
+        type: regex
+        # The text after the indentation, as long as it holds something
+        # other than full blocks (see above).
+        pattern: '^\t\t?(?P<text>|.*[^█].*)$'

@@ -1,0 +1,157 @@
+[
+  {
+    "key": {
+      "type": "pub",
+      "stub": false,
+      "card": false,
+      "algorithm": "ed25519",
+      "keyid": null,
+      "created": "2026-09-21",
+      "usage": "SC",
+      "status": "expires",
+      "status_date": "2028-09-20",
+      "fingerprint": "2024CF08783DE203DDF8AEA5FC643429776541A3"
+    },
+    "uids": [
+      {
+        "validity": "ultimate",
+        "uid": "Test User <test@users.example.org>"
+      },
+      {
+        "validity": "ultimate",
+        "uid": "Test User <test@example.com>"
+      }
+    ],
+    "subkeys": [
+      {
+        "type": "sub",
+        "stub": false,
+        "card": false,
+        "algorithm": "cv25519",
+        "keyid": null,
+        "created": "2026-09-21",
+        "usage": "E",
+        "status": "expires",
+        "status_date": "2027-09-21",
+        "fingerprint": null
+      },
+      {
+        "type": "sub",
+        "stub": false,
+        "card": false,
+        "algorithm": "ed25519",
+        "keyid": null,
+        "created": "2026-09-21",
+        "usage": "A",
+        "status": null,
+        "status_date": null,
+        "fingerprint": null
+      }
+    ]
+  },
+  {
+    "key": {
+      "type": "pub",
+      "stub": false,
+      "card": false,
+      "algorithm": "rsa2048",
+      "keyid": null,
+      "created": "2026-09-21",
+      "usage": "SC",
+      "status": "expires",
+      "status_date": "2027-09-21",
+      "fingerprint": "87039E94891BEC1DB74A83FD04D26E5D72DD677B"
+    },
+    "uids": [
+      {
+        "validity": "ultimate",
+        "uid": "Ren Tanaka (テスト) <ren@example.jp>"
+      }
+    ],
+    "subkeys": []
+  },
+  {
+    "key": {
+      "type": "pub",
+      "stub": false,
+      "card": false,
+      "algorithm": "ed25519",
+      "keyid": null,
+      "created": "2026-09-21",
+      "usage": "SC",
+      "status": "revoked",
+      "status_date": "2026-09-21",
+      "fingerprint": "36EF35C4F506D59B1AFF8DF132A714C6987B9645"
+    },
+    "uids": [
+      {
+        "validity": "revoked",
+        "uid": "Revoked Key <revoked@example.com>"
+      }
+    ],
+    "subkeys": []
+  },
+  {
+    "key": {
+      "type": "pub",
+      "stub": false,
+      "card": false,
+      "algorithm": "ed25519",
+      "keyid": null,
+      "created": "2020-01-01",
+      "usage": "SC",
+      "status": "expired",
+      "status_date": "2020-01-02",
+      "fingerprint": "CF388517D09D31EEBCDCDDB465592BB9DCF0B96F"
+    },
+    "uids": [
+      {
+        "validity": "expired",
+        "uid": "Old Key <old@example.com>"
+      }
+    ],
+    "subkeys": []
+  },
+  {
+    "key": {
+      "type": "pub",
+      "stub": false,
+      "card": false,
+      "algorithm": "ed25519",
+      "keyid": null,
+      "created": "2026-09-21",
+      "usage": "SC",
+      "status": "expires",
+      "status_date": "2028-09-20",
+      "fingerprint": "2248B5BA068DE1E064E73E692F52121864EB9C25"
+    },
+    "uids": [
+      {
+        "validity": "full",
+        "uid": "Signed Friend <friend@example.net>"
+      }
+    ],
+    "subkeys": []
+  },
+  {
+    "key": {
+      "type": "pub",
+      "stub": false,
+      "card": false,
+      "algorithm": "rsa3072",
+      "keyid": null,
+      "created": "2026-09-21",
+      "usage": "SC",
+      "status": null,
+      "status_date": null,
+      "fingerprint": "273A2ECF25D2B8BA19FCA9E018AE26E21A8ACE37"
+    },
+    "uids": [
+      {
+        "validity": "unknown",
+        "uid": "Stranger <stranger@example.net>"
+      }
+    ],
+    "subkeys": []
+  }
+]

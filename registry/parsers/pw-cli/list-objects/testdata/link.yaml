@@ -1,0 +1,4 @@
+source: "pw-cli ls Link on Ubuntu 26.04 with PipeWire 1.6.2, LC_ALL=C, while pw-record ran"
+description: Two links, the only objects of the type while a recording stream was connected.
+os: linux
+args: ["ls", "Link"]

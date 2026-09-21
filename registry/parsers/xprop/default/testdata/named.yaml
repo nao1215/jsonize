@@ -1,0 +1,4 @@
+source: "xprop -root _NET_ACTIVE_WINDOW WM_NAME _EXAMPLE_NO_SUCH_ATOM _NET_DESKTOP_GEOMETRY _NET_DESKTOP_NAMES, xprop 1.2.7 on Ubuntu 26.04 (Xwayland), LC_ALL=C"
+description: Properties asked for by name, one the root window does not have and one no window has.
+os: linux
+args: [-root, _NET_ACTIVE_WINDOW, WM_NAME, _EXAMPLE_NO_SUCH_ATOM, _NET_DESKTOP_GEOMETRY, _NET_DESKTOP_NAMES]

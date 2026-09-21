@@ -1,0 +1,53 @@
+# `pw-cli ls` (list-objects) prints one block per object in the PipeWire
+# registry: a line with a tab, the global id and the interface type with
+# its version after a slash, then one line per property, written as a
+# space, two tabs and `key = "value"`. An argument narrows the list to
+# one type, id or name, and the blocks keep the same shape.
+#
+# pw-cli prints the properties of a global as it holds them, and a
+# PipeWire property list keeps one value per key, so they are read as a
+# map; a key printed twice is an error rather than a value lost. Which
+# keys an object has depends on its type and on the module that made it.
+# The values are printed between double quotes whatever they hold, so
+# they stay strings. An object without properties has only its id line
+# and gets an empty map.
+#
+# The type is kept whole: every type seen was "PipeWire:Interface:NAME",
+# but the name is whatever the object was registered with, and the
+# version is the number pw-cli prints with %d after the last slash.
+format: 1
+command: pw-cli
+variant: list-objects
+description: pw-cli ls, one object per block with its id, type, version and properties
+metadata:
+  tags: [linux, audio, video, pipewire]
+  compatible: [PipeWire]
+  references:
+    - https://docs.pipewire.org/page_man_pw-cli_1.html
+detect:
+  os: [linux]
+  args:
+    any: ["ls", "list-objects"]
+  signature:
+    all:
+      - '\A\tid [0-9]+, type \S+/-?[0-9]+[ \t]*$'
+parse:
+  type: records
+  start: '^\tid [0-9]+, type \S+/-?[0-9]+[ \t]*$'
+  parts:
+    - name: object
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        pattern: '\A\s*id (?P<id>[0-9]+), type (?P<type>\S+)/(?P<version>-?[0-9]+)\s*\z'
+      fields:
+        id: {type: int}
+        version: {type: int}
+    - name: properties
+      select: {skip: 1}
+      parse:
+        type: kv
+        separator: " = "
+        as: map
+        unquote: true
