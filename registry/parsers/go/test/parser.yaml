@@ -43,7 +43,7 @@ detect:
     all: ["test"]
     # -bench prints the benchmark report go/bench reads, and -json
     # prints events rather than result lines.
-    none: ["-bench", "-json"]
+    none: ["-bench", "-bench=", "--bench", "--bench=", "-json", "-json=", "--json", "--json="]
   signature:
     all:
       # Every line is a result line, one of the per-test lines named
