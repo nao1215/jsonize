@@ -1,0 +1,58 @@
+# `7z l -slt -ba` prints what `7z l -slt` prints from the line of ten
+# dashes onwards and nothing before it: -ba leaves out the banner, the
+# scan line, the archive name and the archive's own property block, so
+# the whole output is one "Name = value" block per entry, separated by
+# blank lines and each opening with its Path.
+#
+# The blocks are read exactly as 7z/list-technical reads them: the names
+# depend on the archive format, so each block is a map under the names
+# 7-Zip printed, the sizes and the block number become integers, and the
+# "+" and "-" of Solid, Encrypted and Folder become booleans. A property
+# 7-Zip prints with nothing after the "=" is null.
+#
+# Without the banner there is nothing in the text that says 7-Zip wrote
+# it, so the signature is about the shape: the text opens with a Path,
+# every line of the window is a property, and the entry carries the
+# size, the attributes and the encryption mark that a listing has.
+format: 1
+command: 7z
+variant: list-technical-bare
+aliases:
+  - name: 7za
+description: 7z l -slt -ba entry properties, without the banner
+metadata:
+  tags: [linux, darwin, archive]
+  compatible: [7-Zip]
+  references:
+    - https://documentation.help/7-Zip/list.htm
+detect:
+  args:
+    all: [l, -slt, -ba]
+  signature:
+    # Two entries of a .zip listing, which has the most properties.
+    window: 40
+    all:
+      - '\APath = [^\n]*\n(?:[A-Za-z][A-Za-z0-9 ]* = [^\n]*\n)+'
+      - '(?m)^Size = \d+$'
+      - '(?m)^Attributes = '
+      - '(?m)^Encrypted = [-+]$'
+parse:
+  type: records
+  start: '^Path = '
+  record:
+    parse:
+      type: kv
+      separator: " = "
+      as: map
+    fields:
+      Size: {type: int, null_if: [""]}
+      Packed Size: {type: int, null_if: [""]}
+      Block: {type: int, null_if: [""]}
+      Modified: {null_if: [""]}
+      Created: {null_if: [""]}
+      Accessed: {null_if: [""]}
+      CRC: {null_if: [""]}
+      Method: {null_if: [""]}
+      Comment: {null_if: [""]}
+      Encrypted: {type: bool, true_values: ["+"], false_values: ["-"]}
+      Folder: {type: bool, true_values: ["+"], false_values: ["-"]}

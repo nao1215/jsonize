@@ -1,0 +1,8 @@
+source: >-
+  captured on Ubuntu 26.04 with 7-Zip 26.00 (x64), LC_ALL=C 7z l -slt -ba over
+  a .7z made from files created for this fixture
+description: >-
+  a .7z listed without the banner: a directory, an empty file with no CRC and
+  no method, and a member of the solid block whose packed size is empty
+os: linux
+args: [l, -slt, -ba, upload.7z]

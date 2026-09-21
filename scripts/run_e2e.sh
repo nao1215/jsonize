@@ -47,7 +47,7 @@ Linux)
   for c in ps free vmstat uptime; do need "$c" "procps, exec_linux"; done
   for c in ss ip; do need "$c" "iproute2, exec_linux"; done
   for c in df id env mount du who wc ls ln md5sum sha256sum; do need "$c" "coreutils, exec_linux"; done
-  for c in busybox lscpu lsmod prlimit dpkg apt-cache git tar stat rsync; do need "$c" "exec_linux"; done
+  for c in busybox lscpu lsmod prlimit dpkg apt-cache git tar stat rsync 7z; do need "$c" "exec_linux"; done
   need zsh "completion"
   need systemctl "exec_linux"
   if [ ! -d /run/systemd/system ]; then

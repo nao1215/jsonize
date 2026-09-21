@@ -30,7 +30,7 @@ the same reading with settings of your own.
 
 | Command | Variants |
 |---------|----------|
-| `7z` | [`list`](../schemas/7z/list.json), [`list-technical`](../schemas/7z/list-technical.json) |
+| `7z` | [`list`](../schemas/7z/list.json), [`list-technical`](../schemas/7z/list-technical.json), [`list-technical-bare`](../schemas/7z/list-technical-bare.json) |
 | `actionlint` | [`default`](../schemas/actionlint/default.json) |
 | `amixer` | [`contents`](../schemas/amixer/contents.json), [`simple-controls`](../schemas/amixer/simple-controls.json) |
 | `aplay` | [`devices`](../schemas/aplay/devices.json) |

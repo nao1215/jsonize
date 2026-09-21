@@ -8,7 +8,8 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Added
 
-- `rsync --stats` (`rsync/stats`): the transfer counts rsync prints at the end of a run, with the summary lines that follow them, as one object of typed numbers. The counts by kind that rsync prints in parentheses are read as an object of their own, and a kind it leaves out is null rather than zero. `-v`, `-i`, `--progress` and two or more `-h` options print something else and are refused. The registry holds 270 commands through 743 definitions.
+- `rsync --stats` (`rsync/stats`): the transfer counts rsync prints at the end of a run, with the summary lines that follow them, as one object of typed numbers. The counts by kind that rsync prints in parentheses are read as an object of their own, and a kind it leaves out is null rather than zero. `-v`, `-i`, `--progress` and two or more `-h` options print something else and are refused.
+- `7z l -slt -ba` (`7z/list-technical-bare`): the entry blocks 7-Zip prints with `-ba`, which leaves out the banner, the scan line, the archive name and the archive's own properties. An entry is the same object `7z/list-technical` gives it; what differs is the whole, which is the array of them rather than an object holding the archive beside them. The registry holds 270 commands through 744 definitions.
 - `group_separator` on an int or a float field: the one character a format writes between groups of three digits. It is removed only where the digits are grouped by it, so a value of another shape is an error rather than a number made by dropping characters. It is for a format that decides the character itself; a count printed with the separator of the user's locale still stays the string it was printed as.
 
 ## [0.8.0]
