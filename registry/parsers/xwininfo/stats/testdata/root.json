@@ -1,0 +1,31 @@
+{
+  "window_id": "0x351",
+  "root": true,
+  "name": null,
+  "absolute_x": 0,
+  "absolute_y": 0,
+  "relative_x": 0,
+  "relative_y": 0,
+  "width": 2560,
+  "height": 1080,
+  "depth": 24,
+  "visual": "0x23",
+  "visual_class": "TrueColor",
+  "border_width": 0,
+  "class": "InputOutput",
+  "colormap": "0x22",
+  "colormap_installed": true,
+  "bit_gravity": "ForgetGravity",
+  "window_gravity": "NorthWestGravity",
+  "backing_store": "NotUseful",
+  "save_under": false,
+  "map_state": "IsViewable",
+  "override_redirect": false,
+  "corners": [
+    "+0+0",
+    "-0+0",
+    "-0-0",
+    "+0-0"
+  ],
+  "geometry": "2560x1080+0+0"
+}

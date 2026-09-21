@@ -1,0 +1,4 @@
+source: captured on Ubuntu 26.04 (xwininfo 1.1.6, Xwayland under KDE Plasma) as xwininfo -id 0x400001 -stats with LC_ALL=C
+description: a named, unmapped InputOnly window whose colormap is not installed
+os: linux
+args: [-id, "0x400001", -stats]

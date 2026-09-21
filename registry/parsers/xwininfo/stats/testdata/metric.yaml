@@ -1,0 +1,3 @@
+source: captured on Ubuntu 26.04 (xwininfo 1.1.6, Xwayland under KDE Plasma) as xwininfo -root -metric with LC_ALL=C
+description: -metric appends millimetres and inches to every length, which this definition does not read
+expect_error: "does not describe this input"

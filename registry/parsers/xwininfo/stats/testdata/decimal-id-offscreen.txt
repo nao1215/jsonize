@@ -1,0 +1,24 @@
+
+xwininfo: Window id: 4194308 (has no name)
+
+  Absolute upper-left X:  -1
+  Absolute upper-left Y:  -1
+  Relative upper-left X:  -1
+  Relative upper-left Y:  -1
+  Width: 1
+  Height: 1
+  Depth: 0
+  Visual: 0x2d0
+  Visual Class: TrueColor
+  Border width: 0
+  Class: InputOnly
+  Colormap: 0x0 (not installed)
+  Bit Gravity State: ForgetGravity
+  Window Gravity State: NorthWestGravity
+  Backing Store State: NotUseful
+  Save Under State: no
+  Map State: IsUnviewable
+  Override Redirect State: no
+  Corners:  +-1+-1  -2560+-1  -2560-1080  +-1-1080
+  -geometry 1x1+0+0
+

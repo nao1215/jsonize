@@ -1,0 +1,60 @@
+# xwininfo with no report option, or with -stats, which is the default:
+# the window line, then the geometry and attributes of that window as
+# fixed labels, one per line.
+#
+# Read as one expression over the whole text rather than as key/value
+# lines: the labels hold spaces ("Absolute upper-left X"), which a kv
+# field rule cannot name, and the last line (-geometry WxH+X+Y) has no
+# separator at all.
+#
+# -metric and -english append the size in millimetres or inches in
+# parentheses to every length; the signature refuses that form rather
+# than reading the numbers with the conversion left out. The other
+# report options (-tree, -wm, -size, -bits, -events, -shape, -frame,
+# -all) print other blocks, alone or after these lines, and the
+# signature refuses them.
+format: 1
+command: xwininfo
+variant: stats
+description: xwininfo -root or -id WINDOW, the geometry and attributes of one window
+metadata:
+  tags: [x11, display]
+  compatible: [xwininfo]
+  references:
+    - https://www.x.org/releases/current/doc/man/man1/xwininfo.1.xhtml
+    - https://gitlab.freedesktop.org/xorg/app/xwininfo
+detect:
+  # No argument list: -stats is the default report, and -int only
+  # changes the window id to decimal.
+  signature:
+    # The whole report, label by label, to its last line: a bug report
+    # that pastes the first lines of it and goes on in prose is not this
+    # output, and neither is -stats followed by another report.
+    window: 40
+    all:
+      - '\Axwininfo: Window id: [^\n]*\n(?:[ \t]*\n)*[ \t]+Absolute upper-left X: +-?\d+\n[ \t]+Absolute upper-left Y: +-?\d+\n[ \t]+Relative upper-left X: +-?\d+\n[ \t]+Relative upper-left Y: +-?\d+\n[ \t]+Width: \d+\n[ \t]+Height: \d+\n[ \t]+Depth: \d+\n[ \t]+Visual: [^\n]*\n(?:[ \t]+Visual Class: [^\n]*\n)?[ \t]+Border width: \d+\n[ \t]+Class: [^\n]*\n[ \t]+Colormap: [^\n]*\n[ \t]+Bit Gravity State: [^\n]*\n[ \t]+Window Gravity State: [^\n]*\n[ \t]+Backing Store State: [^\n]*\n[ \t]+Save Under State: [^\n]*\n[ \t]+Map State: [^\n]*\n[ \t]+Override Redirect State: [^\n]*\n[ \t]+Corners: [^\n]*\n[ \t]+-geometry \S+\z'
+parse:
+  type: regex
+  each: input
+  # The window id is hexadecimal, or decimal with -int. A window without
+  # a WM_NAME prints "(has no name)" where the quoted name would be.
+  # Visual Class is left out when the visual is not one the screen
+  # lists, and Colormap is "None" when the window has none.
+  pattern: '\Axwininfo: Window id: (?P<window_id>0x[0-9a-f]+|\d+)(?P<root>(?: \(the root window\))?) (?:\(has no name\)|"(?P<name>.*)")\n[ \t]+Absolute upper-left X: +(?P<absolute_x>-?\d+)\n[ \t]+Absolute upper-left Y: +(?P<absolute_y>-?\d+)\n[ \t]+Relative upper-left X: +(?P<relative_x>-?\d+)\n[ \t]+Relative upper-left Y: +(?P<relative_y>-?\d+)\n[ \t]+Width: (?P<width>\d+)\n[ \t]+Height: (?P<height>\d+)\n[ \t]+Depth: (?P<depth>\d+)\n[ \t]+Visual: (?P<visual>0x[0-9a-f]+)\n(?:[ \t]+Visual Class: (?P<visual_class>\S+)\n)?[ \t]+Border width: (?P<border_width>\d+)\n[ \t]+Class: (?P<class>\S+)\n[ \t]+Colormap: (?:(?P<colormap>0x[0-9a-f]+) \((?P<colormap_installed>installed|not installed)\)|None)\n[ \t]+Bit Gravity State: (?P<bit_gravity>\S+)\n[ \t]+Window Gravity State: (?P<window_gravity>\S+)\n[ \t]+Backing Store State: (?P<backing_store>\S+)\n[ \t]+Save Under State: (?P<save_under>yes|no)\n[ \t]+Map State: (?P<map_state>\S+)\n[ \t]+Override Redirect State: (?P<override_redirect>yes|no)\n[ \t]+Corners: +(?P<corners>[+-]-?\d+[+-]-?\d+(?: +[+-]-?\d+[+-]-?\d+){3})\n[ \t]+-geometry (?P<geometry>\S+)\z'
+fields:
+  window_id: {required: true}
+  root: {type: bool, true_values: ["(the root window)"], false_values: [""]}
+  absolute_x: {type: int}
+  absolute_y: {type: int}
+  relative_x: {type: int}
+  relative_y: {type: int}
+  width: {type: int}
+  height: {type: int}
+  depth: {type: int}
+  border_width: {type: int}
+  colormap_installed: {type: bool, true_values: [installed], false_values: [not installed]}
+  save_under: {type: bool, true_values: ["yes"], false_values: ["no"]}
+  override_redirect: {type: bool, true_values: ["yes"], false_values: ["no"]}
+  # the four corners, each as the signed offsets xwininfo prints:
+  # upper-left, upper-right, lower-right, lower-left
+  corners: {type: array, split_regex: ' +'}
