@@ -1,0 +1,7 @@
+level	page_num	block_num	par_num	line_num	word_num	left	top	width	height	conf	text
+1	1	0	0	0	0	0	0	500	120	-1	
+2	1	1	0	0	0	32	40	237	31	-1	
+3	1	1	1	0	0	32	40	237	31	-1	
+4	1	1	1	1	0	32	40	237	31	-1	
+5	1	1	1	1	1	32	40	79	31	93.045448	Café
+5	1	1	1	1	2	124	41	145	30	90.323547	AusmaB

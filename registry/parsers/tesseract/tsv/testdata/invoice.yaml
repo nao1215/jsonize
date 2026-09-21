@@ -1,0 +1,9 @@
+source: >-
+  captured on Ubuntu 26.04 with tesseract 5.5.0 (eng), LC_ALL=C tesseract
+  invoice.png stdout tsv over a 700x200 PNG drawn for this fixture with
+  ImageMagick, reading "Invoice 2026-09" and "Total 1,280 JPY"
+description: >-
+  a page whose layout rows carry no text and whose word rows do, including
+  a word with a comma in it
+os: linux
+args: [invoice.png, stdout, tsv]

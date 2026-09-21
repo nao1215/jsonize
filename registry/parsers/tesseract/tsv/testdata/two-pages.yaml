@@ -1,0 +1,7 @@
+source: >-
+  captured on Ubuntu 26.04 with tesseract 5.5.0 (eng), LC_ALL=C tesseract
+  two.tiff stdout tsv over a two-page TIFF drawn for this fixture
+description: >-
+  two pages in one run, where page_num is what separates them
+os: linux
+args: [two.tiff, stdout, tsv]

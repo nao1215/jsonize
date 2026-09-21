@@ -1,0 +1,10 @@
+source: >-
+  captured on Ubuntu 26.04 with tesseract 5.5.0 (eng), LC_ALL=C tesseract
+  invoice.png stdout over the PNG of the invoice fixture, with no output
+  configuration named
+description: >-
+  the plain text tesseract writes when no configuration is named, which is
+  not the table this definition reads
+os: linux
+args: [invoice.png, stdout]
+expect_error: 'does not describe this input'

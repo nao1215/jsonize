@@ -1,0 +1,8 @@
+source: >-
+  captured on Ubuntu 26.04 with tesseract 5.5.0 (eng), LC_ALL=C tesseract
+  blank.png stdout tsv over a 400x120 white PNG drawn for this fixture
+description: >-
+  a page the recogniser found nothing on, which is the header and the one
+  page row
+os: linux
+args: [blank.png, stdout, tsv]

@@ -267,6 +267,7 @@ the same reading with settings of your own.
 | `tasklist` | [`csv`](../schemas/tasklist/csv.json), [`list`](../schemas/tasklist/list.json), [`modules`](../schemas/tasklist/modules.json), [`services`](../schemas/tasklist/services.json), [`table`](../schemas/tasklist/table.json), [`verbose`](../schemas/tasklist/verbose.json) |
 | `taskset` | [`affinity-list`](../schemas/taskset/affinity-list.json), [`affinity-mask`](../schemas/taskset/affinity-mask.json) |
 | `tc` | [`qdisc`](../schemas/tc/qdisc.json), [`qdisc-stats`](../schemas/tc/qdisc-stats.json) |
+| `tesseract` | [`tsv`](../schemas/tesseract/tsv.json) |
 | `timedatectl` | [`linux`](../schemas/timedatectl/linux.json), [`show`](../schemas/timedatectl/show.json), [`timesync`](../schemas/timedatectl/timesync.json), [`timezones`](../schemas/timedatectl/timezones.json) |
 | `tokei` | [`default`](../schemas/tokei/default.json) |
 | `top` | [`busybox`](../schemas/top/busybox.json), [`darwin`](../schemas/top/darwin.json), [`linux`](../schemas/top/linux.json) |
