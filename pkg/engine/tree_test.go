@@ -85,6 +85,22 @@ func TestParseTreeRefuses(t *testing.T) {
 			t.Errorf("%q was read as %s", input, mustJSON(t, v))
 		}
 	}
+	// The message names the level the line is at and the level of the line
+	// it would hang from, the numbers a reader checks against the text.
+	for input, want := range map[string]string{
+		"a: 1\n    b: 2\n":           "line 2: at level 2 under a line at level 0",
+		"a: 1\n  b: 2\n      c: 3\n": "line 3: at level 3 under a line at level 1",
+		"    a: 1\n":                 "line 1: at level 2 with no line above it",
+	} {
+		_, err := Parse(load(t, treeDef), []byte(input), Options{})
+		if err == nil || !strings.Contains(err.Error(), want) {
+			t.Errorf("%q: %v, want %q", input, err, want)
+		}
+		_, err = streamAll(t, treeDef, input)
+		if err == nil || !strings.Contains(err.Error(), want) {
+			t.Errorf("%q streamed: %v, want %q", input, err, want)
+		}
+	}
 	// Indentation that is not a whole number of levels means the unit the
 	// definition states is not the one the text uses.
 	if _, err := Parse(load(t, treeDef), []byte("a: 1\n   b: 2\n"), Options{}); err == nil {

@@ -51,7 +51,7 @@ func (r *run) treeNodes(p *definition.Parse, lines []line, i, depth int) ([]any,
 			// The caller reads a node's children immediately after it, so
 			// a line deeper than expected here has skipped a level: there
 			// is no node for it to hang from.
-			return nil, 0, r.errorf(lines[i].num, "", "indented %d levels below a line at level %d, so it has no parent", d-depth, depth)
+			return nil, 0, noParent(r.errorf, lines[i].num, d, depth)
 		}
 		// A definition that says what a top-level line looks like is
 		// saying that a line at depth zero of any other shape is not
@@ -73,6 +73,16 @@ func (r *run) treeNodes(p *definition.Parse, lines []line, i, depth int) ([]any,
 		out = append(out, obj)
 	}
 	return out, i, nil
+}
+
+// noParent is the error for a line at level d where a line at level
+// depth was expected, which is one level below the node it would hang
+// from: it names the two levels a reader checks against the text.
+func noParent(errorf func(int, string, string, ...any) *ParseError, num, d, depth int) *ParseError {
+	if depth == 0 {
+		return errorf(num, "", "at level %d with no line above it, so it has no parent", d)
+	}
+	return errorf(num, "", "at level %d under a line at level %d, so it skips a level and has no parent", d, depth-1)
 }
 
 // treeDepth counts how many levels of indentation open the line and

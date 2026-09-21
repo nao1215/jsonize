@@ -522,6 +522,28 @@ parse:
 	} else if !strings.Contains(err.Error(), "nothing to join") {
 		t.Error(err)
 	}
+
+	// Nor is a blank line something to join: joined onto it, the
+	// continuation came out with a space in front that the text does not
+	// hold. The whole reading and the stream refuse it alike.
+	lines := load(t, `
+format: 1
+command: x
+variant: lines
+input:
+  fold: '^[ \t]+\S'
+parse:
+  type: regex
+  pattern: '^(?P<l>.*)$'
+`)
+	blank := []byte("modes: x\n\n   orphan\n")
+	if got, err := Parse(lines, blank, Options{}); err == nil || !strings.Contains(err.Error(), "line 3") {
+		t.Errorf("a continuation under a blank line: %v, %v; want an error on line 3", got, err)
+	}
+	err = Stream(lines, bytes.NewReader(blank), Options{}, func(any) error { return nil })
+	if err == nil || !strings.Contains(err.Error(), "line 3") {
+		t.Errorf("a continuation under a blank line, streamed: %v; want an error on line 3", err)
+	}
 }
 
 // Folding runs before ignoring, so a continuation reaches the line it

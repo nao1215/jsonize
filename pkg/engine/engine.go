@@ -306,7 +306,10 @@ func foldLines(in *definition.Input, lines []line) ([]line, *splitError) {
 			pieces = append(pieces, l.text)
 			continue
 		}
-		if len(out) == 0 {
+		// A blank line is nothing to join onto either: the join would
+		// write a separator in front of the continuation that the text
+		// does not hold.
+		if len(out) == 0 || strings.TrimSpace(out[len(out)-1].text) == "" {
 			return nil, &splitError{line: l.num, msg: fmt.Sprintf("continuation line with nothing to join it to: %q", l.text)}
 		}
 		pieces = append(pieces, strings.TrimSpace(l.text))
