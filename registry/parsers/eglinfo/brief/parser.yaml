@@ -31,7 +31,7 @@ detect:
       # version or the failure to initialise. Without -B eglinfo opens
       # with the client extension list instead, and lists every config
       # of every display, which this definition does not read.
-      - '\A(?:(?:[A-Za-z0-9]+ platform|Default display):\n(?:EGL API version: [0-9]|eglinfo: )|Device platform:\nDevice #[0-9]+:\n)'
+      - '\A(?:(?:(?:Device [0-9]+ on )?[A-Za-z0-9]+ platform|Default display):\n(?:EGL API version: [0-9]|eglinfo: )|Device platform:\nDevice #[0-9]+:\n)'
 parse:
   type: composite
   parts:
@@ -40,10 +40,13 @@ parse:
       parse:
         type: records
         # A heading of one word and "platform", or "Default display" from
-        # a client library without platform extensions.
+        # a client library without platform extensions. With -e and
+        # EGL_EXT_explicit_device, eglinfo prints one block per device of
+        # each platform, headed "Device 0 on GBM platform:" (eglinfo.c in
+        # mesa-demos).
         # "Platform Device platform" belongs to a device and is below the
         # range of this part.
-        start: '^(?:[A-Za-z0-9]+ platform|Default display):$'
+        start: '^(?:(?:Device [0-9]+ on )?[A-Za-z0-9]+ platform|Default display):$'
         parts:
           - name: platform
             select: {limit: 1}
