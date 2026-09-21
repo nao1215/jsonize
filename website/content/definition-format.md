@@ -247,8 +247,9 @@ end (a fold, a `records` block, a tree node with its children, a quoted
 csv value, a composite part's region) is bounded by the input limit, and
 a record that grows past it ends the stream. It runs before `ignore` and `skip_blank`, so a
 continuation is joined even where the line it belongs to would be
-dropped. A continuation with nothing above it is an error naming the
-line, rather than something quietly dropped. This is for a report that
+dropped. A continuation with nothing above it, or with a blank line
+above it, is an error naming the line, rather than something quietly
+dropped or joined onto nothing. This is for a report that
 breaks a long value at the terminal width (`ethtool` listing link modes)
 and for the control files whose values continue on an indented line.
 
@@ -836,7 +837,7 @@ fields:
 | `when_missing` | all | `null` (default) or `omit` the key when the value is missing |
 | `layout` | time | the [Go reference layout](https://pkg.go.dev/time#pkg-constants) the timestamp is written in; required, and it has to state a year unless `year: assumed` says the format prints none |
 | `year` | time | `assumed` for a format that prints no year; the value stays a string until `--assume-year` says which year to read it in |
-| `location` | time | how to read a timestamp that states no zone: `utc` (default) or `local`, the zone the running system is in |
+| `location` | time | how to read a timestamp that states no zone: `utc` (default) or `local`, the zone the running system is in. A wall clock the zone skips when its offset changes (02:30 on the night summer time starts) is an error rather than another hour |
 | `layout` | duration | `h:mm` or `mm:ss`, saying what the last part of a bare `4:50` is; required |
 | `true_values`, `false_values` | bool | spellings (case-insensitive); defaults are true/yes/on/1/y and false/no/off/0/n |
 | `split`, `split_regex` | array | how to split; items are trimmed. A `split_regex` that matches the empty string is an error, since it would split between every character |

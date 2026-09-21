@@ -206,7 +206,8 @@ $ jz --file sales.csv --type units=int --type price=float --type in_stock=bool
 
 - The types are `int`, `float` and `bool`, converted the way a
   definition's field of that type is: an integer with an optional sign, a
-  decimal (not `NaN` or an infinity), and `true`, `yes`, `on`, `1`, `y` or
+  decimal (not `NaN`, an infinity, or one too large or too small for a
+  64-bit float), and `true`, `yes`, `on`, `1`, `y` or
   `false`, `no`, `off`, `0`, `n` in any case. Space around a value is
   not part of it.
 - An empty value is `null`. A column not named keeps its text, so `007`

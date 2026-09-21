@@ -66,6 +66,15 @@ func TestFloat(t *testing.T) {
 		{"1_000.5", 0, true},
 		{"0x1p3", 0, true},
 		{"0X1P-2", 0, true},
+		// A value too small for a float64 is refused the way one too large
+		// is, rather than written as the 0 it is not.
+		{"1e400", 0, true},
+		{"1e-400", 0, true},
+		{"-2.5e-330", 0, true},
+		{"5e-324", 5e-324, false},
+		{"0e-400", 0, false},
+		{"0.000e5", 0, false},
+		{"-0.0", 0, false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.in, func(t *testing.T) {
@@ -327,6 +336,39 @@ func TestTime(t *testing.T) {
 	}
 	if _, ok := Location("Asia/Tokyo"); ok {
 		t.Error("only utc and local are locations")
+	}
+}
+
+// TestTimeRefusesAClockTheZoneSkips pins that a wall clock the zone never
+// shows, the hour a change to summer time skips, is refused rather than
+// moved to another hour: time.ParseInLocation reads 02:30 on that day as
+// 01:30, so two different texts would give one timestamp.
+func TestTimeRefusesAClockTheZoneSkips(t *testing.T) {
+	t.Parallel()
+	ny, err := time.LoadLocation("America/New_York")
+	if err != nil {
+		t.Skipf("no zone database: %v", err)
+	}
+	const layout = "2006-01-02 15:04"
+	for in, want := range map[string]string{
+		"2025-03-09 01:30": "2025-03-09T01:30:00-05:00",
+		"2025-03-09 03:30": "2025-03-09T03:30:00-04:00",
+		"2025-11-02 02:30": "2025-11-02T02:30:00-05:00",
+	} {
+		got, _, err := TimeAssuming(in, layout, ny, Assumptions{})
+		if err != nil || got != want {
+			t.Errorf("TimeAssuming(%q) = %q, %v; want %q", in, got, err, want)
+		}
+	}
+	for _, in := range []string{"2025-03-09 02:00", "2025-03-09 02:30", "2025-03-09 02:59"} {
+		got, _, err := TimeAssuming(in, layout, ny, Assumptions{})
+		if err == nil || !strings.Contains(err.Error(), "does not show") {
+			t.Errorf("TimeAssuming(%q) = %q, %v; want the skipped hour refused", in, got, err)
+		}
+	}
+	// The year an assumption supplies goes through the same check.
+	if _, _, err := TimeAssuming("Mar  9 02:30", "Jan _2 15:04", ny, Assumptions{Year: 2025}); err == nil {
+		t.Error("a skipped clock in an assumed year should be refused")
 	}
 }
 

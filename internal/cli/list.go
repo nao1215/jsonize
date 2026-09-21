@@ -14,6 +14,7 @@ import (
 	"github.com/nao1215/jsonize/pkg/definition"
 	"github.com/nao1215/jsonize/pkg/jsonutil"
 	"github.com/nao1215/jsonize/pkg/registry"
+	"github.com/nao1215/jsonize/pkg/selector"
 )
 
 const listUsage = `Usage: jz list [COMMAND [VARIANT]]
@@ -185,7 +186,7 @@ func ownVariants(reg *registry.Registry, command string) []*registry.Entry {
 func (a *app) listVariants(reg *registry.Registry, command string, asJSON bool) int {
 	entries := reg.Variants(parserKey(command))
 	if len(entries) == 0 {
-		a.errorf("no parser for %q; run `jz list` to see the supported commands", command)
+		a.errorf("%v", &selector.UnknownParserError{Parser: command, Known: reg.Commands()})
 		return ExitSelect
 	}
 	if asJSON {
@@ -243,7 +244,7 @@ func (a *app) listDefinition(reg *registry.Registry, command, variant string, as
 	e, ok := reg.Lookup(parserKey(command), variant)
 	if !ok {
 		if len(reg.Variants(parserKey(command))) == 0 {
-			a.errorf("no parser for %q; run `jz list` to see the supported commands", command)
+			a.errorf("%v", &selector.UnknownParserError{Parser: command, Known: reg.Commands()})
 		} else {
 			a.errorf("parser %q has no variant %q (available: %s)", command, variant,
 				strings.Join(variantNames(reg.Variants(parserKey(command))), ", "))

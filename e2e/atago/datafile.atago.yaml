@@ -705,6 +705,16 @@ scenarios:
               {"sku":"1","units":4}
           stderr:
             contains: 'line 3: field "units": cannot convert "four" to int'
+      # A decimal too small for a float is refused, as one too large is,
+      # rather than written as 0.
+      - run:
+          command: jz --format csv --type ratio=float
+          stdin: "id,ratio\n1,1e-400\n"
+      - assert:
+          exit_code: 3
+          stdout: {empty: true}
+          stderr:
+            contains: 'field "ratio": cannot convert "1e-400" to float'
       - run:
           command: jz --format csv --type price=float
           stdin: "sku,units\n1,4\n"

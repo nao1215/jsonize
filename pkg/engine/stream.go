@@ -268,7 +268,8 @@ func (s *streamer) feedRaw(l line) error {
 		return s.feedFolded(l)
 	}
 	if s.fold.MatchString(l.text) {
-		if s.folding == nil {
+		// A blank line is nothing to join onto, as in the whole reading.
+		if s.folding == nil || strings.TrimSpace(s.folding[0]) == "" {
 			return &ParseError{Definition: s.def.ID(), Line: l.num, Msg: fmt.Sprintf("continuation line with nothing to join it to: %q", l.text)}
 		}
 		piece := strings.TrimSpace(l.text)
@@ -582,7 +583,7 @@ func (s *streamer) feedTree(l line) error {
 			return err
 		}
 	} else if len(s.tree) == 0 {
-		return s.errorf(l.num, "", "indented %d levels below a line at level 0, so it has no parent", depth)
+		return noParent(s.errorf, l.num, depth, 0)
 	}
 	if err := s.held.take(lineBytes(l.text), s.def, l.num); err != nil {
 		return err

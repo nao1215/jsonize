@@ -88,6 +88,11 @@ func Float(s string) (float64, error) {
 	if math.IsNaN(v) || math.IsInf(v, 0) {
 		return 0, &Error{Type: typeFloat, Input: s, Cause: errors.New("non-finite value")}
 	}
+	// strconv refuses a value too large for a float64 but gives 0 for one
+	// too small, which would write a number the text does not hold.
+	if v == 0 && strings.ContainsAny(mantissa(t), "123456789") {
+		return 0, &Error{Type: typeFloat, Input: s, Cause: strconv.ErrRange}
+	}
 	// strconv also reads Go's own syntax: underscores between digits and
 	// hexadecimal with a binary exponent. No command prints a decimal
 	// that way, and Int already refuses both.
@@ -97,6 +102,14 @@ func Float(s string) (float64, error) {
 		}
 	}
 	return v, nil
+}
+
+// mantissa is the part of a decimal before its exponent.
+func mantissa(s string) string {
+	if i := strings.IndexAny(s, "eE"); i >= 0 {
+		return s[:i]
+	}
+	return s
 }
 
 // defaultTrueValues and defaultFalseValues are the case-insensitive spellings
@@ -200,6 +213,17 @@ func TimeAssuming(s, layout string, loc *time.Location, a Assumptions) (string, 
 		}
 		return "", false, &Error{Type: typeTime, Input: s, Cause: fmt.Errorf("does not match the layout %q", written)}
 	}
+	// ParseInLocation moves a wall clock the zone never shows, the hour a
+	// change to summer time skips, to another hour. Read the same text
+	// without a zone and compare the clocks, so that such a value is
+	// refused rather than turned into the timestamp of a different text.
+	if naive, nerr := time.Parse(layout, t); nerr == nil && !sameClock(naive, parsed) {
+		zone := loc.String()
+		if loc == time.Local {
+			zone = "the local zone"
+		}
+		return "", false, &Error{Type: typeTime, Input: s, Cause: fmt.Errorf("is a time the clock of %s does not show; a change of its offset skips it", zone)}
+	}
 	if strings.Contains(layout, "MST") {
 		resolved, ok := resolveZone(parsed, a.Zones)
 		if !ok {
@@ -208,6 +232,14 @@ func TimeAssuming(s, layout string, loc *time.Location, a Assumptions) (string, 
 		parsed = resolved
 	}
 	return parsed.Format(time.RFC3339Nano), true, nil
+}
+
+// sameClock reports two times that show the same date and wall clock,
+// whatever their zones.
+func sameClock(a, b time.Time) bool {
+	ay, am, ad := a.Date()
+	by, bm, bd := b.Date()
+	return ay == by && am == bm && ad == bd && a.Hour() == b.Hour() && a.Minute() == b.Minute() && a.Second() == b.Second() && a.Nanosecond() == b.Nanosecond()
 }
 
 // notInYearError is a day the year assumed for it does not have, such as
