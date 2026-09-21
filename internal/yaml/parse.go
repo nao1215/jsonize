@@ -475,6 +475,7 @@ func (p *parser) mapping(off, c int) (*Node, int, error) {
 	n := p.node(Node{Kind: MappingNode, Line: line, Col: col})
 	seen := map[string]bool{}
 	for {
+		explicit := p.at(off) == '?' && p.separates(off+1)
 		key, after, err := p.key(off)
 		if err != nil {
 			return nil, 0, err
@@ -485,9 +486,15 @@ func (p *parser) mapping(off, c int) (*Node, int, error) {
 		seen[key.Value] = true
 		var value *Node
 		next := p.skipSpace(after)
-		if p.lineEnds(next) {
+		switch {
+		case p.lineEnds(next):
 			value, next, err = p.nested(next, c)
-		} else {
+		case explicit:
+			// The ":" of an explicit key starts its line, so the value
+			// after it may open a collection there, as an item after a
+			// dash does: ": - x" is a sequence, ": b: 1" a mapping.
+			value, next, err = p.block(next, c)
+		default:
 			value, next, err = p.value(next, c)
 		}
 		if err != nil {
@@ -681,6 +688,14 @@ func (p *parser) value(off, parent int) (*Node, int, error) {
 		return nil, 0, p.errorf(off, "anchors, aliases and tags are not supported")
 	case '@', '`':
 		return nil, 0, p.errorf(off, "%q cannot start a value", p.src[off])
+	case '-':
+		if p.separates(off + 1) {
+			return nil, 0, p.errorf(off, "a sequence item cannot start on the line of its key; start the items on the next line")
+		}
+	case '?':
+		if p.separates(off + 1) {
+			return nil, 0, p.errorf(off, "an explicit key (\"? \") cannot stand where a value is")
+		}
 	}
 	text, next, err := p.plain(off, parent)
 	if err != nil {
@@ -711,6 +726,10 @@ func (p *parser) plain(off, parent int) (string, int, error) {
 	if strings.Contains(first, ": ") || strings.HasSuffix(first, ":") {
 		return "", 0, p.errorf(off, "a mapping value is not allowed here")
 	}
+	// A comment ends the scalar: the lines below it do not continue it.
+	if p.at(next) == '#' {
+		return first, next, nil
+	}
 	// A scalar written on one line is that line, which is nearly every
 	// scalar of a definition: the text is joined only once a second line
 	// continues it.
@@ -731,6 +750,9 @@ func (p *parser) plain(off, parent int) (string, int, error) {
 		fold(&b, empty)
 		b.WriteString(text)
 		next = end
+		if p.at(next) == '#' {
+			return b.String(), next, nil
+		}
 		if c, empty, err = p.continuation(next, parent); err != nil {
 			return "", 0, err
 		}
@@ -904,7 +926,9 @@ func (p *parser) blockScalar(off, parent int) (string, int, error) {
 	} else {
 		foldLines(&b, lines)
 	}
-	if b.Len() > 0 && chomp != '-' {
+	// The line break a scalar ends with is the one after its last line,
+	// which a text that stops right there does not have.
+	if b.Len() > 0 && chomp != '-' && (trailing > 0 || !p.eof(next)) {
 		b.WriteByte('\n')
 	}
 	if chomp == '+' {
@@ -1159,6 +1183,10 @@ func (p *parser) flowScalar(off int) (*Node, int, error) {
 	case '?':
 		if p.separates(off + 1) {
 			return nil, 0, p.errorf(off, "an explicit key (\"? \") inside a flow collection is not supported")
+		}
+	case '-':
+		if p.separates(off + 1) {
+			return nil, 0, p.errorf(off, "a sequence item (\"- \") cannot stand inside a flow collection")
 		}
 	}
 	var b strings.Builder
