@@ -465,6 +465,9 @@ func TestValueLimit(t *testing.T) {
 // U+FFFD in the place of an escape naming half a surrogate pair, which
 // is a character the input may hold for itself, so such an escape is
 // refused with the place it is in instead of read as something else.
+//
+// json.Valid says such a document is valid, which is why FuzzReadJSON
+// names this among the refusals it expects.
 func TestJSONRefusesHalfOfASurrogatePair(t *testing.T) {
 	t.Parallel()
 	for _, tt := range []struct {

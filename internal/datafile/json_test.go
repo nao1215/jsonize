@@ -141,9 +141,18 @@ func TestJSONLines(t *testing.T) {
 	}
 }
 
-// Every document encoding/json accepts is read, unless it gives a key
-// twice or nests past the limit, and what is read writes back as the same
-// JSON: the same keys in the same order and the same number literals.
+// Every document encoding/json accepts is read, and what is read writes
+// back as the same JSON: the same keys in the same order and the same
+// number literals.
+//
+// Four kinds of document it accepts are refused instead, and each is a
+// statement this package makes rather than a gap. A key given twice and
+// a document nested past the limit are the two the reader declares; text
+// that is not UTF-8 is not text. The fourth is an escape naming half of
+// a surrogate pair: json.Valid says yes and json.Unmarshal then hands
+// back U+FFFD, which is a character the input may hold for itself, so
+// reading it that way would change what it was given.
+// TestJSONRefusesHalfOfASurrogatePair pins that.
 func FuzzReadJSON(f *testing.F) {
 	for _, s := range []string{`{"a":1}`, `[1,2.5e3,"x",null,true]`, `{"a":{"a":{}}}`, `{"a":1,"a":2}`, ``, `"é"`, `[`, "{\"a\"\n:1}"} {
 		f.Add([]byte(s))
@@ -156,7 +165,7 @@ func FuzzReadJSON(f *testing.F) {
 			if !errors.As(err, &pe) {
 				t.Fatalf("a failure that is not a parse error: %v", err)
 			}
-			if json.Valid(trimmed) && !strings.Contains(pe.Msg, "given twice") && !strings.Contains(pe.Msg, "nest deeper") && !strings.Contains(pe.Msg, "UTF-8") {
+			if json.Valid(trimmed) && !strings.Contains(pe.Msg, "given twice") && !strings.Contains(pe.Msg, "nest deeper") && !strings.Contains(pe.Msg, "UTF-8") && !strings.Contains(pe.Msg, "surrogate pair") {
 				t.Fatalf("valid JSON refused: %v", err)
 			}
 			return

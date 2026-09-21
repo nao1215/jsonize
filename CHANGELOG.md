@@ -17,6 +17,7 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- `FuzzReadJSON` reported an escape naming half of a surrogate pair as valid JSON the reader refused, so `make fuzz` failed on every run that reached that input. `json.Valid` accepts such a document and `json.Unmarshal` then hands back U+FFFD, which is a character the input may hold for itself, so refusing it is what keeps a conversion from changing what it was given. The fuzz target now names it among the refusals it expects, beside a key given twice, a document nested past the limit and text that is not UTF-8, and the input is in the seed corpus.
 - `file/posix` refused a listing whose path holds a space. The signature required a path of non-space characters, although the expression that reads the line has always taken `[^:]+`, so `file 'quarterly report.pdf'` was exit 4.
 - `jz run file -i FILE` could land on `file/posix`. file(1) reports a file it cannot open in the description and still exits 0, and that sentence satisfied `file/posix` because "No such file or directory" holds the word "directory", so a caller that asked for a MIME type was handed a record with a `type` instead. `file/posix` now states that it does not read the output of `-i`, `--mime`, `--mime-type`, `--mime-encoding`, `--extension` or `--apple`, and the answer is exit 4 with a diagnostic saying so.
 
