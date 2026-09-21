@@ -10,7 +10,13 @@ project follows [Semantic Versioning](https://semver.org/).
 
 - `rsync --stats` (`rsync/stats`): the transfer counts rsync prints at the end of a run, with the summary lines that follow them, as one object of typed numbers. The counts by kind that rsync prints in parentheses are read as an object of their own, and a kind it leaves out is null rather than zero. `-v`, `-i`, `--progress` and two or more `-h` options print something else and are refused.
 - `7z l -slt -ba` (`7z/list-technical-bare`): the entry blocks 7-Zip prints with `-ba`, which leaves out the banner, the scan line, the archive name and the archive's own properties. An entry is the same object `7z/list-technical` gives it; what differs is the whole, which is the array of them rather than an object holding the archive beside them. The registry holds 270 commands through 744 definitions.
+- A server-side group in the cookbook: inspecting an uploaded PDF with `pdfinfo`, an archive with `7z l -slt`, a certificate with `openssl x509`, an upload's type with `file -i`, and recording what a backup run moved with `rsync --stats`, closing with the `jz run` exit-status contract and what converting the output does not do. The five commands run for real in the end-to-end suite on Linux, over paths holding a space and shell metacharacters, with their failure cases.
 - `group_separator` on an int or a float field: the one character a format writes between groups of three digits. It is removed only where the digits are grouped by it, so a value of another shape is an error rather than a number made by dropping characters. It is for a format that decides the character itself; a count printed with the separator of the user's locale still stays the string it was printed as.
+
+### Fixed
+
+- `file/posix` refused a listing whose path holds a space. The signature required a path of non-space characters, although the expression that reads the line has always taken `[^:]+`, so `file 'quarterly report.pdf'` was exit 4.
+- `jz run file -i FILE` could land on `file/posix`. file(1) reports a file it cannot open in the description and still exits 0, and that sentence satisfied `file/posix` because "No such file or directory" holds the word "directory", so a caller that asked for a MIME type was handed a record with a `type` instead. `file/posix` now states that it does not read the output of `-i`, `--mime`, `--mime-type`, `--mime-encoding`, `--extension` or `--apple`, and the answer is exit 4 with a diagnostic saying so.
 
 ## [0.8.0]
 

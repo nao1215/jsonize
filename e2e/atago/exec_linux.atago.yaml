@@ -2477,3 +2477,141 @@ scenarios:
       - assert:
           exit_code: 2
           stdout: {empty: true}
+
+  # The commands a server runs over what a client sent it: poppler,
+  # 7-Zip, OpenSSL and file(1), each on a path holding a space and
+  # shell metacharacters, and each with the failure that matters more
+  # than the success.
+  - name: pdfinfo reads a PDF written here, and its failures keep their own status
+    only: {os: linux}
+    steps:
+      - fixture:
+          file: "up loads/report [final].pdf"
+          content: |
+            %PDF-1.5
+            1 0 obj
+            << /Type /Catalog /Pages 2 0 R >>
+            endobj
+            2 0 obj
+            << /Type /Pages /Kids [3 0 R 4 0 R] /Count 2 >>
+            endobj
+            3 0 obj
+            << /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] >>
+            endobj
+            4 0 obj
+            << /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] >>
+            endobj
+            5 0 obj
+            << /Title (Quarterly report) /Producer (jsonize end-to-end suite) >>
+            endobj
+            trailer
+            << /Size 6 /Root 1 0 R /Info 5 0 R >>
+            %%EOF
+      - run:
+          command: jz run --explain pdfinfo "${workdir}/up loads/report [final].pdf"
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose pdfinfo/poppler from embedded"
+          stdout:
+            json:
+              - { path: "$.Pages", equals: 2 }
+              - { path: "$.Title", equals: "Quarterly report" }
+              - { path: "$.Producer", equals: "jsonize end-to-end suite" }
+              - { path: "$.Encrypted", equals: "no" }
+              - { path: "$.Tagged", equals: false }
+      # A file that is not there and a file that is not a PDF are both
+      # poppler's own failure: its status comes back, its message stays
+      # on standard error, and nothing is written that a caller could
+      # read as a report.
+      - run:
+          command: jz run pdfinfo "${workdir}/up loads/missing.pdf"
+      - assert:
+          exit_code: 1
+          stderr:
+            contains: "Couldn't open file"
+          stdout: {empty: true}
+      - fixture:
+          file: "up loads/not-a.pdf"
+          content: |
+            this is not a PDF
+      - run:
+          command: jz run pdfinfo "${workdir}/up loads/not-a.pdf"
+      - assert:
+          exit_code: 1
+          stdout: {empty: true}
+      # An option pdfinfo does not have: it prints its usage and exits
+      # 99, and that status is what comes back.
+      - run:
+          command: jz run pdfinfo --no-such-option "${workdir}/up loads/report [final].pdf"
+      - assert:
+          exit_code: 99
+          stdout: {empty: true}
+
+  - name: openssl x509 reads the fields of a certificate made here
+    only: {os: linux}
+    steps:
+      - run:
+          command: openssl req -x509 -newkey rsa:2048 -keyout "${workdir}/key [1].pem" -out "${workdir}/cert [1].pem" -days 30 -nodes -subj /CN=example.test/O=Example
+      - assert:
+          exit_code: 0
+      - run:
+          command: jz run --explain openssl x509 -noout -subject -dates -fingerprint -in "${workdir}/cert [1].pem"
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose openssl/x509-fields from embedded"
+          stdout:
+            json:
+              - { path: "$.subject", equals: "CN=example.test, O=Example" }
+              - { path: "$.notBefore", matches: "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9:]+Z$" }
+              - { path: "$.notAfter", matches: "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9:]+Z$" }
+      # The key is not a certificate: openssl fails, and its status is
+      # what comes back.
+      - run:
+          command: jz run openssl x509 -noout -dates -in "${workdir}/key [1].pem"
+      - assert:
+          exit_code: 1
+          stdout: {empty: true}
+
+  - name: file -i and file name the type of a path holding a space
+    only: {os: linux}
+    steps:
+      - fixture:
+          file: "up loads/note [1].txt"
+          content: |
+            plain text
+      - run:
+          command: jz run --explain file -i "${workdir}/up loads/note [1].txt"
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose file/mime from embedded"
+          stdout:
+            json:
+              - { path: "$[0].file", matches: "note \\[1\\]\\.txt$" }
+              - { path: "$[0].mime_type", equals: "text/plain" }
+      # The sentence form over the same name: the path of a listing may
+      # hold spaces, which is what an upload named by a person looks
+      # like.
+      - run:
+          command: jz run --explain file "${workdir}/up loads/note [1].txt"
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose file/posix from embedded"
+          stdout:
+            json:
+              - { path: "$[0].file", matches: "note \\[1\\]\\.txt$" }
+              - { path: "$[0].type", matches: "text" }
+      # file(1) reports a file it cannot open in the description and
+      # still exits 0. With -i there is no MIME type to read, and the
+      # sentence form is not reached either, so the answer is exit 4
+      # rather than a record whose mime_type is missing.
+      - run:
+          command: jz run file -i ${workdir}/missing.bin
+      - assert:
+          exit_code: 4
+          stderr:
+            contains: "which does not read the output of -i"
+          stdout: {empty: true}

@@ -21,6 +21,7 @@ so the output shown is what jz prints.
 | make JSON in a script | [Build a JSON body for an API call](#build-a-json-body-for-an-api-call), [Pass a variable that may start with @](#pass-a-variable-that-may-start-with-), [Put a file's contents into JSON](#put-a-files-contents-into-json), [Keep a file's line endings](#keep-a-files-line-endings), [Build nested JSON](#build-nested-json), [Make a JSON array](#make-a-json-array) |
 | hand the JSON to jq | [Pick the records you want with jq](#pick-the-records-you-want-with-jq), [List installed packages by licence](#list-installed-packages-by-licence), [Fail a step when a value is out of range](#fail-a-step-when-a-value-is-out-of-range) |
 | send or store the JSON | [Send JSON to an HTTP API](#send-json-to-an-http-api), [Save a report for a later step](#save-a-report-for-a-later-step) |
+| inspect what a server received | [Check an uploaded PDF before rendering it](#check-an-uploaded-pdf-before-rendering-it), [List an archive before extracting it](#list-an-archive-before-extracting-it), [Check when a certificate expires](#check-when-a-certificate-expires), [Check the type of an upload](#check-the-type-of-an-upload), [Record what a backup run moved](#record-what-a-backup-run-moved), [Tell a failed command from output jz could not read](#tell-a-failed-command-from-output-jz-could-not-read) |
 | use jz in CI | [Fail a CI step when jz cannot read the output](#fail-a-ci-step-when-jz-cannot-read-the-output), [Read the explanation in a script](#read-the-explanation-in-a-script), [Get the JSON Schema of an output](#get-the-json-schema-of-an-output) |
 | read a format jz does not know | [Add a parser of your own](#add-a-parser-of-your-own) |
 
@@ -344,6 +345,157 @@ $ jq -r '.[0].mounted_on' df.json
 
 A failure leaves the file empty and the status non-zero; `set -e` or an
 explicit check is what stops the later step.
+
+## Check an uploaded PDF before rendering it
+
+`pdfinfo` reports what a PDF says about itself. The page count and the
+file size are numbers, so a limit is a comparison. The keys are the
+labels poppler printed, which is why `."File size"` is quoted in jq.
+
+```console
+$ pdfinfo 'report [final].pdf' | jz | jq -c '{pages: .Pages, encrypted: .Encrypted, bytes: ."File size"}'
+{"pages":19,"encrypted":"no","bytes":146453}
+```
+
+Needs poppler-utils. Only `pdfinfo FILE` is read; `-box`, `-meta`,
+`-struct` and the other reports print something else and are refused.
+`Encrypted` stays text, since poppler writes the permissions beside
+`yes`.
+
+poppler is what opens the file, and an upload is untrusted input to it.
+
+## List an archive before extracting it
+
+`7z l -slt` prints one block per member, which is what a service reads
+to decide whether to extract at all.
+
+```console
+$ 7z l -slt upload.7z | jz | jq -c '.entries | {members: length, bytes: map(.Size) | add}'
+{"members":5,"bytes":496}
+```
+
+The same JSON answers the question that has to be asked before anything
+is written to disk:
+
+```console
+$ 7z l -slt upload.7z | jz | jq -r '.entries[] | select(.Path | startswith("/") or contains("..")) | .Path'
+```
+
+Needs 7-Zip, which Debian and Ubuntu package as `7zip`. `7z l -slt -ba`
+prints the blocks without the banner and is read as
+`7z/list-technical-bare`. Which properties a block carries depends on
+the archive format, so the keys are the names 7-Zip printed.
+
+Listing an archive is not extracting it, and a listing that passes both
+checks can still be a decompression bomb: the size above is what the
+archive claims.
+
+## Check when a certificate expires
+
+`openssl x509 -noout -dates` prints the two dates, and jz writes them as
+RFC 3339 because openssl prints them in GMT and says so.
+
+```console
+$ openssl x509 -noout -dates -in server.pem | jz --parser openssl
+{"notBefore":"2026-09-14T13:32:06Z","notAfter":"2026-10-14T13:32:06Z"}
+```
+
+`--parser openssl` is needed: a line of `label=value` is what any
+configuration file has, so this format is not claimed from the text
+alone. `jz run openssl x509 -noout -dates -in server.pem` says the same
+thing through the command name.
+
+`-subject`, `-issuer`, `-serial` and `-fingerprint` add their own keys,
+and the fingerprint's key names the hash it was made with
+(`SHA1 Fingerprint`, `sha256 Fingerprint`). `-text`, `-modulus` and
+`-pubkey` print other formats and are refused.
+
+## Check the type of an upload
+
+`file -i` names the MIME type and the character set of each file.
+
+```console
+$ file -i /usr/share/doc/bash/NEWS.gz /usr/bin/stat | jz | jq -r '.[] | [.file, .mime_type] | @tsv'
+/usr/share/doc/bash/NEWS.gz	application/gzip
+/usr/bin/stat	inode/symlink
+```
+
+Needs file(1). What it reports is what its magic database made of the
+bytes: agreeing with the type a client declared is a check worth making
+and is not a statement about the file.
+
+A name holding a space is one value, in `file -i` and in the sentence
+form `file FILE` alike. A file file(1) could not open is the one case
+to watch: it writes the reason where the type would be and still exits
+0, so `jz run file -i` answers exit 4 there rather than a record whose
+`mime_type` is missing.
+
+## Record what a backup run moved
+
+`rsync --stats` closes a run with the counts, and they are numbers, so a
+report or a threshold is one jq expression.
+
+```console
+$ rsync -a --stats /srv/data/ /srv/backup/ | jz | jq -c '{moved: .regular_files_transferred, bytes: .total_transferred_file_size, deleted: .deleted_files}'
+{"moved":3,"bytes":3000018,"deleted":1}
+```
+
+Needs rsync 3.1.0 or later. `-v`, `-i`, `--progress` and `--out-format`
+put file names in front of the counts and are refused, which also keeps
+the paths out of the JSON; two or more `-h` options round the sizes and
+are refused as well.
+
+rsync prints the block even when it failed: a missing source is exit 23
+and a block of zeros. Read the status, not the counts, which is what the
+next recipe is about.
+
+## Tell a failed command from output jz could not read
+
+`jz run` returns the command's own status. It uses a status of its own
+only when the command succeeded and its output could not be converted,
+so a script can tell the two apart.
+
+```console
+$ jz run --parser pdfinfo -- false
+jz: false exited with status 1
+$ echo $?
+1
+```
+
+Exit 4 means the opposite: the command was happy and jz was not.
+
+```console
+$ jz run --parser pdfinfo -- echo hello
+$ echo $?
+4
+```
+
+Nothing is written to standard output in either case, so a later step
+that reads the JSON cannot mistake a failure for an empty result.
+
+### What converting the output does not do
+
+JSON is a shape, not a check. All of this stays with the application
+that runs the command.
+
+- Limit the size of what you accept, and the time and the memory the
+  command may use. `jz run --timeout 10s` covers the time; CPU, memory
+  and process limits are the caller's.
+- Treat the input as hostile to the command itself. poppler, 7-Zip,
+  file(1) and OpenSSL parse formats that are attacked; isolate them
+  where that matters.
+- Keep those tools current, and pin the versions you tested against.
+- Build an argument list rather than a shell string. `jz run` starts the
+  command directly, with no shell, and passes every argument as it is,
+  so a file name holding a space, a quote or a semicolon is one argument
+  and not syntax.
+- Treat the values in the JSON as untrusted: a member path, a file name,
+  a certificate subject and a PDF title all come from whoever supplied
+  the input.
+- Keep the command's standard error away from a client. It names paths.
+- Check your own rules after parsing: a page limit, a member count, an
+  expiry window.
+- Create temporary files with permissions of your own, and remove them.
 
 ## Read the explanation in a script
 

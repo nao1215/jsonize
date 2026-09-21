@@ -1,0 +1,8 @@
+source: >-
+  captured on Ubuntu 26.04 with file 5.46, LC_ALL=C.UTF-8 file over three
+  entries created for this fixture, two of whose names hold a space
+description: >-
+  a listing whose paths hold spaces, which is what an upload named by a
+  person looks like
+os: linux
+args: ["quarterly report.pdf", notes.txt, "old files"]
