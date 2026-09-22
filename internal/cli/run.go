@@ -627,7 +627,70 @@ func (a *app) refuseBefore(defs []*definition.Definition, out *outputOptions) in
 	if err != nil {
 		return a.exitFor(err)
 	}
+	// An assumption none of them has a timestamp for could change nothing,
+	// and is refused the way a key none of them has is.
+	var year, zone bool
+	for _, d := range defs {
+		y, z := timestampsOf(d)
+		year, zone = year || y, zone || z
+	}
+	none := "no definition of " + defs[0].Command + " prints"
+	if defs[0].Command == definition.InlineCommand {
+		none = "the --define never prints"
+	}
+	switch {
+	case out.year != "" && !year:
+		a.errorf("--assume-year dates a timestamp printed without a year, and %s one", none)
+		return ExitUsage
+	case len(out.zones) > 0 && !zone:
+		a.errorf("--assume-zone gives a zone abbreviation an offset, and %s a timestamp with one", none)
+		return ExitUsage
+	}
 	return ExitOK
+}
+
+// timestampsOf reports whether a definition reads a timestamp printed
+// without a year, which --assume-year dates, and one that names its zone
+// by an abbreviation, which --assume-zone gives an offset: every field of
+// the definition, of its parts, records and tree nodes, and of the arrays
+// and objects inside them.
+func timestampsOf(d *definition.Definition) (year, zone bool) {
+	var fields func(map[string]*definition.Field)
+	var field func(*definition.Field)
+	field = func(f *definition.Field) {
+		if f == nil {
+			return
+		}
+		if f.EffectiveType() == definition.FieldTime {
+			year = year || f.Year == "assumed"
+			zone = zone || strings.Contains(f.Layout, "MST")
+		}
+		field(f.Items)
+		fields(f.Fields)
+	}
+	fields = func(m map[string]*definition.Field) {
+		for _, f := range m {
+			field(f)
+		}
+	}
+	var parse func(*definition.Parse)
+	parse = func(p *definition.Parse) {
+		for i := range p.Parts {
+			fields(p.Parts[i].Fields)
+			parse(&p.Parts[i].Parse)
+		}
+		if p.Node != nil {
+			fields(p.Node.Fields)
+			parse(&p.Node.Parse)
+		}
+		if p.Record != nil {
+			fields(p.Record.Fields)
+			parse(&p.Record.Parse)
+		}
+	}
+	fields(d.Fields)
+	parse(&d.Parse)
+	return year, zone
 }
 
 // readings returns the definitions entries are read with.

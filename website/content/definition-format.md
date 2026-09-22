@@ -438,7 +438,9 @@ cut by a delimiter that a value may itself contain, which is what
 separates it from `split: delimiter`: a value wrapped in `"` may hold the
 delimiter, a line break, or a quote written twice (RFC 4180). The first
 row names the columns unless the definition does, and the names are
-normalised the way a table header is.
+normalised the way a table header is. A csv read as data (`--format csv`
+or a `.csv` file) is read without a definition, and there the headings
+are the keys as written.
 
 A row shorter than the header leaves the remaining keys `null`, so every
 object of a document carries the same keys. A row longer than the header
@@ -491,7 +493,8 @@ Result: an object of objects. A `[section]` heading opens an outer key
 and every `key = value` line under it becomes an inner one, which is what
 systemd units, git configuration and desktop entries are written in.
 Keys written before the first heading go under the empty name, and there
-is no such key when the file has no preamble. Lines starting with `#` or
+is no such key when the file has no preamble. A heading with no name
+(`[]`) is an error, since it would merge into that preamble. Lines starting with `#` or
 `;` are comments; either character inside a value is part of the value,
 since a password or a path may contain one. A section written twice
 continues the first, and a key written twice in one section is an error

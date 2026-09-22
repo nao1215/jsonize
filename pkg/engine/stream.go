@@ -667,7 +667,7 @@ func (s *streamer) emitCSV(rec line) error {
 		case s.p.Header.None:
 			s.csvCols = csvNumbered(len(row))
 		default:
-			s.csvCols, s.csvHeader, isHeader = csvColumns(s.p, row), row, true
+			s.csvCols, s.csvHeader, isHeader = csvColumns(s.p, row, s.opts.KeepNames), row, true
 		}
 		if !s.csvChecked {
 			s.csvChecked = true

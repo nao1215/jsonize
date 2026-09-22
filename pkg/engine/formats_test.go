@@ -275,6 +275,13 @@ parse: {type: ini}
 	if _, err := Parse(load(t, src), []byte("[a]\nnot a pair\n"), Options{}); err == nil {
 		t.Error("a line with no separator was accepted")
 	}
+	// A heading with no name would be the nameless section the lines
+	// before the first heading go under, and two things would read as one.
+	for _, input := range []string{"k = 1\n[]\nj = 2\n", "[ ]\nk = 1\n"} {
+		if v, err := Parse(load(t, src), []byte(input), Options{}); err == nil || !strings.Contains(err.Error(), "a section heading with no name") {
+			t.Errorf("%q: %v %v", input, mustJSON(t, v), err)
+		}
+	}
 	// An ini result is one object, so it has no streaming form.
 	if _, err := streamAll(t, src, "[a]\nk = 1\n"); err == nil {
 		t.Error("an ini parser offered a streaming form")

@@ -48,16 +48,17 @@ func (a *app) cmdList(args []string) int {
 		return code
 	}
 	asJSON, sources, asSchema := lo.asJSON, lo.sources, lo.asSchema
-	if o.fs.NArg() > 2 {
-		a.errorf("list: expected at most COMMAND and VARIANT, got %d arguments", o.fs.NArg())
+	args = o.fs.Args()
+	if len(args) > 2 {
+		a.errorf("list: expected at most COMMAND and VARIANT, got %d arguments", len(args))
 		return ExitUsage
 	}
-	if asSchema && (o.fs.NArg() != 2 || sources || asJSON) {
+	if asSchema && (sources || asJSON) {
 		a.errorf("list: --schema takes COMMAND VARIANT and nothing else: a schema describes one definition's output")
 		return ExitUsage
 	}
 	if sources {
-		if o.fs.NArg() > 0 {
+		if len(args) > 0 {
 			a.errorf("list: --sources takes no arguments")
 			return ExitUsage
 		}
@@ -71,17 +72,40 @@ func (a *app) cmdList(args []string) int {
 	// below, so the listing says how many rather than leaving the
 	// warnings above to be counted by hand.
 	defer a.reportSkipped(reg)
-	switch o.fs.NArg() {
+	args = splitDefinitionID(reg, args)
+	if asSchema && len(args) != 2 {
+		a.errorf("list: --schema takes COMMAND VARIANT and nothing else: a schema describes one definition's output")
+		return ExitUsage
+	}
+	switch len(args) {
 	case 0:
 		return a.listCommands(reg, asJSON)
 	case 1:
-		return a.listVariants(reg, o.fs.Arg(0), asJSON)
+		return a.listVariants(reg, args[0], asJSON)
 	default:
 		if asSchema {
-			return a.listSchema(reg, o.fs.Arg(0), o.fs.Arg(1))
+			return a.listSchema(reg, args[0], args[1])
 		}
-		return a.listDefinition(reg, o.fs.Arg(0), o.fs.Arg(1), asJSON)
+		return a.listDefinition(reg, args[0], args[1], asJSON)
 	}
+}
+
+// splitDefinitionID reads one argument written the way jz names a
+// definition everywhere else, df/gnu, as the command and the variant.
+// Only a command the registry has is split, so a path such as
+// /usr/bin/df or ./tools/df is still read as the program it names.
+func splitDefinitionID(reg *registry.Registry, args []string) []string {
+	if len(args) != 1 {
+		return args
+	}
+	command, variant, ok := strings.Cut(args[0], "/")
+	if !ok || command == "" || command == "." || command == ".." || variant == "" || strings.Contains(variant, "/") {
+		return args
+	}
+	if len(reg.Variants(command)) == 0 {
+		return args
+	}
+	return []string{command, variant}
 }
 
 // listSchema prints the JSON Schema of what one definition produces. It is

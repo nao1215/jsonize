@@ -231,6 +231,15 @@ scenarios:
           stdout:
             equals: |
               {"a":1}
+      # A csv heading is data: the key as written.
+      - run:
+          command: jz --format csv
+          stdin: "名前,In Stock,%CPU\n太郎,2,3\n"
+      - assert:
+          exit_code: 0
+          stdout:
+            equals: |
+              [{"名前":"太郎","In Stock":"2","%CPU":"3"}]
       # The value of an explicit key may open a list on the line of its ":".
       - run:
           command: jz --format yaml
@@ -311,6 +320,24 @@ scenarios:
           stdout: {empty: true}
           stderr:
             contains: "jz: yaml: line 2: .inf is not a number JSON can hold"
+      # A data format is read without a definition's field rules, so the
+      # options about them could change nothing and are refused.
+      - run:
+          command: jz --format json --raw
+          stdin: '{"a":1}'
+      - assert:
+          exit_code: 2
+          stdout: {empty: true}
+          stderr:
+            contains: "--raw leaves out the field rules of a definition, and standard input is read as json"
+      - run:
+          command: jz --format csv --assume-year 2025
+          stdin: "a\n1\n"
+      - assert:
+          exit_code: 2
+          stdout: {empty: true}
+          stderr:
+            contains: "--assume-year dates the timestamps a definition reads, and standard input is read as csv"
       # A list item on the line of its key is not YAML, not the string "- b".
       - run:
           command: jz --format yaml

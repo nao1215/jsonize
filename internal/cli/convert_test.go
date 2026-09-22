@@ -136,6 +136,10 @@ func TestTabularDataReadsTheSameEveryWay(t *testing.T) {
 		{"empty values", "csv", "a,b,c\n,,\n1,,3\n", `[{"a":"","b":"","c":""},{"a":"1","b":"","c":"3"}]`},
 		{"a leading zero", "csv", "a,b\nx,007\n", `[{"a":"x","b":"007"}]`},
 		{"a byte order mark", "csv", "\xEF\xBB\xBFa,b\n1,2\n", `[{"a":"1","b":"2"}]`},
+		// A heading is data too: it is the key as written, and only an
+		// empty one or a repeat is given a name of its own.
+		{"headings as written", "csv", "名前,In Stock,,a,a,%CPU\n1,2,3,4,5,6\n", `[{"名前":"1","In Stock":"2","column":"3","a":"4","a_2":"5","%CPU":"6"}]`},
+		{"tsv headings as written", "tsv", "Use%\tMounted on\n1\t/\n", `[{"Use%":"1","Mounted on":"/"}]`},
 		{"a tsv escape sequence", "tsv", "a\tb\n\x1b[1mx\x1b[0m\t007\n", `[{"a":"\u001b[1mx\u001b[0m","b":"007"}]`},
 		{"a tsv record of spaces", "tsv", "a\n \n", `[{"a":" "}]`},
 		// A record is bounded by the input limit, as a line of every other
@@ -212,6 +216,13 @@ func TestDataFileUsageErrors(t *testing.T) {
 		{"--type on a column the header lacks", "a\n1\n", []string{"--format", "csv", "--type", "b=int"}, `jz: csv/comma: line 1: no column "b"; the columns are "a"`},
 		{"--type on a column the header lacks, streamed", "a\n1\n", []string{"--format", "csv", "--stream", "--type", "b=int"}, `no column "b"`},
 		{"--type with --raw", "a\n1\n", []string{"--format", "csv", "--raw", "--type", "a=int"}, "--type and --raw cannot be used together"},
+		// A data format is read without a definition's field rules, so
+		// the options about them could change nothing and are refused.
+		{"--raw for a document", `{"a":1}`, []string{"--format", "json", "--raw"}, "--raw leaves out the field rules of a definition, and standard input is read as json"},
+		{"--raw for a csv", "a\n1\n", []string{"--format", "csv", "--raw"}, "and standard input is read as csv"},
+		{"--raw for a named file", "", []string{"--file", filepath.Join(h.home, "missing.jsonl"), "--raw"}, "is read as jsonl"},
+		{"--assume-year for a document", "a: 1\n", []string{"--format", "yaml", "--assume-year", "2024"}, "--assume-year dates the timestamps a definition reads, and standard input is read as yaml"},
+		{"--assume-zone for a csv", "a\n1\n", []string{"--format", "csv", "--assume-zone", "JST=+0900"}, "--assume-zone names the zone of the timestamps a definition reads, and standard input is read as csv"},
 	} {
 		if code := h.pipe(tt.input, tt.args...); code != ExitUsage || !strings.Contains(h.stderr.String(), tt.want) {
 			t.Errorf("%s: exit %d, stderr %q, want %q", tt.name, code, h.stderr.String(), tt.want)
@@ -294,10 +305,6 @@ func TestDataFileOutputOptions(t *testing.T) {
 	// written, as a stream of a command's output does; the status is 3.
 	if code := h.pipe("1\n2\nx\n3\n", "--format", "jsonl", "--stream"); code != ExitParse || h.stdout.String() != "1\n2\n" || strings.Count(h.stderr.String(), "jz: jsonl: line 3: the line is not one JSON value") != 1 {
 		t.Errorf("a stream that ends at a bad record: %d %q %s", code, h.stdout.String(), h.stderr.String())
-	}
-	// The options about a format's fields change nothing for a document.
-	if code := h.pipe("a: 1\n", "--format", "yaml", "--raw", "--assume-year", "2024"); code != ExitOK || strings.TrimSpace(h.stdout.String()) != `{"a":1}` {
-		t.Errorf("--raw and --assume-year: %d %s %s", code, h.stdout.String(), h.stderr.String())
 	}
 }
 

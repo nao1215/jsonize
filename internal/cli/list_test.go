@@ -62,6 +62,17 @@ func TestListNamesWhatItHasNoParserFor(t *testing.T) {
 	if code := h.run("list", "/usr/bin/df", "gnu"); code != ExitOK || !strings.Contains(h.stdout.String(), "df/gnu") {
 		t.Errorf("a path: %d %s", code, h.stdout.String())
 	}
+	// The command/variant name --explain and jz list print is taken for
+	// the two words, and a path is still a path.
+	if code := h.run("list", "df/gnu"); code != ExitOK || !strings.Contains(h.stdout.String(), "df/gnu") || !strings.Contains(h.stdout.String(), "description:") {
+		t.Errorf("df/gnu: %d %s %s", code, h.stdout.String(), h.stderr.String())
+	}
+	if code := h.run("list", "--schema", "df/gnu"); code != ExitOK || !strings.Contains(h.stdout.String(), `"$schema"`) {
+		t.Errorf("--schema df/gnu: %d %s %s", code, h.stdout.String(), h.stderr.String())
+	}
+	if code := h.run("list", "df/nosuch"); code != ExitSelect || !strings.Contains(h.stderr.String(), `parser "df" has no variant "nosuch"`) {
+		t.Errorf("df/nosuch: %d %s", code, h.stderr.String())
+	}
 	// A misspelt name gets the suggestion jz run and --parser give it.
 	for _, args := range [][]string{{"list", "dff"}, {"list", "dff", "gnu"}} {
 		if code := h.run(args...); code != ExitSelect || !strings.Contains(h.stderr.String(), "did you mean df?") {

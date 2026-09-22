@@ -1757,10 +1757,30 @@ func TestAssumptionsAboutTimestamps(t *testing.T) {
 		t.Errorf("with a zone: %#v", obj["timestamp"])
 	}
 
-	// An assumption no field in the chosen format asks for makes no
-	// difference to the output and is not an error.
+	// Detected from the text, the definition is not known until the input
+	// is read, so an assumption none of it uses is not an error.
 	if code := h.pipe(gnuDF, "--assume-year", "2025", "--assume-zone", "JST=+0900"); code != ExitOK {
 		t.Errorf("unused assumptions: %d %s", code, h.stderr.String())
+	}
+	// Named, the definitions are known before the input is read, and an
+	// assumption none of them can use is refused, as a key none of them
+	// can have is.
+	if code := h.pipe(gnuDF, "--parser", "df", "--assume-year", "2025"); code != ExitUsage || !strings.Contains(h.stderr.String(), "no definition of df prints one") {
+		t.Errorf("--assume-year for df: %d %s", code, h.stderr.String())
+	}
+	if code := h.pipe(who, "--parser", "who", "--assume-zone", "JST=+0900"); code != ExitUsage || !strings.Contains(h.stderr.String(), "no definition of who prints a timestamp with one") {
+		t.Errorf("--assume-zone for who: %d %s", code, h.stderr.String())
+	}
+	if code := h.pipe(date, "--parser", "date", "--assume-zone", "JST=+0900", "--assume-year", "2025"); code != ExitUsage || !strings.Contains(h.stderr.String(), "--assume-year") {
+		t.Errorf("--assume-year for date: %d %s", code, h.stderr.String())
+	}
+	// --raw leaves a timestamp as the text it was cut as, so an assumption
+	// beside it could change nothing, as a --type beside it could not.
+	if code := h.pipe(who, "--parser", "who", "--raw", "--assume-year", "2025"); code != ExitUsage || !strings.Contains(h.stderr.String(), "--assume-year and --raw cannot be used together") {
+		t.Errorf("--raw with --assume-year: %d %s", code, h.stderr.String())
+	}
+	if code := h.pipe(date, "--raw", "--assume-zone", "JST=+0900"); code != ExitUsage || !strings.Contains(h.stderr.String(), "--assume-zone and --raw cannot be used together") {
+		t.Errorf("--raw with --assume-zone: %d %s", code, h.stderr.String())
 	}
 	// One that cannot be read is.
 	for _, args := range [][]string{

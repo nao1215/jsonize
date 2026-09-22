@@ -38,6 +38,11 @@ func (r *run) parseINI(p *definition.Parse, fields map[string]*definition.Field,
 			continue
 		}
 		if heading, ok := iniSection(text); ok {
+			// The lines before the first heading are under the empty
+			// name, so a heading of none would merge into them.
+			if heading == "" {
+				return nil, r.errorf(l.num, "", "a section heading with no name: %q", truncate(text, 80))
+			}
 			name = heading
 			if existing, found := root.Get(name); found {
 				// A section written twice continues the first one, which

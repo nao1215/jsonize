@@ -73,14 +73,21 @@ the conversion. `jz list` adds `--json`,
 `jz completion bash|zsh` prints a shell completion script (see
 [Install](../install/#shell-completion)).
 
-Options that state two answers at once are refused with exit status 2
-before the input is opened or a command is started: `--pretty` with
-`--stream`, `--extract` with `--exclude`, `--define` with
-`--parser`, `--format` with `--parser` or `--define`, `--columns` and
-`--type` where there are no columns, and `--type` with `--raw`. So are,
-before the input is read or the command started, `--stream` when no
-variant of the named parser (or the `--define`) has a streaming form,
-and a key to `--extract` or `--exclude` that none of them can have.
+An option either changes the answer or is refused with exit status 2,
+before the input is opened or a command is started. Refused are the
+options that state two answers at once: `--pretty` with `--stream`,
+`--extract` with `--exclude`, `--define` with `--parser`, `--format`
+with `--parser` or `--define`, and `--type`, `--assume-year` or
+`--assume-zone` with `--raw`, which leaves out the field rules they
+act through. So are the
+ones that could change nothing: `--columns` and `--type` where there are
+no columns; `--raw`, `--assume-year` and `--assume-zone` for a data
+format, which is read without a definition's field rules; and, against
+every variant of the named parser (or the `--define`), `--stream` when
+none has a streaming form, a key to `--extract` or `--exclude` that none
+can have, and an assumption none has a timestamp for. Only when the
+definition is found from the text, and is not known until the input has
+been read, does an option it has no use for pass without a word.
 
 ## Data files
 
@@ -129,8 +136,10 @@ file as a command's output.
   (`jz --file rows.csv --columns id,name`).
   They are read as data rather than as a command's output: an escape
   sequence and a line of spaces are part of the values, an empty line
-  holds no row, and a csv definition in a user registry changes only
-  what `--parser csv` reads.
+  holds no row, the header line gives the keys as written (`名前`,
+  `In Stock`, `%CPU`; an empty heading is `column` and a repeat `a_2`),
+  and a csv definition in a user registry changes only what `--parser
+  csv` reads, which normalises the headings as a command's table is.
 - An LTSV value is everything after the first colon. A label is letters,
   digits and `_ . -`; a missing label, an empty field and a label given
   twice on one line are refused. An empty line holds no record, and a
@@ -215,8 +224,8 @@ $ jz --file sales.csv --type units=int --type price=float --type in_stock=bool
 - A value that is not the type is exit 3 with the line and the column
   (`csv/comma: line 3: field "units": cannot convert "four" to int`);
   with `--stream` the rows around it are written and the status is 3.
-- A column is named as it appears in the output: the header normalised
-  (`In Stock` is `in_stock`), a `--columns` name, or `column_2`. A column
+- A column is named as it appears in the output: the heading as written
+  (`In Stock`), a `--columns` name, or `column_2`. A column
   the header line (or the first record, for numbered columns) does not
   have is exit 2 before any row is written, and so is a column named
   twice or an unknown type. An empty input has no columns and is `[]`.
@@ -751,7 +760,8 @@ The rules left out are all of a field's: `type` and its layouts,
 a string field's `regex` and `unescape`. Every value is a string, except an empty
 aligned cell and a regex group that did not take part in the match, which
 stay null. It works with `--pretty`, `--stream`, `--extract` and
-`--exclude`, and `jz test` does not take it.
+`--exclude`, and `jz test` does not take it. A data format is read
+without a definition, so `--raw` with one is refused.
 
 ## HTTP headers
 
@@ -796,8 +806,10 @@ $ jz run --assume-zone JST=+0900 --assume-zone CET=+0100 date
   allowance: `Dec 31` read on January 2 is last year, and `Feb 29` goes
   back to the last year that had one.
 - `--assume-zone` takes `ABBR=+HHMM` and may be repeated.
-- An assumption no field in the chosen format asks for changes nothing
-  and is not an error.
+- An assumption no definition could use is refused: for a data format,
+  and when no variant of the named parser prints such a timestamp
+  (`jz run --assume-year now df`). When the definition is found from the
+  text, one it does not use changes nothing and is not an error.
 
 ## What a file path says
 
