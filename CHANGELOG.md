@@ -17,6 +17,13 @@ project follows [Semantic Versioning](https://semver.org/).
 - A server-side group in the cookbook: inspecting an uploaded PDF with `pdfinfo`, an archive with `7z l -slt`, a certificate with `openssl x509`, an upload's type with `file -i`, and recording what a backup run moved with `rsync --stats`, closing with the `jz run` exit-status contract and what converting the output does not do. The five commands run for real in the end-to-end suite on Linux, over paths holding a space and shell metacharacters, with their failure cases.
 - `group_separator` on an int or a float field: the one character a format writes between groups of three digits. It is removed only where the digits are grouped by it, so a value of another shape is an error rather than a number made by dropping characters. It is for a format that decides the character itself; a count printed with the separator of the user's locale still stays the string it was printed as.
 
+### Changed
+
+- An option either changes the answer or is refused with exit 2 before anything is read or run. `--raw`, `--assume-year` and `--assume-zone` are now refused for a data format (`--format` or a data file's extension), which is read without a definition's field rules and so could change nothing, and `--assume-year` and `--assume-zone` are refused when no variant of the named parser, or the `--define`, prints a timestamp they could complete (`jz run --assume-year now df`), the way a key to `--extract` none of them has already was. When the definition is found from the text, an option it has no use for still passes, since which definition reads the input is not known until it has been read.
+- The header line of a csv or tsv read as data (`--format csv`, a `.csv` file, `jz new k:=@x.csv`, `--stream`) is now the keys as written: `名前`, `In Stock` and `%CPU` stay as they are, where they became `column`, `in_stock` and `cpu_percent`. An empty heading is still `column` and a repeated one `a_2`. `--parser csv`, which reads with a definition, normalises the headings as before.
+- `jz list df/gnu` and `jz list --schema df/gnu` take the name `--explain` and `jz list` print for a definition. A path such as `/usr/bin/df` is still read as the program it names.
+- An ini section heading with no name (`[]`) is an error. It merged into the keys written before the first heading, which go under the empty name.
+
 ### Fixed
 
 - `apt-cache/depends` refused the line of a relationship ORed with the next one (` |PreDepends: coreutils-from-uutils`), so `jz run apt-cache depends coreutils` was exit 3. The mark is now read into `alternative`, which is true for such a relationship and false for the others.
