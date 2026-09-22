@@ -105,6 +105,21 @@ func (a *app) dataFormat(file, named, input string, out *outputOptions, sel *sel
 		a.errorf("--type converts the columns of a csv or a tsv, and %s is read as %s", input, format)
 		return "", "", "", ExitUsage
 	}
+	// A data format is read without a definition's field rules, so the
+	// options about them could change nothing, and an option that does
+	// nothing is refused rather than let pass for one that did.
+	switch {
+	case out.raw && len(sel.types) == 0: // with --type the pair is refused by name
+
+		a.errorf("--raw leaves out the field rules of a definition, and %s is read as %s, which has none", input, format)
+		return "", "", "", ExitUsage
+	case out.year != "":
+		a.errorf("--assume-year dates the timestamps a definition reads, and %s is read as %s, which reads none", input, format)
+		return "", "", "", ExitUsage
+	case len(out.zones) > 0:
+		a.errorf("--assume-zone names the zone of the timestamps a definition reads, and %s is read as %s, which reads none", input, format)
+		return "", "", "", ExitUsage
+	}
 	if datafile.Tabular(format) {
 		sel.tabular = true
 		out.keepEscapes = true

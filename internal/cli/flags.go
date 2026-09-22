@@ -294,12 +294,12 @@ func (f *outputOptions) engineOptions() engine.Options {
 	return opts
 }
 
-// assumptions reads --assume-year and --assume-zone. An assumption that
-// no field in the chosen format asks for is not an error: it makes no
-// difference to the output, and refusing it would mean a caller who
-// writes the same command line for several formats has to know which of
-// them prints a bare year. That is unlike a key named to --extract,
-// which changes the shape a consumer reads and so has to be right.
+// assumptions reads --assume-year and --assume-zone. Whether one is used
+// is judged as a key named to --extract is: refused before anything is
+// read when no definition that could read the input has a timestamp for
+// it (a data format, or every variant of a named parser), and left alone
+// when the definition is found from the text, since which one reads it
+// is not known until then.
 func (f *outputOptions) assumptions() (convert.Assumptions, error) {
 	var a convert.Assumptions
 	switch f.year {

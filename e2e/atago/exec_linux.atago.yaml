@@ -677,6 +677,14 @@ scenarios:
           command: jz run --assume-year now who
       - assert:
           exit_code: 0
+      # df prints no timestamp at all, which is known before it is run.
+      - run:
+          command: jz run --assume-year now df
+      - assert:
+          exit_code: 2
+          stdout: {empty: true}
+          stderr:
+            contains: "no definition of df prints one"
 
   # procps is on every ubuntu runner; sysstat is installed by CI.
   - name: jz run --stream vmstat writes the samples of an interval run
