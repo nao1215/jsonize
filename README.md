@@ -214,7 +214,7 @@ and 2025; other display languages and code pages are not checked.
 
 [jc](https://github.com/kellyjonbrazil/jc) converts command output, file formats and strings, and [jo](https://github.com/jpmens/jo) builds JSON from arguments. jz overlaps with part of each. Both are older, packaged by the major distributions, and the better choice for some jobs.
 
-| | jc 1.25.7 | jo 1.9 | jz v0.8.0 |
+| | jc 1.25.7 | jo 1.9 | jz v0.9.0 |
 |---|---|---|---|
 | Command output | 236 parsers in all, 19 of them streaming; named, or taken from the command name | no | 758 definitions under 280 names; detected from the text, generic formats need `--parser` |
 | Commands only one of jc and jz reads | `traceroute`, `iptables`, `dmidecode`, `wg`, `ufw`, `pacman`, ... | no | `systemd-*` tools, `lsfd`, `lsns`, `journalctl`, `sar`, `docker`, ... |
