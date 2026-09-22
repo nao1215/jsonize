@@ -56,7 +56,7 @@ func (r *run) parseCSV(p *definition.Parse, fields map[string]*definition.Field,
 			case p.Header.None:
 				cols = csvNumbered(len(row))
 			default:
-				cols, header, isHeader = csvColumns(p, row), row, true
+				cols, header, isHeader = csvColumns(p, row, r.opts.KeepNames), row, true
 			}
 			// The columns are checked once, where they are first known:
 			// at the header line, or at the first record of a csv whose
@@ -267,15 +267,19 @@ func csvNumbered(n int) []string {
 }
 
 // csvColumns names the columns: the ones the definition states, or the
-// first row normalised the way a table header is. Every name is unique,
-// so that every value of a row has a key of its own.
-func csvColumns(p *definition.Parse, header []string) []string {
+// first row, normalised the way a table header is unless keep says to
+// take it as written. Every name is unique, so that every value of a row
+// has a key of its own.
+func csvColumns(p *definition.Parse, header []string, keep bool) []string {
 	if len(p.Header.Columns) > 0 {
 		return p.Header.Columns
 	}
 	out := make([]string, len(header))
 	for i, cell := range header {
-		name := definition.NormalizeName(cell)
+		name := cell
+		if !keep {
+			name = definition.NormalizeName(cell)
+		}
 		if renamed, ok := p.Header.Rename[name]; ok {
 			name = renamed
 		}

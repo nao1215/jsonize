@@ -62,6 +62,13 @@ type Options struct {
 	// part of any value; in a data file such as a csv they are part of the
 	// value that holds them.
 	KeepEscapes bool
+	// KeepNames makes a csv's header line the keys as written. By default
+	// a heading is normalised the way a table's is ("Use%" is use_percent),
+	// which is what a command's output needs for keys a definition can
+	// name; in a data file the heading is data, and changing it would lose
+	// a name such as one written in Japanese. An empty heading and a
+	// repeated one are still given names of their own either way.
+	KeepNames bool
 }
 
 func (o Options) maxInput() int64 {
