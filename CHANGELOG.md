@@ -6,6 +6,10 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.9.0]
+
+This release adds sixteen definitions (the registry holds 280 commands through 758 definitions, from 270 and 742), makes an option either change the answer or be refused before anything is read, keeps the headings of a csv read as data as written, and fixes readers that returned JSON different from their input: YAML, JSON Lines, LTSV, local timestamps, folded lines and floats too small to hold.
+
 ### Added
 
 - `rsync --stats` (`rsync/stats`): the transfer counts rsync prints at the end of a run, with the summary lines that follow them, as one object of typed numbers. The counts by kind that rsync prints in parentheses are read as an object of their own, and a kind it leaves out is null rather than zero. `-v`, `-i`, `--progress` and two or more `-h` options print something else and are refused.
