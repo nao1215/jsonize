@@ -1774,6 +1774,14 @@ func TestAssumptionsAboutTimestamps(t *testing.T) {
 	if code := h.pipe(date, "--parser", "date", "--assume-zone", "JST=+0900", "--assume-year", "2025"); code != ExitUsage || !strings.Contains(h.stderr.String(), "--assume-year") {
 		t.Errorf("--assume-year for date: %d %s", code, h.stderr.String())
 	}
+	// --raw leaves a timestamp as the text it was cut as, so an assumption
+	// beside it could change nothing, as a --type beside it could not.
+	if code := h.pipe(who, "--parser", "who", "--raw", "--assume-year", "2025"); code != ExitUsage || !strings.Contains(h.stderr.String(), "--assume-year and --raw cannot be used together") {
+		t.Errorf("--raw with --assume-year: %d %s", code, h.stderr.String())
+	}
+	if code := h.pipe(date, "--raw", "--assume-zone", "JST=+0900"); code != ExitUsage || !strings.Contains(h.stderr.String(), "--assume-zone and --raw cannot be used together") {
+		t.Errorf("--raw with --assume-zone: %d %s", code, h.stderr.String())
+	}
 	// One that cannot be read is.
 	for _, args := range [][]string{
 		{"--assume-year", "20x5"}, {"--assume-year", "25"}, {"--assume-year", "later"},

@@ -77,7 +77,9 @@ An option either changes the answer or is refused with exit status 2,
 before the input is opened or a command is started. Refused are the
 options that state two answers at once: `--pretty` with `--stream`,
 `--extract` with `--exclude`, `--define` with `--parser`, `--format`
-with `--parser` or `--define`, and `--type` with `--raw`. So are the
+with `--parser` or `--define`, and `--type`, `--assume-year` or
+`--assume-zone` with `--raw`, which leaves out the field rules they
+act through. So are the
 ones that could change nothing: `--columns` and `--type` where there are
 no columns; `--raw`, `--assume-year` and `--assume-zone` for a data
 format, which is read without a definition's field rules; and, against
