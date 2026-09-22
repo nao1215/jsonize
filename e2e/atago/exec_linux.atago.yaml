@@ -315,16 +315,14 @@ scenarios:
               # one is the architecture everywhere.
               - { path: "$[0].name", equals: Architecture }
               - { path: "$[0].value", matches: "^\\S+$" }
-      # -p prints comma separated records. No definition reads that, and
-      # the label one must not be stretched over it.
+      # -p prints comma separated records, which lscpu/parsable reads; the
+      # label one must not be stretched over them.
       - run:
-          command: jz run lscpu -p
+          command: jz run --explain lscpu -p
       - assert:
-          exit_code: 4
-          stdout:
-            empty: true
+          exit_code: 0
           stderr:
-            contains: no lscpu variant matches this input
+            contains: "chose lscpu/parsable from embedded"
 
   # A report whose blocks repeat: each interface carries its own counter
   # tables, so the answer is one object per interface rather than a flat
@@ -2750,3 +2748,60 @@ scenarios:
             contains:
               - '{"name":"localforward","value":"8080 [localhost]:80"}'
               - '{"name":"localforward","value":"9090 [localhost]:90"}'
+
+  - name: lscpu -p names its columns from the header comment, whatever list -p was given
+    only: {os: linux}
+    steps:
+      - run:
+          command: jz run --explain lscpu -p=cpu,core,online
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose lscpu/parsable from embedded"
+          stdout:
+            json:
+              - { path: "$[0].cpu", equals: 0 }
+              - { path: "$[0].online", matches: "^[YN]$" }
+      - run:
+          command: jz run lscpu -p
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$[0].cpu", equals: 0 }
+              - { path: "$[0].socket", gte: 0 }
+
+  - name: gcc -print-search-dirs gives its search paths as arrays
+    only: {os: linux}
+    steps:
+      - run:
+          command: jz run gcc -print-search-dirs
+      - assert:
+          exit_code: 0
+          stdout:
+            json:
+              - { path: "$.install", matches: "^/" }
+              - { path: "$.programs[0]", matches: "^/" }
+              - { path: "$.libraries[0]", matches: "^/" }
+
+  - name: apt-cache rdepends lands on its own definition, and depends on its own
+    only: {os: linux}
+    steps:
+      - run:
+          command: jz run --explain apt-cache rdepends libc6
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose apt-cache/rdepends from embedded"
+          stdout:
+            json:
+              - { path: "$[0].package.name", equals: libc6 }
+      - run:
+          command: jz run --explain apt-cache depends coreutils
+      - assert:
+          exit_code: 0
+          stderr:
+            contains: "chose apt-cache/depends from embedded"
+          stdout:
+            json:
+              - { path: "$[0].package", equals: coreutils }

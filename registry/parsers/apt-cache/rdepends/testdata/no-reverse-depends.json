@@ -1,0 +1,40 @@
+[
+  {
+    "package": {
+      "virtual": false,
+      "name": "games-all"
+    },
+    "reverse_depends": []
+  },
+  {
+    "package": {
+      "virtual": false,
+      "name": "sl"
+    },
+    "reverse_depends": [
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "games-toys",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "junior-games-text",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      }
+    ]
+  },
+  {
+    "package": {
+      "virtual": false,
+      "name": "ubuntu-gnome-desktop"
+    },
+    "reverse_depends": []
+  }
+]

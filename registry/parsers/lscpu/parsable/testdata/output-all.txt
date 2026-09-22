@@ -1,0 +1,12 @@
+# The following is the parsable format, which can be fed to other
+# programs. Each different item in every column has an unique ID
+# starting usually from zero.
+# BOGOMIPS,CPU,Core,Socket,Cluster,Node,Book,DRAWER,,L1d,L1i,L2,L3,Polarization,Address,Configured,Online,Mhz,SCALMHZ%,Maxmhz,Minmhz,Modelname
+6000.29,0,0,0,,0,,,,0,0,0,0,U,,,Y,2000.0000,39%,5187.5000,625.0000,AMD RYZEN AI MAX+ 395 w/ Radeon 8060S
+6000.29,1,1,0,,0,,,,1,1,1,0,U,,,Y,2000.0000,39%,5187.5000,625.0000,AMD RYZEN AI MAX+ 395 w/ Radeon 8060S
+6000.29,2,2,0,,0,,,,2,2,2,0,U,,,Y,3543.0410,68%,5187.5000,625.0000,AMD RYZEN AI MAX+ 395 w/ Radeon 8060S
+6000.29,3,3,0,,0,,,,3,3,3,0,U,,,Y,2000.0000,39%,5187.5000,625.0000,AMD RYZEN AI MAX+ 395 w/ Radeon 8060S
+6000.29,4,4,0,,0,,,,4,4,4,0,U,,,Y,1782.2280,34%,5187.5000,625.0000,AMD RYZEN AI MAX+ 395 w/ Radeon 8060S
+6000.29,5,5,0,,0,,,,5,5,5,0,U,,,Y,2000.0000,39%,5187.5000,625.0000,AMD RYZEN AI MAX+ 395 w/ Radeon 8060S
+6000.29,6,6,0,,0,,,,6,6,6,0,U,,,Y,2000.0000,39%,5187.5000,625.0000,AMD RYZEN AI MAX+ 395 w/ Radeon 8060S
+6000.29,7,7,0,,0,,,,7,7,7,0,U,,,Y,2024.5389,39%,5187.5000,625.0000,AMD RYZEN AI MAX+ 395 w/ Radeon 8060S

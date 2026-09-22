@@ -1,0 +1,4 @@
+description: The 32-bit multilib, whose library list names the 32-bit directories.
+source: output of `gcc -m32 -print-search-dirs` (gcc 15) captured on Ubuntu 26.04 with LC_ALL=C
+os: linux
+args: ["-m32", "-print-search-dirs"]

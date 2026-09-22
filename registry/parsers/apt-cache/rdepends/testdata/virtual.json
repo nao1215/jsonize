@@ -1,0 +1,33 @@
+[
+  {
+    "package": {
+      "virtual": false,
+      "name": "sl"
+    },
+    "reverse_depends": [
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "games-toys",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "junior-games-text",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      }
+    ]
+  },
+  {
+    "package": {
+      "virtual": true,
+      "name": "mail-transport-agent"
+    },
+    "reverse_depends": []
+  }
+]

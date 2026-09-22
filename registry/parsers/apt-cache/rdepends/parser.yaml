@@ -1,0 +1,77 @@
+# `apt-cache rdepends PKG...` prints, for each package, its name, a
+# "Reverse Depends:" line and one indented line per package that has a
+# relationship to it (apt-private/private-depends.cc, ShowDepends). The
+# result is one object per package, with the list under it.
+#
+# An entry is opened by two spaces, or by " |" when the relationship is
+# one alternative of an or-group other than the last one in the package
+# that declares it. The same package can be listed more than once: once
+# per relationship and per version apt knows, and the kind of the
+# relationship is printed only when APT::Cache::ShowDependencyType is set
+# (it is off for rdepends by default), so repeats are kept as printed.
+# APT::Cache::ShowVersion adds the version constraint in brackets, which
+# is read into an operator and a version.
+#
+# Under an entry apt prints, indented by four spaces, the other packages
+# that satisfy the same relationship (another architecture of the
+# package asked about, a provider). They are joined onto the entry and
+# read into other_targets.
+#
+# --recurse repeats the block for every package listed, and --installed
+# leaves out the entries that are not installed; neither changes the
+# shape. A package with no reverse relationships is its name and the
+# heading alone, and its list is empty. A virtual package named on the
+# command line is printed last in angle brackets with no heading and no
+# list: apt prints nothing about it, so its list is empty too, and
+# `virtual` says why.
+format: 1
+command: apt-cache
+variant: rdepends
+description: apt-cache rdepends, the packages that refer to a package
+metadata:
+  tags: [linux, debian, package]
+  compatible: [APT]
+  references:
+    - https://manpages.debian.org/apt-cache
+    - https://salsa.debian.org/apt-team/apt/-/blob/main/apt-private/private-depends.cc
+detect:
+  args:
+    any: ["rdepends"]
+  signature:
+    all:
+      # The heading is not translated in the source; a package name is
+      # the characters Debian allows, with the architecture after a colon
+      # for a foreign one.
+      - '\A[a-z0-9][a-z0-9+.-]*(?::[a-z0-9-]+)?[ \t]*\nReverse Depends:[ \t]*$'
+input:
+  fold: '^    \S'
+parse:
+  type: records
+  start: '^<?[a-z0-9][a-z0-9+.-]*(?::[a-z0-9-]+)?>?[ \t]*$'
+  parts:
+    - name: package
+      select: {limit: 1}
+      parse:
+        type: regex
+        each: input
+        patterns:
+          - pattern: '\A<(?P<name>[a-z0-9][a-z0-9+.-]*(?::[a-z0-9-]+)?)>[ \t]*\z'
+            values: {virtual: "true"}
+          - pattern: '\A(?P<name>[a-z0-9][a-z0-9+.-]*(?::[a-z0-9-]+)?)[ \t]*\z'
+            values: {virtual: "false"}
+      fields:
+        name: {required: true}
+        virtual: {type: bool}
+    - name: reverse_depends
+      select: {after: '^Reverse Depends:[ \t]*$'}
+      parse:
+        type: regex
+        # The relationship kind is a capitalised word (Depends, Breaks)
+        # and a package name is lower case, so the two cannot be taken
+        # for each other. The kind is translated by apt in another
+        # locale; jz run sets LC_ALL=C.
+        pattern: '^ (?P<alternative>[| ])(?:(?P<relation>[A-Z][A-Za-z-]*): )?(?P<package><?[a-z0-9][a-z0-9+.-]*(?::[a-z0-9-]+)?>?)(?: \((?P<operator>[<>=!]+) (?P<version>[^ ()]+)\))?(?P<other_targets>(?: [a-z0-9][a-z0-9+.-]*(?::[a-z0-9-]+)?)*)[ \t]*$'
+      fields:
+        alternative: {type: bool, true_values: ["|"], false_values: [" ", ""]}
+        package: {required: true}
+        other_targets: {type: array, split: " ", trim_prefix: " "}

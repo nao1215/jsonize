@@ -1,0 +1,98 @@
+[
+  {
+    "cpu": 0,
+    "core": 0,
+    "socket": 0,
+    "cluster": null,
+    "book": null,
+    "drawer": null,
+    "node": 0,
+    "address": null,
+    "configured": null,
+    "polarization": "U"
+  },
+  {
+    "cpu": 1,
+    "core": 1,
+    "socket": 0,
+    "cluster": null,
+    "book": null,
+    "drawer": null,
+    "node": 0,
+    "address": null,
+    "configured": null,
+    "polarization": "U"
+  },
+  {
+    "cpu": 2,
+    "core": 2,
+    "socket": 0,
+    "cluster": null,
+    "book": null,
+    "drawer": null,
+    "node": 0,
+    "address": null,
+    "configured": null,
+    "polarization": "U"
+  },
+  {
+    "cpu": 3,
+    "core": 3,
+    "socket": 0,
+    "cluster": null,
+    "book": null,
+    "drawer": null,
+    "node": 0,
+    "address": null,
+    "configured": null,
+    "polarization": "U"
+  },
+  {
+    "cpu": 4,
+    "core": 4,
+    "socket": 0,
+    "cluster": null,
+    "book": null,
+    "drawer": null,
+    "node": 0,
+    "address": null,
+    "configured": null,
+    "polarization": "U"
+  },
+  {
+    "cpu": 5,
+    "core": 5,
+    "socket": 0,
+    "cluster": null,
+    "book": null,
+    "drawer": null,
+    "node": 0,
+    "address": null,
+    "configured": null,
+    "polarization": "U"
+  },
+  {
+    "cpu": 6,
+    "core": 6,
+    "socket": 0,
+    "cluster": null,
+    "book": null,
+    "drawer": null,
+    "node": 0,
+    "address": null,
+    "configured": null,
+    "polarization": "U"
+  },
+  {
+    "cpu": 7,
+    "core": 7,
+    "socket": 0,
+    "cluster": null,
+    "book": null,
+    "drawer": null,
+    "node": 0,
+    "address": null,
+    "configured": null,
+    "polarization": "U"
+  }
+]

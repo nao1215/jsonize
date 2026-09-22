@@ -1,0 +1,16 @@
+	id 100, type PipeWire:Interface:Link/3
+ 		object.serial = "6916"
+ 		factory.id = "21"
+ 		client.id = "33"
+ 		link.output.port = "83"
+ 		link.input.port = "102"
+ 		link.output.node = "63"
+ 		link.input.node = "99"
+	id 114, type PipeWire:Interface:Link/3
+ 		object.serial = "6917"
+ 		factory.id = "21"
+ 		client.id = "33"
+ 		link.output.port = "84"
+ 		link.input.port = "103"
+ 		link.output.node = "63"
+ 		link.input.node = "99"

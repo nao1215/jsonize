@@ -1,0 +1,74 @@
+[
+  {
+    "cpu": 0,
+    "node": 0,
+    "mhz": "2702.5959",
+    "online": "Y",
+    "maxmhz": "5187.5000",
+    "minmhz": "625.0000",
+    "modelname": "AMD RYZEN AI MAX+ 395 w/ Radeon 8060S"
+  },
+  {
+    "cpu": 1,
+    "node": 0,
+    "mhz": "3550.2590",
+    "online": "Y",
+    "maxmhz": "5187.5000",
+    "minmhz": "625.0000",
+    "modelname": "AMD RYZEN AI MAX+ 395 w/ Radeon 8060S"
+  },
+  {
+    "cpu": 2,
+    "node": 0,
+    "mhz": "1784.6010",
+    "online": "Y",
+    "maxmhz": "5187.5000",
+    "minmhz": "625.0000",
+    "modelname": "AMD RYZEN AI MAX+ 395 w/ Radeon 8060S"
+  },
+  {
+    "cpu": 3,
+    "node": 0,
+    "mhz": "2000.0000",
+    "online": "Y",
+    "maxmhz": "5187.5000",
+    "minmhz": "625.0000",
+    "modelname": "AMD RYZEN AI MAX+ 395 w/ Radeon 8060S"
+  },
+  {
+    "cpu": 4,
+    "node": 0,
+    "mhz": "2950.7000",
+    "online": "Y",
+    "maxmhz": "5187.5000",
+    "minmhz": "625.0000",
+    "modelname": "AMD RYZEN AI MAX+ 395 w/ Radeon 8060S"
+  },
+  {
+    "cpu": 5,
+    "node": 0,
+    "mhz": "1786.2980",
+    "online": "Y",
+    "maxmhz": "5187.5000",
+    "minmhz": "625.0000",
+    "modelname": "AMD RYZEN AI MAX+ 395 w/ Radeon 8060S"
+  },
+  {
+    "cpu": 6,
+    "node": 0,
+    "mhz": "2694.1721",
+    "online": "Y",
+    "maxmhz": "5187.5000",
+    "minmhz": "625.0000",
+    "modelname": "AMD RYZEN AI MAX+ 395 w/ Radeon 8060S"
+  },
+  {
+    "cpu": 7,
+    "node": 0,
+    "mhz": "2000.0000",
+    "online": "Y",
+    "maxmhz": "5187.5000",
+    "minmhz": "625.0000",
+    "modelname": "AMD RYZEN AI MAX+ 395 w/ Radeon 8060S"
+  }
+]

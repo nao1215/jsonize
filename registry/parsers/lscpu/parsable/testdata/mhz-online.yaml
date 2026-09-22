@@ -1,0 +1,4 @@
+description: A listing asked for with seven columns, among them the current and limit frequencies, the online flag and the model name, which holds spaces and a slash.
+source: the prose, the header and rows 1 to 8 of `lscpu -p=cpu,node,mhz,online,maxmhz,minmhz,modelname -a` captured on Ubuntu 26.04 (util-linux 2.41.3) with LC_ALL=C
+os: linux
+args: ["-p=cpu,node,mhz,online,maxmhz,minmhz,modelname", "-a"]

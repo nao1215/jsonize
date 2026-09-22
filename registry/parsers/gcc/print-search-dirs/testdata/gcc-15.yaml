@@ -1,0 +1,4 @@
+description: GCC 15, where the program list names one directory twice.
+source: output of `gcc -print-search-dirs` (gcc 15) captured on Ubuntu 26.04 with LC_ALL=C
+os: linux
+args: ["-print-search-dirs"]

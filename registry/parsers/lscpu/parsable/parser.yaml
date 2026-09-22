@@ -1,0 +1,89 @@
+# `lscpu -p` prints three lines of prose and a fourth comment line that
+# names the columns, then one comma separated row per CPU. Which columns
+# appear depends on the list given to -p (`-p=cpu,node,mhz`, `-p=+MHZ`,
+# `--output-all`), so the names come from that last comment line: the
+# prose is ignored and the csv reader takes the line after it as its
+# header, where "# CPU" is normalised to "cpu".
+#
+# lscpu does not quote or escape a value (util-linux 2.41.3,
+# sys-utils/lscpu.c, print_cpus_parsable). A model name holding a comma
+# would give its row more cells than the header names, which is refused
+# rather than read.
+#
+# Without a list lscpu prints its old compatible form: each cache level
+# is a column of its own (L1d, L1i, L2, L3) and an extra comma stands
+# before them, which gives a column with an empty name. That column is
+# always empty and is kept as "column", null. With a list the cache
+# levels share one column whose name and value join the levels with
+# colons ("L1d:L1i:L2:L3", "0:0:0:0"); that value stays a string.
+#
+# A CPU that lacks one of the caches others have has the missing id left
+# out rather than printed empty, so in the compatible form the ids after
+# it move one column to the left (get_cell_data, COL_CPU_CACHE). The text
+# cannot say which level is missing, so every cache column named after a
+# level is required: such a row is refused instead of being read with an
+# L3 id under L2. An offline CPU listed with -a may lack its caches the
+# same way and is then refused as well (inferred from the source, not
+# verified: this machine has no offline CPU).
+#
+# Only the ids are converted. They are printed with %d or not at all;
+# with -y (physical ids) the topology columns print a dash for an id the
+# kernel does not report, and that is null like an empty cell. The
+# frequencies, the online and configured flags (Y or N, which lscpu
+# passes through gettext) and the rest stay as printed.
+format: 1
+command: lscpu
+variant: parsable
+description: lscpu -p, one comma separated row per logical CPU
+metadata:
+  tags: [linux, cpu, util-linux]
+  compatible: [util-linux]
+  references:
+    - https://man7.org/linux/man-pages/man1/lscpu.1.html
+    - https://github.com/util-linux/util-linux/blob/master/sys-utils/lscpu.c
+detect:
+  os: [linux]
+  signature:
+    all:
+      # The prose as the C locale prints it, then the column names: the
+      # names lscpu uses are letters, digits, "%" (SCALMHZ%) and the
+      # colons of the cache column, and the compatible form leaves one
+      # empty. "starting from zero" without "usually" is the wording of
+      # older releases as remembered, not verified.
+      - '\A# The following is the parsable format, which can be fed to other\n# programs\. Each different item in every column has an unique ID\n# starting (?:usually )?from zero\.\n# [A-Za-z][A-Za-z0-9%:]*(?:,[A-Za-z0-9%:]*)*[ \t]*$'
+input:
+  ignore:
+    - '^# The following is the parsable format, which can be fed to other$'
+    - '^# programs\. Each different item in every column has an unique ID$'
+    - '^# starting (?:usually )?from zero\.$'
+parse:
+  type: csv
+fields:
+  cpu: {type: int, required: true}
+  core: {type: int, null_if: ["", "-"]}
+  socket: {type: int, null_if: ["", "-"]}
+  cluster: {type: int, null_if: ["", "-"]}
+  book: {type: int, null_if: ["", "-"]}
+  drawer: {type: int, null_if: ["", "-"]}
+  node: {type: int, null_if: [""]}
+  address: {type: int, null_if: [""]}
+  # The cache levels of the compatible form; see above for why each is
+  # required.
+  l1: {type: int, required: true}
+  l1d: {type: int, required: true}
+  l1i: {type: int, required: true}
+  l2: {type: int, required: true}
+  l3: {type: int, required: true}
+  l4: {type: int, required: true}
+  column: {null_if: [""]}
+  l1d_l1i_l2_l3: {null_if: [""]}
+  l1d_l1i_l2: {null_if: [""]}
+  online: {null_if: [""]}
+  configured: {null_if: [""]}
+  polarization: {null_if: [""]}
+  mhz: {null_if: [""]}
+  scalmhz_percent: {null_if: [""]}
+  maxmhz: {null_if: [""]}
+  minmhz: {null_if: [""]}
+  bogomips: {null_if: [""]}
+  modelname: {null_if: [""]}

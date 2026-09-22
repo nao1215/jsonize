@@ -1,0 +1,4 @@
+description: Every column lscpu knows, including the scaled frequency with its percent sign and the BogoMIPS value.
+source: the prose, the header and rows 1 to 8 of `lscpu --parse --output-all` captured on Ubuntu 26.04 (util-linux 2.41.3) with LC_ALL=C
+os: linux
+args: ["--parse", "--output-all"]

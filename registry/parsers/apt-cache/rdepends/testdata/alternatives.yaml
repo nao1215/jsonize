@@ -1,0 +1,4 @@
+description: A package many others refer to, some of them as one alternative of an or-group, marked with a bar.
+source: output of `apt-cache rdepends zenity` captured on Ubuntu 26.04 (APT 3.2.0) with LC_ALL=C
+os: linux
+args: ["rdepends", "zenity"]

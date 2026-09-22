@@ -1,0 +1,658 @@
+[
+  {
+    "package": {
+      "virtual": false,
+      "name": "zenity"
+    },
+    "reverse_depends": [
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "budgie-core",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": true,
+        "relation": null,
+        "package": "snapd",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "ubuntu-budgie-desktop-minimal",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "ubuntu-budgie-desktop",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "mutter-18-tests",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "budgie-kangaroo-applet",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "budgie-dropby-applet",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "budgie-countdown-applet",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "budgie-core",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "ubuntu-desktop-minimal",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "ubuntu-desktop",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": true,
+        "relation": null,
+        "package": "snapd",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "gdm3",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": true,
+        "relation": null,
+        "package": "steam-installer",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": true,
+        "relation": null,
+        "package": "rtcw",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "protontricks",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": true,
+        "relation": null,
+        "package": "pokemmo-installer",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": true,
+        "relation": null,
+        "package": "opentyrian",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "openrct2",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": true,
+        "relation": null,
+        "package": "mythtv-frontend",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": true,
+        "relation": null,
+        "package": "mythtv-backend",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": true,
+        "relation": null,
+        "package": "augustus-game",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "xubuntu-desktop",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": true,
+        "relation": null,
+        "package": "winetricks",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": true,
+        "relation": null,
+        "package": "wifi-qr",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "videogen",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "vanilla-gnome-desktop",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "ukwm",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "ubuntustudio-menu",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "ubuntukylin-desktop-minimal",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "ubuntukylin-desktop",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "ubuntu-unity-desktop",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "ubuntu-mate-welcome",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "ubuntu-mate-desktop",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "ubuntu-mate-core",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "ubuntu-budgie-desktop-minimal",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "ubuntu-budgie-desktop",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "thonny",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "steam-libs",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "ssh-agent-filter",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": true,
+        "relation": null,
+        "package": "ssft",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": true,
+        "relation": null,
+        "package": "squeak-vm",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "renpy",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "pytrainer",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "pluma",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "pekwm",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "mutter-18-tests",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "muffin",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "marco",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "lightdm-remote-session-x2go",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": true,
+        "relation": null,
+        "package": "libsequoia-octopus-librnp",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "libreoffice-dmaths",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": true,
+        "relation": null,
+        "package": "libayatana-common0",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "junior-desktop",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "jack-capture",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": true,
+        "relation": null,
+        "package": "ioquake3",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "ink-generator",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "indicator-session",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "imsprog",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "gnome-core",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "gmtkbabel",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "gfsview-batch",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "geeqie",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "gedit",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "fritzing",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": true,
+        "relation": null,
+        "package": "fcitx-ui-classic",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "clipit",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "cinnamon-desktop-environment",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "chkboot",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "budgie-welcome",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "budgie-kangaroo-applet",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "budgie-dropby-applet",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "budgie-countdown-applet",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "debian-goodies",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "ayatana-indicator-session",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "autokey-gtk",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "ubuntu-desktop-minimal",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "ubuntu-desktop",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": true,
+        "relation": null,
+        "package": "snapd",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": true,
+        "relation": null,
+        "package": "im-config",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      },
+      {
+        "alternative": false,
+        "relation": null,
+        "package": "gdm3",
+        "operator": null,
+        "version": null,
+        "other_targets": []
+      }
+    ]
+  }
+]

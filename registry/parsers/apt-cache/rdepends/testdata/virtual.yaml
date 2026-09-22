@@ -1,0 +1,4 @@
+description: A virtual package named beside a real one, printed last in angle brackets with no heading.
+source: output of `apt-cache rdepends sl mail-transport-agent` captured on Ubuntu 26.04 (APT 3.2.0) with LC_ALL=C
+os: linux
+args: ["rdepends", "sl", "mail-transport-agent"]

@@ -1,0 +1,4 @@
+description: Offline CPUs asked for on a machine that has none, so the header is printed and no row.
+source: output of `lscpu --parse=+MHZ,online -c` captured on Ubuntu 26.04 (util-linux 2.41.3) with LC_ALL=C
+os: linux
+args: ["--parse=+MHZ,online", "-c"]

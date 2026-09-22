@@ -1,0 +1,4 @@
+source: "pw-cli ls Client on Ubuntu 26.04 with PipeWire 1.6.2, LC_ALL=C"
+description: Clients, some with an empty application name, which stays an empty string.
+os: linux
+args: ["ls", "Client"]

@@ -15,6 +15,9 @@
     "node": {
       "type": "object",
       "properties": {
+        "alternative": {
+          "type": "boolean"
+        },
         "relation": {
           "type": "string"
         },

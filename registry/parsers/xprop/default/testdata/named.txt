@@ -1,0 +1,5 @@
+_NET_ACTIVE_WINDOW(WINDOW): window id # 0x200000
+WM_NAME:  not found.
+_EXAMPLE_NO_SUCH_ATOM:  no such atom on any window.
+_NET_DESKTOP_GEOMETRY(CARDINAL) = 2560, 1080
+_NET_DESKTOP_NAMES(UTF8_STRING) = "Desktop 1"

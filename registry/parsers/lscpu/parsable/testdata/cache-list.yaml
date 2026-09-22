@@ -1,0 +1,4 @@
+description: The cache column asked for by name, where the levels share one column joined with colons.
+source: the prose, the header and rows 1 to 8 of `lscpu -p=cpu,cache,core -b` captured on Ubuntu 26.04 (util-linux 2.41.3) with LC_ALL=C
+os: linux
+args: ["-p=cpu,cache,core", "-b"]

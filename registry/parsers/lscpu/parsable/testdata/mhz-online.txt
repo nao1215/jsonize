@@ -1,0 +1,12 @@
+# The following is the parsable format, which can be fed to other
+# programs. Each different item in every column has an unique ID
+# starting usually from zero.
+# CPU,Node,Mhz,Online,Maxmhz,Minmhz,Modelname
+0,0,2702.5959,Y,5187.5000,625.0000,AMD RYZEN AI MAX+ 395 w/ Radeon 8060S
+1,0,3550.2590,Y,5187.5000,625.0000,AMD RYZEN AI MAX+ 395 w/ Radeon 8060S
+2,0,1784.6010,Y,5187.5000,625.0000,AMD RYZEN AI MAX+ 395 w/ Radeon 8060S
+3,0,2000.0000,Y,5187.5000,625.0000,AMD RYZEN AI MAX+ 395 w/ Radeon 8060S
+4,0,2950.7000,Y,5187.5000,625.0000,AMD RYZEN AI MAX+ 395 w/ Radeon 8060S
+5,0,1786.2980,Y,5187.5000,625.0000,AMD RYZEN AI MAX+ 395 w/ Radeon 8060S
+6,0,2694.1721,Y,5187.5000,625.0000,AMD RYZEN AI MAX+ 395 w/ Radeon 8060S
+7,0,2000.0000,Y,5187.5000,625.0000,AMD RYZEN AI MAX+ 395 w/ Radeon 8060S

@@ -1,0 +1,6 @@
+install: /usr/lib/gcc/x86_64-linux-gnu/15/
+programs: =/usr/libexec/gcc/x86_64-linux-gnu/15/:/usr/lib/gcc/x86_64-linux-gnu/15/
+libraries: =/usr/lib/gcc/x86_64-linux-gnu/15/:/lib/x86_64-linux-gnu/:/usr/lib/
++ make -j8
+cc -O2 -c main.c -o main.o
+cc main.o -o app

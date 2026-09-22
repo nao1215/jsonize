@@ -2909,3 +2909,38 @@ scenarios:
               - { path: "$.display.direct_rendering", equals: true }
               - { path: "$.sections[0].heading.extension", equals: GLX_MESA_query_renderer }
               - { path: "$.sections[1].heading.title", equals: Memory info }
+
+  # The runners have neither PipeWire nor a display, so these are read
+  # from output captured on a desktop.
+  - name: pw-cli ls is read as one record per PipeWire object
+    steps:
+      - fixture:
+          file: pw.txt
+          from: "${specdir}/testdata/pw-cli-ls-link.txt"
+      - run:
+          command: jz --file pw.txt
+      - assert:
+          exit_code: 0
+          stderr: {empty: true}
+          stdout:
+            json:
+              - { path: "$[0].object.id", equals: 100 }
+              - { path: "$[0].object.version", equals: 3 }
+              - { path: "$[0].properties['link.input.node']", equals: "99" }
+
+  - name: xprop keeps a property it could not find as a record with its error
+    steps:
+      - fixture:
+          file: xprop.txt
+          from: "${specdir}/testdata/xprop-named.txt"
+      - run:
+          command: jz --file xprop.txt
+      - assert:
+          exit_code: 0
+          stderr: {empty: true}
+          stdout:
+            json:
+              - { path: "$", length: 5 }
+              - { path: "$[1].property.name", equals: WM_NAME }
+              - { path: "$[1].property.error", equals: not found }
+              - { path: "$[3].property.value", equals: "2560, 1080" }

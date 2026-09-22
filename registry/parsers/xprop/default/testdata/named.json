@@ -1,0 +1,52 @@
+[
+  {
+    "property": {
+      "separator": ":",
+      "name": "_NET_ACTIVE_WINDOW",
+      "type": "WINDOW",
+      "value": "window id # 0x200000",
+      "error": null
+    },
+    "lines": []
+  },
+  {
+    "property": {
+      "separator": null,
+      "name": "WM_NAME",
+      "type": null,
+      "value": null,
+      "error": "not found"
+    },
+    "lines": []
+  },
+  {
+    "property": {
+      "separator": null,
+      "name": "_EXAMPLE_NO_SUCH_ATOM",
+      "type": null,
+      "value": null,
+      "error": "no such atom on any window"
+    },
+    "lines": []
+  },
+  {
+    "property": {
+      "separator": "=",
+      "name": "_NET_DESKTOP_GEOMETRY",
+      "type": "CARDINAL",
+      "value": "2560, 1080",
+      "error": null
+    },
+    "lines": []
+  },
+  {
+    "property": {
+      "separator": "=",
+      "name": "_NET_DESKTOP_NAMES",
+      "type": "UTF8_STRING",
+      "value": "\"Desktop 1\"",
+      "error": null
+    },
+    "lines": []
+  }
+]

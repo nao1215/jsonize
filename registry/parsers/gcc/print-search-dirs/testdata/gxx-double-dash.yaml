@@ -1,0 +1,4 @@
+description: The C++ driver with the two-dash spelling, which prints the same three lines as gcc.
+source: output of `g++ --print-search-dirs` (g++ 15) captured on Ubuntu 26.04 with LC_ALL=C
+os: linux
+args: ["--print-search-dirs"]

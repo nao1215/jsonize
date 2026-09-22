@@ -1,0 +1,4 @@
+description: The relationship kind and the version constraint printed through two configuration options.
+source: output of `apt-cache rdepends -o APT::Cache::ShowDependencyType=true -o APT::Cache::ShowVersion=true libc-dev-bin sl` captured on Ubuntu 26.04 (APT 3.2.0) with LC_ALL=C
+os: linux
+args: ["rdepends", "-o", "APT::Cache::ShowDependencyType=true", "-o", "APT::Cache::ShowVersion=true", "libc-dev-bin", "sl"]
