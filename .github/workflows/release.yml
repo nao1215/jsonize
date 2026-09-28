@@ -4,13 +4,8 @@ on:
   push:
     tags: ["v*"]
 
-# contents: create the GitHub Release and upload its files.
-# id-token: keyless cosign signing and build provenance through GitHub OIDC.
-# attestations: publish the build provenance.
 permissions:
-  contents: write
-  id-token: write
-  attestations: write
+  contents: read
 
 jobs:
   # The archives of the tag are built and checked, and the Windows ones
@@ -24,6 +19,13 @@ jobs:
   goreleaser:
     needs: smoke
     runs-on: ubuntu-latest
+    # contents: create the GitHub Release and upload its files.
+    # id-token: keyless cosign signing and build provenance through GitHub OIDC.
+    # attestations: publish the build provenance.
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
