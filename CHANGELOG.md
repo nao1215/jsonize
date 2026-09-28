@@ -6,6 +6,10 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Changed
+
+- Release artifacts now ship with SLSA build provenance as a release asset (`multiple.intoto.jsonl`), which `slsa-verifier verify-artifact` checks against a downloaded archive without the GitHub CLI. The release run verifies every published archive against it before finishing. The GitHub attestation checked by `gh attestation verify` is still published.
+
 ## [0.9.0]
 
 This release adds sixteen definitions (the registry holds 280 commands through 758 definitions, from 270 and 742), makes an option either change the answer or be refused before anything is read, keeps the headings of a csv read as data as written, and fixes readers that returned JSON different from their input: YAML, JSON Lines, LTSV, local timestamps, folded lines and floats too small to hold.

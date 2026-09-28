@@ -63,6 +63,18 @@ cosign verify-blob \
   checksums.txt
 ```
 
+Releases after v0.9.0 also attach SLSA build provenance to the release
+as `multiple.intoto.jsonl`, so a downloaded archive can be checked
+against that file with
+[slsa-verifier](https://github.com/slsa-framework/slsa-verifier):
+
+```sh
+slsa-verifier verify-artifact jsonize_<version>_linux_amd64.tar.gz \
+  --provenance-path multiple.intoto.jsonl \
+  --source-uri github.com/nao1215/jsonize \
+  --source-tag v<version>
+```
+
 Each archive has an SPDX software bill of materials beside it,
 `<archive>.sbom.json`, listing the Go modules and the Go standard library
 built into `jz`.
