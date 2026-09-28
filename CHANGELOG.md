@@ -6,6 +6,10 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.9.1]
+
+A release with no change to what jz reads or writes. The release assets gain SLSA build provenance, and the README and the comparison page name v0.9.1 as the version they describe.
+
 ### Changed
 
 - Release artifacts now ship with SLSA build provenance as a release asset (`multiple.intoto.jsonl`), which `slsa-verifier verify-artifact` checks against a downloaded archive without the GitHub CLI. The release run verifies every published archive against it before finishing. The GitHub attestation checked by `gh attestation verify` is still published.
