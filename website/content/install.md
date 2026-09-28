@@ -64,7 +64,8 @@ cosign verify-blob \
 ```
 
 Releases after v0.9.0 also attach SLSA build provenance to the release
-as `multiple.intoto.jsonl`, so an archive can be checked offline with
+as `multiple.intoto.jsonl`, so a downloaded archive can be checked
+against that file with
 [slsa-verifier](https://github.com/slsa-framework/slsa-verifier):
 
 ```sh
