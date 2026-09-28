@@ -14,6 +14,7 @@
 [![Go Reference](https://pkg.go.dev/badge/github.com/nao1215/jsonize.svg)](https://pkg.go.dev/github.com/nao1215/jsonize)
 ![GitHub](https://img.shields.io/github/license/nao1215/jsonize)
 ![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/nao1215/jsonize/total)
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/nao1215/jsonize/badge)](https://scorecard.dev/viewer/?uri=github.com/nao1215/jsonize)
 
 
 # jsonize
