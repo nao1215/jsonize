@@ -3,7 +3,7 @@
 BIN      := jz
 VERSION  ?= $(shell git describe --tags --always --dirty 2>/dev/null || echo dev)
 LDFLAGS  := -s -w -X github.com/nao1215/jsonize/internal/buildinfo.Version=$(VERSION)
-GOLANGCI := v2.13.2
+GOLANGCI := v2.14.0
 PKGS     := ./...
 
 .PHONY: build
