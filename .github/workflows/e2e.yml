@@ -75,7 +75,7 @@ jobs:
           go mod init e2e-atago-build
           go get github.com/nao1215/atago@v0.25.0
           GOOS=freebsd GOARCH=amd64 go build -o "${GITHUB_WORKSPACE}/bin/atago" github.com/nao1215/atago
-      - uses: vmactions/freebsd-vm@8b0f1a8fc0ea0def307835c258940ca358fe6480 # v1.5.6
+      - uses: vmactions/freebsd-vm@a2f9a41fa97f6848b8c3b791087dfcdaa5b473ff # v1.5.8
         with:
           copyback: false
           # bash for the runner script, go for the jz and the helper the
