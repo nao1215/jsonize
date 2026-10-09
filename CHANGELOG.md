@@ -6,6 +6,10 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Changed
+
+- The Go toolchain the module asks for is 1.26.9 (was 1.26.6), so a build from source picks up the standard library fixes for GO-2026-6607, GO-2026-6608, GO-2026-6617 and the other advisories published with Go 1.26.9 that reach jz's code. Prebuilt binaries are unaffected.
+
 ## [0.9.1]
 
 A release with no change to what jz reads or writes. The release assets gain SLSA build provenance, and the README and the comparison page name v0.9.1 as the version they describe.
