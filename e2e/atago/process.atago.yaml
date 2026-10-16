@@ -398,7 +398,9 @@ scenarios:
           timeout: 30s
       - assert:
           duration:
-            lt: 10s
+            # Leave room for scheduling on the emulated FreeBSD runner,
+            # while still requiring termination before sleep 30 finishes.
+            lt: 20s
       - assert:
           exit_code: 137
           stderr:
@@ -421,9 +423,13 @@ scenarios:
             # A fifo rather than a pipeline: waiting for one process of a
             # background pipeline waits for the whole of it in some shells.
             mkfifo input
-            sleep 30 > input & producer=$!
-            jz < input > out.json 2> err.txt & jz=$!
-            sleep 0.2
+            e2ehelper emit -lines 2 -burst 1 -interval 30s > input & producer=$!
+            jz --format lines --stream < input > out.json 2> err.txt & jz=$!
+            trap 'kill "$producer" "$jz" 2>/dev/null || true' EXIT
+            # Output proves jz has started and is reading the pipe.
+            i=0
+            while [ ! -s out.json ] && [ $i -lt 100 ]; do sleep 0.1; i=$((i + 1)); done
+            [ -s out.json ] || exit 1
             kill -TERM $jz
             wait $jz
             echo "jz=$?"
@@ -433,7 +439,7 @@ scenarios:
           timeout: 30s
       - assert:
           duration:
-            lt: 6s
+            lt: 20s
       - assert:
           exit_code: 0
           stdout:
@@ -442,4 +448,5 @@ scenarios:
       - assert:
           file:
             path: out.json
-            equals: ""
+            equals: |
+              "4\t/mnt/1"
