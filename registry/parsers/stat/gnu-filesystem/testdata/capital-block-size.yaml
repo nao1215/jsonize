@@ -1,3 +1,0 @@
-source: synthetic coreutils fixture with capitalized Block in the fundamental block size label
-os: linux
-args: [-f, /home]

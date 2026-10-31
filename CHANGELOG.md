@@ -6,10 +6,6 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
-### Fixed
-
-- Accept either capitalization of the fundamental block size label in `stat -f` output.
-
 ### Changed
 
 - The Go toolchain the module asks for is 1.26.9 (was 1.26.6), so a build from source picks up the standard library fixes for GO-2026-6607, GO-2026-6608, GO-2026-6617 and the other advisories published with Go 1.26.9 that reach jz's code. Prebuilt binaries are unaffected.
