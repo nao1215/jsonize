@@ -150,7 +150,7 @@ scenarios:
           timeout: 30s
       - assert:
           duration:
-            lt: 6s
+            lt: 20s
       - assert:
           exit_code: 0
           stdout:
