@@ -6,9 +6,14 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.9.2]
+
+A release with no change to what jz reads or writes. It rebuilds the binaries with a Go toolchain that has the current standard library security fixes.
+
 ### Changed
 
-- The Go toolchain the module asks for is 1.26.9 (was 1.26.6), so a build from source picks up the standard library fixes for GO-2026-6607, GO-2026-6608, GO-2026-6617 and the other advisories published with Go 1.26.9 that reach jz's code. Prebuilt binaries are unaffected.
+- The Go toolchain the module asks for is 1.26.9 (was 1.26.6), so a build from source picks up the standard library fixes for GO-2026-6607, GO-2026-6608, GO-2026-6617 and the other advisories published with Go 1.26.9 that reach jz's code.
+- The prebuilt binaries are built with Go 1.27.3. The v0.9.1 binaries were built with Go 1.27.1, before the standard library fixes for GO-2026-6607, GO-2026-6608, GO-2026-6617, GO-2026-6809 and the other advisories released with Go 1.27.2 and 1.27.3.
 
 ## [0.9.1]
 
