@@ -6,6 +6,10 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Changed
+
+- Building from source now needs Go 1.26.11 or later (was 1.26.9). Go 1.26.11 fixes the `net/http` advisory GO-2026-6859, which govulncheck finds reachable from jsonize on the earlier patch.
+
 ## [0.9.2]
 
 A release with no change to what jz reads or writes. It rebuilds the binaries with a Go toolchain that has the current standard library security fixes.
