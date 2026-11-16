@@ -273,7 +273,7 @@ func (a *app) openInput(file, compression string) (io.Reader, func(), int) {
 	r := a.env.Stdin
 	closeInput := func() {}
 	if file != "-" {
-		f, err := os.Open(file)
+		f, err := os.Open(file) // #nosec G304 -- file is the input path the user passed to jz
 		if err != nil {
 			a.errorf("%v", err)
 			return nil, closeInput, ExitError

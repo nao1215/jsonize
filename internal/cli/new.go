@@ -191,7 +191,7 @@ func readLimited(path string) ([]byte, error) { return readBounded(path, MaxInpu
 // readBounded reads a file of at most maxSize bytes. A larger one is a
 // parse failure, as input past the limit is when jz reads it with --file.
 func readBounded(path string, maxSize int64) ([]byte, error) {
-	f, err := os.Open(path)
+	f, err := os.Open(path) // #nosec G304 -- path is the --file the user passed to jz
 	if err != nil {
 		return nil, err
 	}

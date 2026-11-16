@@ -51,7 +51,7 @@ func foregroundGroup() int {
 	}
 	defer tty.Close()
 	var pgrp int32
-	_, _, errno := syscall.Syscall(syscall.SYS_IOCTL, tty.Fd(), syscall.TIOCGPGRP, uintptr(unsafe.Pointer(&pgrp))) //nolint:gosec // the ioctl fills the process group id it is handed
+	_, _, errno := syscall.Syscall(syscall.SYS_IOCTL, tty.Fd(), syscall.TIOCGPGRP, uintptr(unsafe.Pointer(&pgrp))) // #nosec G103 -- the ioctl fills the process group id it is handed
 	if errno != 0 {
 		return 0
 	}

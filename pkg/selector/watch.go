@@ -313,7 +313,7 @@ func viable(prog *syntax.Prog, prefix string) bool {
 			list = add(list, inst.Out, at)
 		case syntax.InstEmptyWidth:
 			// The program keeps the assertion in Arg, which is an EmptyOp.
-			if at == len(runes) || syntax.EmptyOp(inst.Arg)&^emptyContext(runes, at) == 0 { //nolint:gosec // an EmptyOp widened to uint32 by the compiler
+			if at == len(runes) || syntax.EmptyOp(inst.Arg)&^emptyContext(runes, at) == 0 { // #nosec G115 -- an EmptyOp widened to uint32 by the compiler
 				list = add(list, inst.Out, at)
 			}
 		case syntax.InstMatch:
@@ -323,7 +323,7 @@ func viable(prog *syntax.Prog, prefix string) bool {
 		}
 		return list
 	}
-	cur = add(cur, uint32(prog.Start), 0) //nolint:gosec // an instruction index
+	cur = add(cur, uint32(prog.Start), 0) // #nosec G115 -- an instruction index
 	for i, r := range runes {
 		if matched {
 			return true

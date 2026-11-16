@@ -11,7 +11,7 @@ import (
 // enough, since /dev/null is one too.
 func isTerminal(f *os.File) bool {
 	var t syscall.Termios
-	_, _, errno := syscall.Syscall(syscall.SYS_IOCTL, f.Fd(), syscall.TCGETS, uintptr(unsafe.Pointer(&t))) //nolint:gosec // the ioctl fills the termios it is handed
+	_, _, errno := syscall.Syscall(syscall.SYS_IOCTL, f.Fd(), syscall.TCGETS, uintptr(unsafe.Pointer(&t))) // #nosec G103 -- the ioctl fills the termios it is handed
 
 	return errno == 0
 }

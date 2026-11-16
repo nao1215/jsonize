@@ -135,7 +135,7 @@ func lookup(cmd Command) (string, error) {
 // else. The wait delay is what makes a grandchild that keeps the pipes
 // open after the command exits a delay rather than a hang.
 func child(ctx context.Context, path string, cmd Command, stderr io.Writer) *exec.Cmd {
-	c := exec.CommandContext(ctx, path, cmd.Args...)
+	c := exec.CommandContext(ctx, path, cmd.Args...) // #nosec G204 -- running the command the user named is what jz run does
 	c.Env = BuildEnv(os.Environ(), cmd.KeepLocale, cmd.Env)
 	c.Dir = cmd.Dir
 	c.Stdin = cmd.Stdin
