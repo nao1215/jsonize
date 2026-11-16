@@ -142,7 +142,7 @@ func pipe(args []string, stdout io.Writer) error {
 	if fs.NArg() == 0 {
 		return errors.New("pipe: no command given")
 	}
-	cmd := exec.CommandContext(context.Background(), fs.Arg(0), fs.Args()[1:]...)
+	cmd := exec.CommandContext(context.Background(), fs.Arg(0), fs.Args()[1:]...) // #nosec G204 -- the command is the one the spec passes to this test helper
 	cmd.Stderr = os.Stderr
 	if *stdinFile != "" {
 		in, err := os.Open(*stdinFile)
@@ -244,7 +244,7 @@ func goneWithin(pidFile string, deadline time.Duration) string {
 }
 
 func readPID(path string) (int, error) {
-	b, err := os.ReadFile(path)
+	b, err := os.ReadFile(path) // #nosec G304 -- path is the pid file this test helper wrote
 	if err != nil {
 		return 0, err
 	}

@@ -91,7 +91,7 @@ func leave(d time.Duration, stdout io.Writer) error {
 	if err != nil {
 		return err
 	}
-	cmd := exec.Command(self) //nolint:noctx // the process is left to run on its own
+	cmd := exec.Command(self) /* #nosec G204 -- self is this test helper's own executable */ //nolint:noctx // the process is left to run on its own
 	cmd.Stdout = stdout
 	cmd.Env = append(withoutKnobs(os.Environ()), holdKey+"="+d.String())
 	return cmd.Start()
@@ -130,12 +130,12 @@ func as(args []string, stdout io.Writer) error {
 }
 
 func copyFile(src, dst string) error {
-	in, err := os.Open(src)
+	in, err := os.Open(src) // #nosec G304 -- src is a file the spec asks this test helper to copy
 	if err != nil {
 		return err
 	}
 	defer in.Close()
-	out, err := os.OpenFile(dst, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0o755) //nolint:gosec // a program is meant to be run
+	out, err := os.OpenFile(dst, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0o755) // #nosec G302 G304 G703 -- a program is meant to be run
 	if err != nil {
 		return err
 	}

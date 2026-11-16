@@ -13,7 +13,7 @@ import (
 // to it is held, so the exit code is what says whether it has ended.
 func alive(pid int) bool {
 	const stillActive = 259
-	h, err := syscall.OpenProcess(syscall.PROCESS_QUERY_INFORMATION, false, uint32(pid)) //nolint:gosec // pid is what the producer wrote
+	h, err := syscall.OpenProcess(syscall.PROCESS_QUERY_INFORMATION, false, uint32(pid)) // #nosec G115 -- pid is what the producer wrote
 	if err != nil {
 		return false
 	}

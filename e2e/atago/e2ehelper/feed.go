@@ -87,7 +87,7 @@ type fed struct {
 }
 
 func startFed(argv []string, stdout io.Writer, deadline time.Duration) (*fed, error) {
-	cmd := exec.CommandContext(context.Background(), argv[0], argv[1:]...)
+	cmd := exec.CommandContext(context.Background(), argv[0], argv[1:]...) // #nosec G204 -- argv is the command the spec asks this test helper to drive
 	cmd.Stderr = os.Stderr
 	in, err := cmd.StdinPipe()
 	if err != nil {
@@ -202,7 +202,7 @@ type step struct {
 }
 
 func readScript(path string) ([]step, error) {
-	b, err := os.ReadFile(path)
+	b, err := os.ReadFile(path) // #nosec G304 -- path is the script file the spec passes to this test helper
 	if err != nil {
 		return nil, err
 	}
