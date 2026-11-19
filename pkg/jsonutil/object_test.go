@@ -233,7 +233,8 @@ func TestObjectIndex(t *testing.T) {
 }
 
 // Encode is documented to write what encoding/json writes with HTML
-// escaping off, compact and with two-space indentation alike. Any value
+// escaping off, compact and with two-space indentation alike, up to how
+// U+FFFD is spelled. Any value
 // the engine can produce is generated, with object keys in sorted order so
 // that a Go map, which encoding/json sorts, gives the same members in the
 // same order, and the two outputs are compared byte for byte.
@@ -254,7 +255,14 @@ func TestEncodeMatchesEncodingJSON(t *testing.T) {
 			if err := enc.Encode(theirs); err != nil {
 				return fmt.Sprintf("encoding/json(%#v): %v", theirs, err)
 			}
-			if got.String() != want.String() {
+			// A byte that is not UTF-8 is U+FFFD in both, but Go 1.27's
+			// encoding/json writes the character where earlier releases
+			// (and Encode) write its escape. The two are the same JSON
+			// string, so the escape is read as the character on both
+			// sides; genString draws no "u" that could form one by itself.
+			g := strings.ReplaceAll(got.String(), `\ufffd`, "\uFFFD")
+			w := strings.ReplaceAll(want.String(), `\ufffd`, "\uFFFD")
+			if g != w {
 				return fmt.Sprintf("pretty=%v\n got  %q\n want %q", pretty, got.String(), want.String())
 			}
 		}
