@@ -5,6 +5,13 @@ project_name: jsonize
 before:
   hooks:
     - go mod tidy
+    # The license texts of the modules linked into jz, per GOOS, shipped
+    # as THIRD_PARTY_LICENSES/ in the archives and packages. GOROOT is
+    # explicit so go-licenses still recognizes the standard library after
+    # a toolchain switch; Windows uses the GOEXPERIMENT its build uses.
+    - sh -c 'GOROOT="$(go env GOROOT)" GOOS=linux go-licenses save ./cmd/jz --save_path=third_party_licenses/linux --force'
+    - sh -c 'GOROOT="$(go env GOROOT)" GOOS=darwin go-licenses save ./cmd/jz --save_path=third_party_licenses/darwin --force'
+    - sh -c 'GOROOT="$(go env GOROOT)" GOOS=windows GOEXPERIMENT=nogreenteagc go-licenses save ./cmd/jz --save_path=third_party_licenses/windows --force'
 
 builds:
   - id: jz
@@ -43,6 +50,8 @@ archives:
     files:
       - LICENSE
       - README.md
+      - src: "third_party_licenses/{{ .Os }}/**/*"
+        dst: THIRD_PARTY_LICENSES
 
 # The official registry ships inside the binary: a release is the unit
 # that carries both the code and the parser definitions, and jz never
@@ -82,6 +91,10 @@ nfpms:
     license: MIT
     formats: [deb, rpm, apk]
     bindir: /usr/bin
+    contents:
+      - src: ./third_party_licenses/linux
+        dst: /usr/share/doc/jsonize/THIRD_PARTY_LICENSES
+        type: tree
 
 # A cask in nao1215/homebrew-tap, which installs the macOS and Linux
 # archives. Writing to that repository takes TAP_GITHUB_TOKEN; the

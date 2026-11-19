@@ -27,9 +27,9 @@ jobs:
       - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
         with:
           go-version: stable
-      - uses: nao1215/setup-atago@5c563dcd9d85e114f8abe8bbdcd058e51de09efb # v0.1.3
+      - uses: nao1215/setup-atago@5dca90fe652651408ccd1c2aee030767484482a9 # v0.1.5
         with:
-          version: v0.25.0
+          version: v0.26.3
       # The commands the required Linux scenarios run that the image
       # does not ship: sysstat for iostat and mpstat, BusyBox for its
       # variants, zsh for the completion script, 7zip for the archive
@@ -74,7 +74,7 @@ jobs:
           mkdir -p "${RUNNER_TEMP}/atago" bin
           cd "${RUNNER_TEMP}/atago"
           go mod init e2e-atago-build
-          go get github.com/nao1215/atago@v0.25.0
+          go get github.com/nao1215/atago@v0.26.3
           GOOS=freebsd GOARCH=amd64 go build -o "${GITHUB_WORKSPACE}/bin/atago" github.com/nao1215/atago
       - uses: vmactions/freebsd-vm@c46abacb49f09938ca4e1702d15d836285d694cc # v1.5.9
         with:

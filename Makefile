@@ -102,10 +102,11 @@ demo: build ## Re-record the demo GIFs from demo/*.tape with vhs
 check: fmt vet lint test test-race ## Run everything CI runs locally except E2E
 
 .PHONY: tools
-tools: ## Install developer tools (golangci-lint, atago, goreleaser)
+tools: ## Install developer tools (golangci-lint, atago, goreleaser, go-licenses)
 	go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@$(GOLANGCI)
 	go install github.com/nao1215/atago@latest
 	go install github.com/goreleaser/goreleaser/v2@latest
+	go install github.com/google/go-licenses/v2@v2.0.1
 
 .PHONY: help
 help: ## Show this help

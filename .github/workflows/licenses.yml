@@ -1,0 +1,79 @@
+name: licenses
+
+# Dependency license gate. Every module linked into jz must carry a license
+# that go-licenses can identify, and that license must not be copyleft that
+# reaches the whole binary (GPL, LGPL: a statically linked Go binary cannot be
+# relinked, so LGPL's exception does not help) or forbidden outright (AGPL,
+# non-commercial Creative Commons, Commons Clause).
+#
+# Reciprocal licenses (MPL-2.0, EPL) are allowed: they bind only the files they
+# cover, and the release archives ship those modules' source next to the binary
+# (go-licenses save copies it), which is what they ask for.
+#
+# The check runs per GOOS because the set of linked modules differs by target.
+# The matrix equals the goos list of .goreleaser.yml. There is no schedule:
+# go.sum pins every version, so the verdict only changes when a pull request
+# changes the dependencies.
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  licenses:
+    name: licenses (${{ matrix.goos }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - goos: linux
+            goexperiment: ""
+          - goos: darwin
+            goexperiment: ""
+          # The Windows release is built with GOEXPERIMENT=nogreenteagc
+          # (.goreleaser.yml), and build constraints decide what is linked.
+          - goos: windows
+            goexperiment: nogreenteagc
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      # stable, not the go.mod minimum: go-licenses needs Go 1.23 to build and
+      # the module graph it reads does not depend on the toolchain version.
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version: stable
+          check-latest: true
+
+      # Pinned so a classifier update cannot change the verdict on its own.
+      # Installed before GOOS is set: the tool itself runs on the runner.
+      - name: Install go-licenses
+        run: go install github.com/google/go-licenses/v2@v2.0.1
+
+      # GOROOT is set explicitly because go-licenses recognizes the standard
+      # library by path prefix: after a toolchain switch (go.mod asking for a
+      # newer patch than the runner has) it would otherwise report every
+      # stdlib package as "does not have module info".
+      - name: Check dependency licenses
+        env:
+          GOOS: ${{ matrix.goos }}
+          GOEXPERIMENT: ${{ matrix.goexperiment }}
+        run: |
+          GOROOT="$(go env GOROOT)"
+          export GOROOT
+          go-licenses check --disallowed_types=forbidden,restricted,unknown ./cmd/jz
