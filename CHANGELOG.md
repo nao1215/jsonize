@@ -6,6 +6,10 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Removed
+
+- The Go constants `definition.MaxRegexLength`, `definition.MaxParts`, `definition.MaxPatterns`, `definition.MaxNesting` and `registry.MaxDefinitions` are no longer exported. They bound what `definition.Load` and `registry.Load` accept and only those functions used them; the limits themselves are unchanged and are given in the definition format reference.
+
 ### Fixed
 
 - `stat -f` from uutils coreutils (the `stat` of Ubuntu 26.04) is read by `stat/gnu-filesystem`. uutils writes `Block Size:` where GNU writes `Block size:`, and jz refused the whole output with exit status 3.

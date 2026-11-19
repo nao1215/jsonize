@@ -21,16 +21,16 @@ import (
 const (
 	// MaxDefinitionSize is the largest YAML document accepted.
 	MaxDefinitionSize = 256 * 1024
-	// MaxRegexLength bounds any single regular expression in a definition.
-	MaxRegexLength = 2048
+	// maxRegexLength bounds any single regular expression in a definition.
+	maxRegexLength = 2048
 	// MaxColumns bounds the number of table columns.
 	MaxColumns = 256
-	// MaxParts bounds composite parts.
-	MaxParts = 32
-	// MaxPatterns bounds the alternatives of a regex parser.
-	MaxPatterns = 16
-	// MaxNesting bounds field nesting depth (array of object of array...).
-	MaxNesting = 8
+	// maxParts bounds composite parts.
+	maxParts = 32
+	// maxPatterns bounds the alternatives of a regex parser.
+	maxPatterns = 16
+	// maxNesting bounds field nesting depth (array of object of array...).
+	maxNesting = 8
 )
 
 var (
@@ -249,8 +249,8 @@ func (v *validator) add(path, format string, args ...any) {
 }
 
 func (v *validator) regex(path, expr string) *pattern {
-	if len(expr) > MaxRegexLength {
-		v.add(path, "regular expression longer than %d characters", MaxRegexLength)
+	if len(expr) > maxRegexLength {
+		v.add(path, "regular expression longer than %d characters", maxRegexLength)
 		return nil
 	}
 	// The flags regexp.Compile parses with, so that what passes here is
@@ -748,8 +748,8 @@ func validateRegexParse(v *validator, path string, p *Parse, fields map[string]*
 		v.add(path+".pattern", "is required for type regex (or patterns for several alternatives)")
 		return
 	}
-	if len(alts) > MaxPatterns {
-		v.add(key, "more than %d alternatives", MaxPatterns)
+	if len(alts) > maxPatterns {
+		v.add(key, "more than %d alternatives", maxPatterns)
 		return
 	}
 	groupSet := map[string]bool{}
@@ -877,8 +877,8 @@ func validateComposite(v *validator, path string, p *Parse, kind string) {
 	if len(p.Parts) == 0 {
 		v.add(path+".parts", "is required for type %s", kind)
 	}
-	if len(p.Parts) > MaxParts {
-		v.add(path+".parts", "more than %d parts", MaxParts)
+	if len(p.Parts) > maxParts {
+		v.add(path+".parts", "more than %d parts", maxParts)
 	}
 	seen := map[string]bool{}
 	for i := range p.Parts {
@@ -906,8 +906,8 @@ func validateComposite(v *validator, path string, p *Parse, kind string) {
 // core" are what lscpu prints, and a definition that cannot name them
 // cannot convert their values.
 func validateFields(v *validator, path string, fields map[string]*Field, depth int, rawKeys bool) {
-	if depth > MaxNesting {
-		v.add(path, "fields nested deeper than %d levels", MaxNesting)
+	if depth > maxNesting {
+		v.add(path, "fields nested deeper than %d levels", maxNesting)
 		return
 	}
 	names := make([]string, 0, len(fields))
@@ -932,8 +932,8 @@ func validateFields(v *validator, path string, fields map[string]*Field, depth i
 }
 
 func validateField(v *validator, path string, f *Field, depth int) {
-	if depth > MaxNesting {
-		v.add(path, "fields nested deeper than %d levels", MaxNesting)
+	if depth > maxNesting {
+		v.add(path, "fields nested deeper than %d levels", maxNesting)
 		return
 	}
 	switch f.EffectiveType() {
