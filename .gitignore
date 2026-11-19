@@ -2,6 +2,7 @@
 /dist/
 /jz
 /jz.exe
+/third_party_licenses/
 
 # test and coverage
 cover.out

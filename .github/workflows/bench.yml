@@ -22,6 +22,12 @@ jobs:
   bench:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    # setup-himorime (v0.2.0 and later) comments on a same-repository pull
+    # request when the comparison regresses, is inconclusive or skips a
+    # check; its post step fails without this.
+    permissions:
+      contents: read
+      pull-requests: write
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -31,9 +37,9 @@ jobs:
       - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
         with:
           go-version-file: go.mod
-      - uses: nao1215/setup-himorime@14aeeb3fe55ad42cf29ee0802d578820faac3897 # v0.1.2
+      - uses: nao1215/setup-himorime@cae68ae0fcf303571b53dde1a73582fbc596857a # v0.2.0
         with:
-          version: v0.4.1
+          version: v0.6.1
       # The comparison with jc and jo needs those tools and is run by hand
       # (make bench-docs); it must still be a valid suite.
       - name: Validate the comparison suite
