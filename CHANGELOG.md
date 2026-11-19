@@ -6,6 +6,10 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.10.0]
+
+A minor release: `stat -f` from uutils coreutils is read, release archives carry the license texts of the code in jz, and five Go constants that only their own loaders used are no longer exported.
+
 ### Removed
 
 - The Go constants `definition.MaxRegexLength`, `definition.MaxParts`, `definition.MaxPatterns`, `definition.MaxNesting` and `registry.MaxDefinitions` are no longer exported. They bound what `definition.Load` and `registry.Load` accept and only those functions used them; the limits themselves are unchanged and are given in the definition format reference.
