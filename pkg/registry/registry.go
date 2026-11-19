@@ -45,8 +45,8 @@ const DefinitionFile = "parser.yaml"
 // TestdataDir holds fixtures next to a definition.
 const TestdataDir = "testdata"
 
-// MaxDefinitions bounds how many definitions one source may contain.
-const MaxDefinitions = 10000
+// maxDefinitions bounds how many definitions one source may contain.
+const maxDefinitions = 10000
 
 // manifest describes a registry.
 type manifest struct {
@@ -306,8 +306,8 @@ func readFiles(src Source) ([]*file, error) {
 			return nil
 		}
 		count++
-		if count > MaxDefinitions {
-			return &LoadError{Source: src.Name, Path: p, Err: fmt.Errorf("more than %d definitions", MaxDefinitions)}
+		if count > maxDefinitions {
+			return &LoadError{Source: src.Name, Path: p, Err: fmt.Errorf("more than %d definitions", maxDefinitions)}
 		}
 		// One file jz cannot read, for being too large or for any other
 		// reason, is that file's problem in the same way.
