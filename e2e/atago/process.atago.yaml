@@ -423,7 +423,10 @@ scenarios:
             # A fifo rather than a pipeline: waiting for one process of a
             # background pipeline waits for the whole of it in some shells.
             mkfifo input
-            e2ehelper emit -lines 2 -burst 1 -interval 30s > input & producer=$!
+            # The producer writes nothing to the step's own output, so a
+            # producer still exiting when the script ends cannot hold the
+            # pipe atago captures the step with; the script also waits for it.
+            e2ehelper emit -lines 2 -burst 1 -interval 30s > input 2> /dev/null & producer=$!
             jz --format lines --stream < input > out.json 2> err.txt & jz=$!
             trap 'kill "$producer" "$jz" 2>/dev/null || true' EXIT
             # Output proves jz has started and is reading the pipe.
@@ -434,6 +437,7 @@ scenarios:
             wait $jz
             echo "jz=$?"
             kill $producer
+            wait $producer 2> /dev/null || true
       - run:
           command: sh ./filter.sh
           timeout: 30s
