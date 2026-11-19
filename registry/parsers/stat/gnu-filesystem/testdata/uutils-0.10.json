@@ -1,0 +1,48 @@
+[
+  {
+    "file": {
+      "name": "/home"
+    },
+    "filesystem": {
+      "id": "648575401942969",
+      "namelen": 255,
+      "type": "ext2/ext3"
+    },
+    "block_size": {
+      "block_size": 4096,
+      "fundamental_block_size": 4096
+    },
+    "blocks": {
+      "total": 480160322,
+      "free": 157470942,
+      "available": 133061701
+    },
+    "inodes": {
+      "total": 122028032,
+      "free": 109733705
+    }
+  },
+  {
+    "file": {
+      "name": "/tmp"
+    },
+    "filesystem": {
+      "id": "21ac322012960689",
+      "namelen": 255,
+      "type": "tmpfs"
+    },
+    "block_size": {
+      "block_size": 4096,
+      "fundamental_block_size": 4096
+    },
+    "blocks": {
+      "total": 8051664,
+      "free": 4937815,
+      "available": 4937815
+    },
+    "inodes": {
+      "total": 1048576,
+      "free": 805966
+    }
+  }
+]

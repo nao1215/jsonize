@@ -1,0 +1,10 @@
+  File: "/home"
+    ID: 648575401942969 Namelen: 255     Type: ext2/ext3
+Block Size: 4096       Fundamental block size: 4096
+Blocks: Total: 480160322  Free: 157470942  Available: 133061701
+Inodes: Total: 122028032  Free: 109733705
+  File: "/tmp"
+    ID: 21ac322012960689 Namelen: 255     Type: tmpfs
+Block Size: 4096       Fundamental block size: 4096
+Blocks: Total: 8051664    Free: 4937815    Available: 4937815
+Inodes: Total: 1048576    Free: 805966
