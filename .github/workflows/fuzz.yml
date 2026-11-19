@@ -54,6 +54,25 @@ jobs:
           name: fuzz-crashers-${{ matrix.target.name }}
           path: "**/testdata/fuzz/**"
 
+  # The generated-input property tests run on 200 inputs in every go test.
+  # Nightly they run on a million each, from a fresh seed that the log
+  # prints on failure (internal/proptest).
+  properties:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version: stable
+      - name: run the properties on many inputs
+        env:
+          JSONIZE_PROPERTY_RUNS: "1000000"
+        run: go test -count=1 -timeout 25m -run '^(TestEncodeMatchesEncodingJSON|TestUngroupRoundTrip|TestTableReadsBackTheCellsItWasWritten)$' ./pkg/...
+
   # The matrix above is written out so each target gets its own job and
   # its own five minutes. That only works while it lists them all.
   complete:

@@ -291,6 +291,23 @@ JSON only. With `--stream` and `jz new --each`, the records already
 written remain when a later record ends the stream; the status is 3 and
 the failure is on standard error.
 
+## Testing
+
+| Technique | Bug class caught here |
+|---|---|
+| [Golden fixtures of real output](registry/registry_test.go) | A parser that reads a captured command output differently from the JSON recorded next to it |
+| [Conformance relations](internal/conformance) | Output that changes with a BOM, CRLF, a missing final newline or the same output twice in a row |
+| [Decoys](registry/testdata/decoys) | Input of one command identified as another |
+| [Generated properties](pkg/engine/engine_test.go) | Tables that lose, move or retype a cell, numbers that do not survive their digit grouping, and stream and whole readings that disagree |
+| [Differential against encoding/json](pkg/jsonutil/object_test.go) | JSON written differently from what encoding/json writes for the same value |
+| [Independent schema validator](scripts/check_schemas.py) | A fixture that does not fit its published schema, checked by Python jsonschema rather than jz's own validator |
+| [Fuzzing](.github/workflows/fuzz.yml) | Panics, hangs and unbounded memory on malformed definitions and input |
+| [Mutation testing](.github/workflows/mutation.yml) | Logic a change can break without a test failing |
+| [atago end-to-end scenarios](e2e/atago) | The binary on Linux, macOS, Windows and FreeBSD reading the real commands of the host |
+| [himorime benchmarks](bench) | A pull request that makes jz slower or larger in memory than its base |
+
+The commands, the recorded mutation scores and where each runs in CI are on the [testing page](https://nao1215.github.io/jsonize/testing/).
+
 ## Development
 
 ```console
