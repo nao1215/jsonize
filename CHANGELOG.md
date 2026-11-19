@@ -6,6 +6,10 @@ project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+
+- `stat -f` from uutils coreutils (the `stat` of Ubuntu 26.04) is read by `stat/gnu-filesystem`. uutils writes `Block Size:` where GNU writes `Block size:`, and jz refused the whole output with exit status 3.
+
 ### Changed
 
 - CI scans the repository with gosec and Trivy on every pull request (Trivy covers dependency vulnerabilities, committed secrets and misconfigurations, and also runs daily). Workflow actions are recorded in `.github/workflows/actions.lock`, which CI verifies against the pinned commits.

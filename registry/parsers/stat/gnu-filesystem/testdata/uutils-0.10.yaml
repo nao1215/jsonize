@@ -1,0 +1,4 @@
+description: uutils coreutils capitalizes the size in its block size line (Block Size:) where GNU writes Block size:; the other four lines are the same.
+source: captured on Ubuntu 26.04 (uutils coreutils 0.10.0) with LC_ALL=C
+os: linux
+args: [-f, /home, /tmp]
