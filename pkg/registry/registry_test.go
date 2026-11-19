@@ -302,3 +302,60 @@ func TestParsersMustBeADirectory(t *testing.T) {
 		t.Errorf("problem = %s", msg)
 	}
 }
+
+// ReadBounded returns a file of exactly the limit and refuses one byte
+// more, whether the file says its size up front or is read until it ends,
+// and a file past the first buffer is read whole.
+func TestReadBoundedAcceptsTheLimitAndRefusesOneByteMore(t *testing.T) {
+	t.Parallel()
+	const limit = 600
+	for _, mode := range []fs.FileMode{0, fs.ModeIrregular} {
+		for _, n := range []int{0, 1, 511, 512, 513, limit} {
+			data := []byte(strings.Repeat("x", n))
+			fsys := fstest.MapFS{"f": {Data: data, Mode: mode}}
+			got, err := ReadBounded(fsys, "f", limit)
+			if err != nil || string(got) != string(data) {
+				t.Errorf("mode %v, %d bytes under a limit of %d: %d bytes, %v", mode, n, limit, len(got), err)
+			}
+		}
+		fsys := fstest.MapFS{"f": {Data: []byte(strings.Repeat("x", limit+1)), Mode: mode}}
+		if got, err := ReadBounded(fsys, "f", limit); err == nil || !strings.Contains(err.Error(), "exceeds 600 bytes") {
+			t.Errorf("mode %v, %d bytes under a limit of %d: %d bytes, %v; want it refused", mode, limit+1, limit, len(got), err)
+		}
+	}
+	// A file of unknown size is read into 513 bytes first, so under a
+	// limit of 513 the first read ends exactly at the limit and the byte
+	// after it is only seen by reading on.
+	fsys := fstest.MapFS{"f": {Data: []byte(strings.Repeat("x", 514)), Mode: fs.ModeIrregular}}
+	if got, err := ReadBounded(fsys, "f", 513); err == nil {
+		t.Errorf("514 bytes of unknown size under a limit of 513: %d bytes and no error", len(got))
+	}
+}
+
+// The fixtures directory is skipped only at parsers/<command>/<variant>/
+// testdata. A variant that is itself named testdata is a definition and
+// loads; a parser.yaml inside a variant's fixtures is not one.
+func TestTestdataIsSkippedOnlyWhereTheLayoutPutsIt(t *testing.T) {
+	t.Parallel()
+	fsys := fstest.MapFS{
+		"registry.yaml":                        {Data: []byte("format: 1\nname: s\n")},
+		"parsers/cmd/v/parser.yaml":            {Data: []byte(def("cmd", "v"))},
+		"parsers/cmd/v/testdata/parser.yaml":   {Data: []byte(def("cmd", "stray"))},
+		"parsers/cmd/testdata/parser.yaml":     {Data: []byte(def("cmd", "testdata"))},
+		"parsers/cmd/testdata/testdata/a.txt":  {Data: []byte("x")},
+		"parsers/cmd/testdata/testdata/a.json": {Data: []byte("{}")},
+	}
+	reg, err := Load(Source{Name: "s", FS: fsys})
+	if err != nil {
+		t.Fatalf("Load = %v", err)
+	}
+	if len(reg.Problems) != 0 || reg.Len() != 2 {
+		t.Fatalf("Len = %d, Problems = %v; want cmd/v and cmd/testdata and nothing else", reg.Len(), reg.Problems)
+	}
+	if _, ok := reg.Lookup("cmd", "testdata"); !ok {
+		t.Error("a variant named testdata was not loaded")
+	}
+	if _, ok := reg.Lookup("cmd", "stray"); ok {
+		t.Error("a parser.yaml among a variant's fixtures was loaded")
+	}
+}

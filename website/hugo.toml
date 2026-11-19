@@ -64,6 +64,11 @@ name = "Design"
 pageRef = "/design"
 weight = 60
 
+[[menus.main]]
+name = "Testing"
+pageRef = "/testing"
+weight = 65
+
 [module]
 [[module.mounts]]
 source = "content"

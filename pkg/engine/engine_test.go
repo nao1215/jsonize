@@ -4,11 +4,13 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+	"math/rand/v2"
 	"reflect"
 	"slices"
 	"strings"
 	"testing"
 
+	"github.com/nao1215/jsonize/internal/proptest"
 	"github.com/nao1215/jsonize/pkg/definition"
 	"github.com/nao1215/jsonize/pkg/jsonutil"
 )
@@ -1908,4 +1910,145 @@ fields:
 			t.Errorf("%q was read as an int", bad)
 		}
 	}
+}
+
+// A table of any shape whose cells hold no space reads back as the cells
+// that were written: one record per row, one member per column, in order,
+// with every value kept as the text it was. An aligned table holds the
+// same cells padded to their columns, with an empty cell read as null,
+// and wide characters taking two terminal columns. Reading the same input
+// as a stream gives the same records as reading it whole.
+func TestTableReadsBackTheCellsItWasWritten(t *testing.T) {
+	t.Parallel()
+	whitespace := load(t, "format: 1\ncommand: t\nvariant: v\nparse: {type: table}\n")
+	aligned := load(t, "format: 1\ncommand: t\nvariant: v\nparse: {type: table, split: aligned}\n")
+	proptest.Check(t, func(r *rand.Rand) string {
+		ncols, nrows := 1+r.IntN(12), r.IntN(20)
+		alignedMode := r.IntN(2) == 0
+		names := make([]string, ncols)
+		for i := range names {
+			names[i] = fmt.Sprintf("c%d", i)
+		}
+		rows := make([][]string, nrows)
+		for i := range rows {
+			rows[i] = make([]string, ncols)
+			for j := range rows[i] {
+				rows[i][j] = genCell(r, alignedMode && j < ncols-1)
+			}
+		}
+		def, in := whitespace, renderWhitespace(r, names, rows)
+		if alignedMode {
+			def, in = aligned, renderAligned(r, names, rows)
+		}
+		want := make([]any, 0, len(rows))
+		for _, row := range rows {
+			o := jsonutil.NewObject()
+			for j, c := range row {
+				if c == "" {
+					o.Set(names[j], nil)
+				} else {
+					o.Set(names[j], c)
+				}
+			}
+			want = append(want, o)
+		}
+		wantJSON, _ := jsonutil.Marshal(want)
+		got, err := Parse(def, []byte(in), Options{})
+		if err != nil {
+			return fmt.Sprintf("aligned=%v Parse(%q): %v", alignedMode, in, err)
+		}
+		gotJSON, _ := jsonutil.Marshal(got)
+		if nrows == 0 {
+			wantJSON = []byte("[]")
+		}
+		if string(gotJSON) != string(wantJSON) {
+			return fmt.Sprintf("aligned=%v input %q\n got  %s\n want %s", alignedMode, in, gotJSON, wantJSON)
+		}
+		var streamed []any
+		if err := Stream(def, strings.NewReader(in), Options{}, func(v any) error {
+			streamed = append(streamed, v)
+			return nil
+		}); err != nil {
+			return fmt.Sprintf("aligned=%v Stream(%q): %v", alignedMode, in, err)
+		}
+		streamedJSON, _ := jsonutil.Marshal(streamed)
+		if nrows == 0 {
+			streamedJSON = []byte("[]")
+		}
+		if string(streamedJSON) != string(gotJSON) {
+			return fmt.Sprintf("aligned=%v input %q\n stream %s\n whole  %s", alignedMode, in, streamedJSON, gotJSON)
+		}
+		return ""
+	})
+}
+
+// genCell returns a cell without whitespace, or an empty one when empty
+// cells are allowed.
+func genCell(r *rand.Rand, mayBeEmpty bool) string {
+	if mayBeEmpty && r.IntN(5) == 0 {
+		return ""
+	}
+	pieces := []string{"a", "Z", "0", "9", "-", "_", ".", "/", ":", "%", "é", "日本", "😀", "\"", "\\"}
+	var b strings.Builder
+	for range 1 + r.IntN(6) {
+		b.WriteString(proptest.Pick(r, pieces))
+	}
+	return b.String()
+}
+
+func renderWhitespace(r *rand.Rand, names []string, rows [][]string) string {
+	gap := func() string { return strings.Repeat(proptest.Pick(r, []string{" ", "\t"}), 1+r.IntN(4)) }
+	var b strings.Builder
+	for _, line := range append([][]string{names}, rows...) {
+		for j, c := range line {
+			if j > 0 {
+				b.WriteString(gap())
+			}
+			b.WriteString(c)
+		}
+		b.WriteByte('\n')
+	}
+	return b.String()
+}
+
+// termWidth is how many terminal columns s takes, for the characters
+// genCell uses: written out here rather than taken from cellWidth, so the
+// test does not agree with the code by asking the code.
+func termWidth(s string) int {
+	w := 0
+	for _, c := range s {
+		switch c {
+		case '日', '本', '😀':
+			w += 2
+		default:
+			w++
+		}
+	}
+	return w
+}
+
+// renderAligned pads every column to its widest cell in terminal columns
+// and leaves at least two spaces before the next column.
+func renderAligned(r *rand.Rand, names []string, rows [][]string) string {
+	widths := make([]int, len(names))
+	for j, n := range names {
+		widths[j] = termWidth(n)
+		for _, row := range rows {
+			widths[j] = max(widths[j], termWidth(row[j]))
+		}
+		widths[j] += 2 + r.IntN(3)
+	}
+	var b strings.Builder
+	for _, line := range append([][]string{names}, rows...) {
+		var l strings.Builder
+		for j, c := range line {
+			l.WriteString(c)
+			if j < len(line)-1 {
+				l.WriteString(strings.Repeat(" ", widths[j]-termWidth(c)))
+			}
+		}
+		b.WriteString(strings.TrimRight(l.String(), " "))
+		b.WriteByte('\n')
+	}
+	return b.String()
 }

@@ -3,9 +3,14 @@ package jsonutil
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"math"
+	"math/rand/v2"
+	"slices"
 	"strings"
 	"testing"
+
+	"github.com/nao1215/jsonize/internal/proptest"
 )
 
 func TestObjectOrderAndReplace(t *testing.T) {
@@ -225,4 +230,121 @@ func TestObjectIndex(t *testing.T) {
 	if v, ok := o.Get("new"); !ok || v != true {
 		t.Errorf("Set after Delete: %v, %v", v, ok)
 	}
+}
+
+// Encode is documented to write what encoding/json writes with HTML
+// escaping off, compact and with two-space indentation alike, up to how
+// U+FFFD is spelled. Any value
+// the engine can produce is generated, with object keys in sorted order so
+// that a Go map, which encoding/json sorts, gives the same members in the
+// same order, and the two outputs are compared byte for byte.
+func TestEncodeMatchesEncodingJSON(t *testing.T) {
+	t.Parallel()
+	proptest.Check(t, func(r *rand.Rand) string {
+		ours, theirs := genValue(r, 3)
+		for _, pretty := range []bool{false, true} {
+			var got, want bytes.Buffer
+			if err := Encode(&got, ours, pretty); err != nil {
+				return fmt.Sprintf("Encode(%#v): %v", theirs, err)
+			}
+			enc := json.NewEncoder(&want)
+			enc.SetEscapeHTML(false)
+			if pretty {
+				enc.SetIndent("", "  ")
+			}
+			if err := enc.Encode(theirs); err != nil {
+				return fmt.Sprintf("encoding/json(%#v): %v", theirs, err)
+			}
+			// A byte that is not UTF-8 is U+FFFD in both, but Go 1.27's
+			// encoding/json writes the character where earlier releases
+			// (and Encode) write its escape. The two are the same JSON
+			// string, so the escape is read as the character on both
+			// sides; genString draws no "u" that could form one by itself.
+			g := strings.ReplaceAll(got.String(), `\ufffd`, "\uFFFD")
+			w := strings.ReplaceAll(want.String(), `\ufffd`, "\uFFFD")
+			if g != w {
+				return fmt.Sprintf("pretty=%v\n got  %q\n want %q", pretty, got.String(), want.String())
+			}
+		}
+		return ""
+	})
+}
+
+// genValue returns one value in the types an Object holds and the same
+// value in the types encoding/json encodes from (map for *Object).
+func genValue(r *rand.Rand, depth int) (any, any) {
+	kind := r.IntN(7)
+	if depth == 0 {
+		kind = r.IntN(5)
+	}
+	switch kind {
+	case 0:
+		return nil, nil
+	case 1:
+		b := r.IntN(2) == 0
+		return b, b
+	case 2:
+		n := proptest.Pick(r, []int64{0, -1, 1, math.MaxInt64, math.MinInt64, r.Int64(), -r.Int64()})
+		return n, n
+	case 3:
+		f := genFloat(r)
+		return f, f
+	case 4:
+		s := genString(r)
+		return s, s
+	case 5:
+		n := r.IntN(4)
+		ours, theirs := make([]any, n), make([]any, n)
+		for i := range n {
+			ours[i], theirs[i] = genValue(r, depth-1)
+		}
+		return ours, theirs
+	default:
+		n := r.IntN(4)
+		keys := make([]string, n)
+		for i := range keys {
+			keys[i] = genString(r)
+		}
+		// A key that is not UTF-8 is written as U+FFFD by both, which
+		// can make two keys one; and encoding/json sorts the keys of a
+		// map, so the object is built in that order.
+		for i := range keys {
+			keys[i] = strings.ToValidUTF8(keys[i], "�")
+		}
+		slices.Sort(keys)
+		keys = slices.Compact(keys)
+		o, m := NewObject(), make(map[string]any, len(keys))
+		for _, k := range keys {
+			ours, theirs := genValue(r, depth-1)
+			o.Set(k, ours)
+			m[k] = theirs
+		}
+		return o, m
+	}
+}
+
+func genFloat(r *rand.Rand) float64 {
+	switch r.IntN(4) {
+	case 0:
+		return proptest.Pick(r, []float64{0, math.Copysign(0, -1), 1e-6, 1e-7, 1e20, 1e21, -1e21, math.MaxFloat64, math.SmallestNonzeroFloat64, 0.1, 1.5})
+	case 1:
+		return math.Float64frombits(r.Uint64()&^(0x7ff<<52) | uint64(r.IntN(0x7ff))<<52)
+	case 2:
+		return float64(r.Int64N(1<<53)) * math.Pow10(r.IntN(40)-20)
+	default:
+		return r.NormFloat64() * math.Pow10(r.IntN(10))
+	}
+}
+
+// genString draws from the characters writeString treats specially as
+// well as plain text: controls, quote, backslash, the HTML characters,
+// the two line separators, U+FFFD itself and bytes that are not UTF-8.
+func genString(r *rand.Rand) string {
+	pieces := []string{"a", "Z", "0", " ", "\"", "\\", "/", "\x00", "\x1f", "\x7f", "\b", "\f", "\n", "\r", "\t",
+		"<", ">", "&", " ", " ", "�", "é", "日本", "😀", "\xff", "\xc3", "\xed\xa0\x80"}
+	var b strings.Builder
+	for range r.IntN(8) {
+		b.WriteString(proptest.Pick(r, pieces))
+	}
+	return b.String()
 }

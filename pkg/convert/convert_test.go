@@ -2,10 +2,16 @@ package convert
 
 import (
 	"errors"
+	"fmt"
 	"math"
+	"math/rand/v2"
+	"slices"
+	"strconv"
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/nao1215/jsonize/internal/proptest"
 )
 
 func TestInt(t *testing.T) {
@@ -665,4 +671,63 @@ func TestUngroup(t *testing.T) {
 			}
 		})
 	}
+}
+
+// Grouping the digits of any integer in threes with any separator, and
+// optionally adding a fraction, comes back through Ungroup as the plain
+// number, which Int and Float read as the value that was grouped. Taking
+// one digit out of a group after the first breaks the grouping, and
+// Ungroup refuses it rather than returning a different number.
+func TestUngroupRoundTrip(t *testing.T) {
+	t.Parallel()
+	proptest.Check(t, func(r *rand.Rand) string {
+		n := proptest.Pick(r, []int64{0, 7, 999, 1000, -1000, math.MaxInt64, math.MinInt64, r.Int64(), -r.Int64(), r.Int64N(1_000_000)})
+		sep := proptest.Pick(r, []string{",", "'", ".", " ", "_", " ", " "})
+		plain := strconv.FormatInt(n, 10)
+		sign, digits := "", plain
+		if n < 0 {
+			sign, digits = "-", plain[1:]
+		} else if r.IntN(4) == 0 {
+			sign = "+"
+		}
+		var groups []string
+		for len(digits) > 3 {
+			groups = append([]string{digits[len(digits)-3:]}, groups...)
+			digits = digits[:len(digits)-3]
+		}
+		groups = append([]string{digits}, groups...)
+		frac := ""
+		if sep != "." && r.IntN(3) == 0 {
+			frac = "." + strconv.Itoa(r.IntN(1000))
+		}
+		grouped := sign + strings.Join(groups, sep) + frac
+		got, ok := Ungroup(grouped, sep)
+		want := sign + strings.Join(groups, "") + frac
+		if !ok || got != want {
+			return fmt.Sprintf("Ungroup(%q, %q) = %q, %v; want %q, true", grouped, sep, got, ok, want)
+		}
+		if frac == "" {
+			v, err := Int(got)
+			if err != nil || v != n {
+				return fmt.Sprintf("Int(%q) = %d, %v; want %d", got, v, err, n)
+			}
+		} else {
+			f, err := Float(got)
+			wantF, _ := strconv.ParseFloat(want, 64)
+			if err != nil || f != wantF {
+				return fmt.Sprintf("Float(%q) = %v, %v; want %v", got, f, err, wantF)
+			}
+		}
+		if len(groups) < 2 {
+			return ""
+		}
+		g := 1 + r.IntN(len(groups)-1)
+		broken := slices.Clone(groups)
+		broken[g] = broken[g][1:]
+		bad := sign + strings.Join(broken, sep) + frac
+		if got, ok := Ungroup(bad, sep); ok {
+			return fmt.Sprintf("Ungroup(%q, %q) = %q, true; a group of two digits must be refused", bad, sep, got)
+		}
+		return ""
+	})
 }
