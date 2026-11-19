@@ -22,6 +22,12 @@ jobs:
   bench:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    # setup-himorime (v0.2.0 and later) comments on a same-repository pull
+    # request when the comparison regresses, is inconclusive or skips a
+    # check; its post step fails without this.
+    permissions:
+      contents: read
+      pull-requests: write
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
