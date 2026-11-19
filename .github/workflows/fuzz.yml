@@ -11,6 +11,12 @@ on:
 permissions:
   contents: read
 
+# A new push to a pull request cancels the run of the push before it;
+# runs on main and on a schedule are never canceled.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
   # Fuzzing itself stays nightly: a five-minute job per target is too
   # much to run on every push. The check below it is not, and runs on
