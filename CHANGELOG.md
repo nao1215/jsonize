@@ -10,7 +10,7 @@ project follows [Semantic Versioning](https://semver.org/).
 
 - CI scans the repository with gosec and Trivy on every pull request (Trivy covers dependency vulnerabilities, committed secrets and misconfigurations, and also runs daily). Workflow actions are recorded in `.github/workflows/actions.lock`, which CI verifies against the pinned commits.
 - Building from source now needs Go 1.26.11 or later (was 1.26.9). Go 1.26.11 fixes the `net/http` advisory GO-2026-6859, which govulncheck finds reachable from jsonize on the earlier patch.
-- Release archives and Linux packages now include the license texts of the linked dependencies under `THIRD_PARTY_LICENSES/`. CI checks that every module linked into jz on Linux, macOS and Windows carries a license that is not GPL, LGPL, AGPL or unidentifiable, and scans every pull request and push to main for committed secrets with gitleaks.
+- Release archives and Linux packages now include the license texts of the code linked into jz under `THIRD_PARTY_LICENSES/`, the Go standard library's among them. CI checks that every module linked into jz on Linux, macOS and Windows carries a license that is not GPL, LGPL, AGPL or unidentifiable, and scans every pull request and push to main for committed secrets with gitleaks.
 
 ## [0.9.2]
 

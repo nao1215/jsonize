@@ -93,7 +93,9 @@ jobs:
             for f in jz LICENSE README.md; do
               grep -qx "$f" <<<"$listing" || { echo "$archive lacks $f"; exit 1; }
             done
-            grep -q '^THIRD_PARTY_LICENSES/.*LICENSE' <<<"$listing" || { echo "$archive lacks THIRD_PARTY_LICENSES"; exit 1; }
+            for f in THIRD_PARTY_LICENSES/go/LICENSE THIRD_PARTY_LICENSES/github.com/nao1215/jsonize/LICENSE; do
+              grep -qx "$f" <<<"$listing" || { echo "$archive lacks $f"; exit 1; }
+            done
           done
           for target in windows_amd64 windows_arm64; do
             archive="jsonize_${version}_${target}.zip"
@@ -101,14 +103,16 @@ jobs:
             for f in jz.exe LICENSE README.md; do
               grep -qx "$f" <<<"$listing" || { echo "$archive lacks $f"; exit 1; }
             done
-            grep -q '^THIRD_PARTY_LICENSES/.*LICENSE' <<<"$listing" || { echo "$archive lacks THIRD_PARTY_LICENSES"; exit 1; }
+            for f in THIRD_PARTY_LICENSES/go/LICENSE THIRD_PARTY_LICENSES/github.com/nao1215/jsonize/LICENSE; do
+              grep -qx "$f" <<<"$listing" || { echo "$archive lacks $f"; exit 1; }
+            done
           done
           for arch in amd64 arm64; do
             for ext in deb rpm apk; do
               test -s "jsonize_${version}_linux_${arch}.${ext}"
             done
             dpkg-deb -c "jsonize_${version}_linux_${arch}.deb" | grep ' \./usr/bin/jz$' > /dev/null
-            dpkg-deb -c "jsonize_${version}_linux_${arch}.deb" | grep '/usr/share/doc/jsonize/THIRD_PARTY_LICENSES/' > /dev/null
+            dpkg-deb -c "jsonize_${version}_linux_${arch}.deb" | grep ' \./usr/share/doc/jsonize/THIRD_PARTY_LICENSES/go/LICENSE$' > /dev/null
           done
           # Six archives, six packages and one SBOM per archive.
           for archive in jsonize_"${version}"_*.tar.gz jsonize_"${version}"_*.zip; do

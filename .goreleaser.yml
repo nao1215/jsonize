@@ -5,13 +5,16 @@ project_name: jsonize
 before:
   hooks:
     - go mod tidy
-    # The license texts of the modules linked into jz, per GOOS, shipped
-    # as THIRD_PARTY_LICENSES/ in the archives and packages. GOROOT is
-    # explicit so go-licenses still recognizes the standard library after
-    # a toolchain switch; Windows uses the GOEXPERIMENT its build uses.
-    - sh -c 'GOROOT="$(go env GOROOT)" GOOS=linux go-licenses save ./cmd/jz --save_path=third_party_licenses/linux --force'
-    - sh -c 'GOROOT="$(go env GOROOT)" GOOS=darwin go-licenses save ./cmd/jz --save_path=third_party_licenses/darwin --force'
-    - sh -c 'GOROOT="$(go env GOROOT)" GOOS=windows GOEXPERIMENT=nogreenteagc go-licenses save ./cmd/jz --save_path=third_party_licenses/windows --force'
+    # The license texts of the code linked into jz, per GOOS, shipped as
+    # THIRD_PARTY_LICENSES/ in the archives and packages: what go-licenses
+    # saves for the modules (jz has none outside its own today), and the
+    # LICENSE of the Go toolchain that builds the binary, since go-licenses
+    # leaves out the standard library. GOROOT is explicit so go-licenses
+    # still recognizes the standard library after a toolchain switch;
+    # Windows uses the GOEXPERIMENT its build uses.
+    - sh -c 'GOROOT="$(go env GOROOT)" GOOS=linux go-licenses save ./cmd/jz --save_path=third_party_licenses/linux --force && mkdir -p third_party_licenses/linux/go && cp "$(go env GOROOT)/LICENSE" third_party_licenses/linux/go/LICENSE'
+    - sh -c 'GOROOT="$(go env GOROOT)" GOOS=darwin go-licenses save ./cmd/jz --save_path=third_party_licenses/darwin --force && mkdir -p third_party_licenses/darwin/go && cp "$(go env GOROOT)/LICENSE" third_party_licenses/darwin/go/LICENSE'
+    - sh -c 'GOROOT="$(go env GOROOT)" GOOS=windows GOEXPERIMENT=nogreenteagc go-licenses save ./cmd/jz --save_path=third_party_licenses/windows --force && mkdir -p third_party_licenses/windows/go && cp "$(go env GOROOT)/LICENSE" third_party_licenses/windows/go/LICENSE'
 
 builds:
   - id: jz
