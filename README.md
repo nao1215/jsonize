@@ -42,10 +42,9 @@ $ jz new --string "message=$MESSAGE" --path /metadata/labels/app=api replicas:=3
 
 ![jz reading df, uptime and free, and refusing input it cannot identify](demo/jsonize.gif)
 
-The output of more than two hundred commands is identified from its
-text. Each format is a YAML definition, so reading another one needs no
-Go and no rebuild. jz is one binary with no dependencies outside the Go
-standard library.
+jz identifies the output of more than two hundred commands from its
+text. Each format is a YAML definition, so adding one needs no Go and no
+rebuild.
 
 Documentation: https://nao1215.github.io/jsonize/ ([Cookbook](https://nao1215.github.io/jsonize/cookbook/))
 
@@ -76,14 +75,7 @@ archives for Linux, macOS and Windows (amd64 and arm64), and `.deb`,
 [install guide](https://nao1215.github.io/jsonize/install/) for archive
 installation, verifying a download and bash/zsh completion.
 
-## Supported OS (tested on GitHub Actions)
-
-- Linux
-- macOS
-- Windows
-- FreeBSD (the end-to-end suite, in a virtual machine; install with `go install`)
-
-OpenBSD and NetBSD are built and linted, not run.
+CI tests Linux, macOS, Windows, and FreeBSD (the end-to-end suite in a virtual machine; install with `go install`). OpenBSD and NetBSD are built and linted, not run.
 
 ## Using it
 
@@ -126,29 +118,24 @@ Help:
 
 ### Command output
 
-Piped output is identified from its text, and a format too generic to
-claim is refused with the parser name to pass. `--extract` and
-`--exclude` keep or drop keys of the objects jz prints; a key the output
-cannot have is an error that lists the keys it has.
+`--extract` and `--exclude` keep or drop keys; a key the output cannot
+have is an error that lists the keys it has.
 
 ```console
 $ df -h | jz --extract filesystem --extract mounted_on
 [{"filesystem":"/dev/nvme0n1p2","mounted_on":"/"}, ...]
 ```
 
-`jz run` hands the command your standard input, passes its standard
-error through, mirrors its exit status and runs it with `LC_ALL=C`.
-Everything after the command name belongs to the command, and a bare
-`--` states that boundary explicitly.
+`jz run` passes standard input and standard error through, mirrors the
+command's exit status, and runs it with `LC_ALL=C`.
 
 ### Files and text
 
 A data file is read as the format its extension names (`.csv`, `.tsv`,
 `.ltsv`, `.jsonl` or `.ndjson`, `.json`, `.yaml` or `.yml`, each also as
-`.gz` or `.bz2`), and piped data as the format `--format` names, with no
-detection; text the format does not allow is exit 3 with the line.
+`.gz` or `.bz2`), and piped data as the format `--format` names.
 `--format text`, `lines` and `nul` read plain text as one string or a
-list of strings, and `--type COLUMN=int` converts a CSV column.
+list of strings.
 
 ```console
 $ git branch --format='%(refname:short)' | jz --format lines
@@ -160,10 +147,8 @@ $ kubectl get deploy api -o yaml | jz --format yaml --extract spec
 
 ### JSON from arguments
 
-`jz new` makes JSON from arguments. `=` makes a string, `:=` reads JSON,
-`@path` reads a file and `[]` appends to an array. Nothing is guessed.
-`--string` writes text as it is, `--text-file` keeps a file's line
-endings, and `--path` places a value at a JSON Pointer.
+In `jz new`, `=` makes a string, `:=` reads JSON, `@path` reads a file
+and `[]` appends to an array. `--path` places a value at a JSON Pointer.
 
 ```console
 $ jz new name=api replicas:=3 'tags[]=web' spec:=@deploy.yaml
@@ -172,10 +157,8 @@ $ jz new name=api replicas:=3 'tags[]=web' spec:=@deploy.yaml
 
 ### Streams
 
-`--stream` answers a command that keeps printing with one JSON document
-per line as each record is read, and `jz new --each` wraps each one as it
-comes. The first record that cannot be read ends the stream with exit
-status 3, keeping the documents already written.
+`--stream` writes one JSON document per record as it is read, and
+`jz new --each` wraps each one.
 
 ```console
 $ vmstat 1 | jz --stream | jz new --each --string host=web sample:=@-
@@ -183,13 +166,11 @@ $ vmstat 1 | jz --stream | jz new --each --string host=web sample:=@-
 ```
 
 The [usage guide](https://nao1215.github.io/jsonize/usage/#reading-a-command-that-keeps-printing)
-has the details, and `--raw`, `--explain` and `--parser` for looking at
-how a definition reads a command's output.
+has the details.
 
 ## Detection and limits
 
-Some formats need a parser name because their text is too generic to
-identify automatically:
+A format too generic to identify needs a parser name:
 
 ```console
 $ git diff --numstat | jz
@@ -207,8 +188,7 @@ string because the same format reads `ls -lh`.
 Naming a parser does not skip the checks: the definition's signature
 still has to fit, and no option turns that off.
 
-Which forms of which commands are read, and which are refused and why,
-are listed at https://nao1215.github.io/jsonize/coverage/.
+The [coverage page](https://nao1215.github.io/jsonize/coverage/) lists which forms of which commands are read and which are refused.
 
 Of the commands Windows prints, jz reads `ipconfig`, `ipconfig /all`
 and `systeminfo`. CI runs them on English Windows Server 2022 and 2025;
@@ -218,32 +198,13 @@ other display languages and code pages are not checked.
 
 [jc](https://github.com/kellyjonbrazil/jc) converts command output, file formats and strings, and [jo](https://github.com/jpmens/jo) builds JSON from arguments. jz overlaps with part of each. Both are older and packaged by the major distributions, and each is the better choice for some jobs.
 
-| | jc 1.25.7 | jo 1.9 | jz v0.10.0 |
-|---|---|---|---|
-| Command output | 236 parsers in all, 19 of them streaming; named, or taken from the command name | no | 758 definitions under 280 names; detected from the text, generic formats need `--parser` |
-| Commands only one of jc and jz reads | `traceroute`, `iptables`, `dmidecode`, `wg`, `ufw`, `pacman`, ... | no | `systemd-*` tools, `lsfd`, `lsns`, `journalctl`, `sar`, `docker`, ... |
-| File formats | CSV, TSV, INI, YAML, TOML, XML, plist, X.509, ... | no | CSV, TSV, LTSV, JSON, JSON Lines, YAML; INI with `--parser` |
-| Strings (URL, JWT, IP address, timestamp, ...) | yes | no | no |
-| JSON from arguments | no | yes; value types are guessed | `jz new`; `=` is a string, `:=` is JSON |
-| Input that does not fit | many parsers return an empty or partial result with status 0, others exit 100 | not applicable | refused with exit status 3 or 4 |
-| Adding a parser | Python plugin | not applicable | YAML definition, checked by `jz test` |
-| Output | JSON or YAML | JSON | JSON |
-| Library | Python | no | Go |
-| Runtime | Python 3.6+ and three packages, or a prebuilt binary | one C binary, 39 KB stripped | one static Go binary, 15 MB stripped |
+jc uses a parser you name or one taken from the command name, also reads strings such as URLs and timestamps, and is extended with Python plugins. jz detects the format from the text, refuses input that does not fit with exit status 3 or 4, and is extended with YAML definitions. jo guesses value types; `jz new` does not.
 
-Measured on one machine with [himorime](https://github.com/nao1215/himorime): with the parser named or with `jz run`, jz read a short `df -h` report in about 6 to 8 ms and jc in 35 to 72 ms. When jz detects the format of a short output, jc was faster on one core (35 ms against 55 ms) and held less memory. On 100,000 rows of `ps aux` and on a CSV, jz was faster on both core settings. jo built an object in about a third of the time `jz new` took on all cores, and in about two thirds pinned to one. The [comparison page](https://nao1215.github.io/jsonize/compare/) has the full tables, the measurements and how to repeat them.
+The [comparison page](https://nao1215.github.io/jsonize/compare/) has the feature table for jc 1.25.7, jo 1.9 and jz v0.10.0, and timings measured with [himorime](https://github.com/nao1215/himorime): jz is faster with the parser named and on large input, while jc is faster when jz has to detect the format of a short output on one core, and jo builds objects faster than `jz new`.
 
 ## What jsonize does not do
 
-- It does not query, sort, aggregate, or reshape JSON. Use `jq` for that.
-- It does not replace a command's native JSON output. Prefer native output when available.
-- It does not parse arbitrary free-form text. Input must match a known or explicitly defined format.
-- It does not guess when input is ambiguous. Specify `--parser`, or conversion fails.
-- It does not silently discard input that it cannot parse.
-- It does not fetch parser definitions or access the network during conversion.
-- It does not invoke a shell for `jz run`; shell syntax is interpreted only when you explicitly run a shell.
-
-Lines a definition names as not data, such as headings, `total` lines and comments, are left out without a message; `--explain` counts them.
+jz does not query or reshape JSON (use `jq`), and a command's native JSON output is the better choice when it has one. Input must match a known or explicitly defined format: ambiguous input needs `--parser`, and text jz cannot read is an error, not dropped. Lines a definition names as not data, such as headings and `total` lines, are left out; `--explain` counts them. Conversion never touches the network, and `jz run` does not start a shell.
 
 ## Adding a parser
 
@@ -253,10 +214,9 @@ It rewrites the expected JSON of every fixture it reads, so review each
 changed file, not only the new one. Then run `jz test` to check the
 definition against its fixtures and the official fixture corpus.
 
-Registries are layered: `JSONIZE_REGISTRY_PATH`, then the user registry
-under the config directory, then the one built into the binary. The guide is at
-https://nao1215.github.io/jsonize/write-a-parser/ and the reference at
-https://nao1215.github.io/jsonize/definition-format/.
+The [guide](https://nao1215.github.io/jsonize/write-a-parser/) and the
+[definition reference](https://nao1215.github.io/jsonize/definition-format/)
+cover registry layering and the YAML.
 
 ## From Go
 
@@ -283,11 +243,9 @@ The four in one runnable piece are in
 | 141 | standard output was closed early, as by a pipe into `head`; nothing is said, and a command `jz run` started is stopped |
 | *n* | `jz run` mirrors the command's own status, or 128+signal |
 
-Diagnostics go to standard error. By default, reading finishes before
-JSON is written, so a failure leaves standard output empty. jz writes
-JSON only. With `--stream` and `jz new --each`, the records already
-written remain when a later record ends the stream; the status is 3 and
-the failure is on standard error.
+Diagnostics go to standard error. A failure leaves standard output
+empty, except with `--stream` and `jz new --each`, where the records
+already written remain.
 
 ## Testing
 
