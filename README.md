@@ -249,8 +249,9 @@ Lines a definition names as not data, such as headings, `total` lines and commen
 
 Add a YAML definition, a captured `.txt` fixture and its `.yaml` capture
 metadata, then run `jz test --update` to generate its expected JSON.
-Review that output, and run `jz test` to check the definition against its
-fixtures and the official fixture corpus.
+It rewrites the expected JSON of every fixture it reads, so review each
+changed file, not only the new one. Then run `jz test` to check the
+definition against its fixtures and the official fixture corpus.
 
 Registries are layered: `JSONIZE_REGISTRY_PATH`, then the user registry
 under the config directory, then the one built into the binary. The guide is at
