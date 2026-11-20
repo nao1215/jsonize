@@ -79,6 +79,8 @@ bench-compare: ## Compare main with the working tree on the himorime suite (BASE
 .PHONY: bench-docs
 bench-docs: ## Measure jz against jc and jo and rewrite the Benchmarks section of website/content/compare.md (needs himorime, jc, jo, jq, taskset)
 	himorime run --format markdown --output website/content/compare.md --section benchmarks bench/compare
+	sed "s/measured on [0-9-]* at commit [0-9a-f]*/measured on $$(date -u +%F) at commit $$(git rev-parse --short=8 HEAD)/" website/content/compare.md > website/content/compare.md.tmp
+	mv website/content/compare.md.tmp website/content/compare.md
 
 .PHONY: e2e
 e2e: build ## Run the atago end-to-end suite (requires atago on PATH)

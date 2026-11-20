@@ -18,7 +18,7 @@ The versions compared are jc 1.25.7 (released 2026-06-18, MIT licence), jo 1.9 (
 
 - Querying, sorting, aggregating or reshaping JSON. Use `jq`.
 - Replacing a command's native JSON output. Prefer it when there is one.
-- Free-form text. Input must match a known or explicitly defined format.
+- Extracting structure from free-form text. Command output must match a known or explicitly defined format; `--format text` and `lines` only wrap text as strings.
 - Guessing between ambiguous formats. Name one with `--parser`, or conversion fails.
 - Dropping input it cannot parse without saying so. A definition can name lines that are not data (headings, `total` lines, comments, the `df:` messages before a table); those are left out without a message, and `--explain` counts them.
 - Network access, including fetching definitions.
@@ -79,7 +79,7 @@ jo's guess saves writing `:=`. A value that looks like a number loses its spelli
 
 ## Benchmarks
 
-Timings of one process per call, measured on 2026-09-17 with [himorime](https://github.com/nao1215/himorime) from `bench/compare/himorime.yaml` and written into this page by `make bench-docs`. They cover time, CPU time and peak memory, not whether the JSON is correct.
+Timings of one process per call, measured with [himorime](https://github.com/nao1215/himorime) from `bench/compare/himorime.yaml` and written into this page by `make bench-docs`. They cover time, CPU time and peak memory, not whether the JSON is correct. The figures below were measured on 2026-09-17 at commit 2a3a868d, the head named under the tables, and `make bench-docs` rewrites this date and commit with the figures.
 
 jz is built as the release is built (`CGO_ENABLED=0`, `-trimpath`, `-ldflags "-s -w"`) from the commit named under the tables. jc 1.25.7 is installed from PyPI; its prebuilt binaries were not measured. jo 1.9 is built with meson and stripped.
 

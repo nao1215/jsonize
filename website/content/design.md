@@ -82,10 +82,10 @@ be `records` or `tree` for a report with a header above the repeats. Adding
 a type does not change the format version, because an unknown type is
 already an error.
 
-The first five types assume one line is one record. The last three each
-break that: a CSV value may contain a line break, an ini file is sections,
-and a drawn table marks its rows with rules. A ninth type would have to
-break it in a new way.
+Most of them assume one line is one record. `csv`, `ini` and `table` with
+`split: box` each break that: a CSV value may contain a line break, an ini
+file is sections, and a drawn table marks its rows with rules. A new type
+would have to break it in a way none of these does.
 
 ### Data files are read by extension, not detected
 
@@ -538,9 +538,8 @@ $ echo $?
 Streams once skipped the bad record and went on. But a stream with a gap
 looks like one without to the next program, which does not read standard
 error and acts on the records before the exit status arrives. So the
-stream stops, `--stop-on-error` was removed (naming it is refused with a
-message), and a loop that wants to continue past one odd line can start jz
-again on what follows.
+stream stops, and `--stop-on-error` was removed (naming it is refused with a
+message).
 
 The other failures end a stream the same way. Text whose format cannot be
 identified is settled on the leading lines before anything is written
