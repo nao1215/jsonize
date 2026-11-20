@@ -20,7 +20,7 @@ $ df -h | go run github.com/nao1215/jsonize/cmd/jz@latest
 A size rounded by `-h` stays the string `df` printed, and `use_percent`
 is a number.
 
-## Three things to try next
+## Next steps
 
 ```console
 $ jz run --pretty free
