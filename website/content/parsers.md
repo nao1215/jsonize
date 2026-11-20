@@ -13,8 +13,8 @@ those promise.
 
 A handful of entries describe a shape rather than a command: `table`
 (`whitespace`, `aligned`, `box`), `csv` (`comma`, `tab`), `kv` (`colon`,
-`equals`) and `ini` (`default`). They are never chosen on their own —
-two words above two words says nothing about what produced them — and
+`equals`) and `ini` (`default`). They are never chosen on their own,
+because two words above two words says nothing about what produced them, and
 are reached by naming both halves:
 
 ```console
@@ -350,9 +350,9 @@ own on every change, by jz and by an independent validator.
 `x-jsonize.version` is the version of that output contract. It is not
 `format`, which versions how a definition is written; the two change for
 unrelated reasons. A change a program reading the output could be broken
-by — a key removed, a type changed or made nullable, an object become an
+by (a key removed, a type changed or made nullable, an object become an
 array, a key that is no longer always there or that now always is, a
-value added to or taken from an `enum` — is refused unless the version
+value added to or taken from an `enum`) is refused unless the version
 goes up with it. Adding a key that may appear is the one change that
 keeps the version. The JSON jz prints carries no version: the definition
 it was read with, which `--explain` names, identifies the contract.

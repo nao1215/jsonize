@@ -235,8 +235,8 @@ drop or trim your fixture to get past it.
 It also fails if the definition leaves text out without saying so. Every
 line of the fixture has to be read, blank, or named by an `ignore`
 expression, and a pattern has to reach both ends of the line it reads.
-Then the fixture is changed the ways real input goes wrong — a foreign
-line at the end, the same line in the middle, the whole fixture twice —
+Then the fixture is changed the ways real input goes wrong (a foreign
+line at the end, the same line in the middle, the whole fixture twice),
 and a definition that still succeeds has to carry the foreign line in
 its result. A list read from the fixture twice has to be the records of
 one copy twice, no fewer and nothing in between: a heading matched only

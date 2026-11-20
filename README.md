@@ -204,21 +204,19 @@ A rounded size such as `"1.8T"` stays a string. Use `df`, `free` or
 `lsblk -b` for exact numbers. The `size` field from `ls -l` also stays a
 string because the same format reads `ls -lh`.
 
-Naming a parser is a claim about the input, not a way past the checks:
-the definition's signature still has to fit, and there is no option that
-turns that off.
+Naming a parser does not skip the checks: the definition's signature
+still has to fit, and no option turns that off.
 
 Which forms of which commands are read, and which are refused and why,
 are listed at https://nao1215.github.io/jsonize/coverage/.
 
-jz builds and runs on Windows, which is a different thing from reading
-what Windows commands print. `ipconfig`, `ipconfig /all` and
-`systeminfo` are read, and CI runs them on English Windows Server 2022
-and 2025; other display languages and code pages are not checked.
+Of the commands Windows prints, jz reads `ipconfig`, `ipconfig /all`
+and `systeminfo`. CI runs them on English Windows Server 2022 and 2025;
+other display languages and code pages are not checked.
 
 ## Compared with jc and jo
 
-[jc](https://github.com/kellyjonbrazil/jc) converts command output, file formats and strings, and [jo](https://github.com/jpmens/jo) builds JSON from arguments. jz overlaps with part of each. Both are older, packaged by the major distributions, and the better choice for some jobs.
+[jc](https://github.com/kellyjonbrazil/jc) converts command output, file formats and strings, and [jo](https://github.com/jpmens/jo) builds JSON from arguments. jz overlaps with part of each. Both are older and packaged by the major distributions, and each is the better choice for some jobs.
 
 | | jc 1.25.7 | jo 1.9 | jz v0.10.0 |
 |---|---|---|---|
@@ -250,13 +248,12 @@ Lines a definition names as not data, such as headings, `total` lines and commen
 ## Adding a parser
 
 Add a YAML definition, a captured `.txt` fixture and its `.yaml` capture
-metadata, then run `jz test --update` to generate its expected JSON. Review that output and
-run `jz test` to validate the definition against its fixtures and the
-official fixture corpus.
+metadata, then run `jz test --update` to generate its expected JSON.
+Review that output, and run `jz test` to check the definition against its
+fixtures and the official fixture corpus.
 
 Registries are layered: `JSONIZE_REGISTRY_PATH`, then the user registry
-under the config directory, then the one built into the binary. Conversion
-uses local definitions and does not access the network. The guide is at
+under the config directory, then the one built into the binary. The guide is at
 https://nao1215.github.io/jsonize/write-a-parser/ and the reference at
 https://nao1215.github.io/jsonize/definition-format/.
 

@@ -526,7 +526,7 @@ parse:
 Result: an array of nodes. Every line is a node; its depth is how many
 levels of indentation open it, and its children are the lines under it.
 
-`indent` is one level as it is written — `"\t"`, `"  "` — or a list of
+`indent` is one level as it is written (`"\t"`, `"  "`) or a list of
 the forms one level may take, for a report that marks a level with a
 branch character. `systemd-analyze critical-chain` indents by two
 characters that are two spaces or a backtick and a dash, `| ` and `|-`
@@ -544,7 +544,7 @@ id to the width of its siblings after the branch (`|-   7557`), and the
 node pattern reads those spaces. Before a branch, a blank that is not a
 whole number of levels is still an error.
 A node is the fields `node` reads from its line plus a `children` array,
-which is `[]` when nothing follows it — so a consumer walks every node
+which is `[]` when nothing follows it, so a consumer walks every node
 the same way. A `node` pattern cannot name a group `children`.
 
 This is the one parser whose result has a depth the definition does not
@@ -718,8 +718,8 @@ something quietly dropped. A banner belongs in `input.select`, or in a
 `records` is not recursive: a part of it cannot be `records` or
 `composite`, and neither can `record.parse`. A record is a block that
 repeats at one level, so its own depth is stated by the definition and
-there is nothing for the input to say about it. A part may be a `tree`, which decides a different thing —
-how deep a line inside one block is — and `sensors -u` needs both.
+there is nothing for the input to say about it. A part may be a `tree`, which decides a different thing:
+how deep a line inside one block is. `sensors -u` needs both.
 
 ### type: composite
 
