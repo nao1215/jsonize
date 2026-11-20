@@ -4,7 +4,7 @@ description: "What jc, jo and jsonize each do, where they differ, and how long e
 toc: true
 ---
 
-Two established tools cover most of what jz does. [jc](https://github.com/kellyjonbrazil/jc) converts the output of commands, file formats and strings to JSON. [jo](https://github.com/jpmens/jo) builds JSON from shell arguments. jz does a part of each: `COMMAND | jz` overlaps with jc, and `jz new` overlaps with jo. This page lists the differences as they stand and does not rank the tools. Each one is the better choice for some jobs.
+Two established tools cover most of what jz does. [jc](https://github.com/kellyjonbrazil/jc) converts the output of commands, file formats and strings to JSON. [jo](https://github.com/jpmens/jo) builds JSON from shell arguments. jz does a part of each: `COMMAND | jz` overlaps with jc, and `jz new` overlaps with jo.
 
 The versions compared are jc 1.25.7 (released 2026-06-18, MIT licence), jo 1.9 (released 2022-11-04, GPL-2.0-or-later) and jz v0.10.0 (released 2026-11-19, MIT licence). jc has been developed since 2019 and jo since 2016. jz's first commit was in September 2026. jc and jo are packaged by the major Linux distributions and Homebrew. jz is installed with `go install`, a Homebrew tap, the AUR, or the packages on its release page. No code or fixture from either tool is copied into this repository.
 
@@ -14,17 +14,15 @@ The versions compared are jc 1.25.7 (released 2026-06-18, MIT licence), jo 1.9 (
 - Use jo when you need the smallest and fastest program for building JSON, type guessing (`n=1` becomes a number and `a=$(jo b=1)` nests an object without extra syntax), base64 file contents, or adding keys to an existing JSON document.
 - Use jz when you want the format detected from the text instead of named, input that does not fit refused rather than read partly, parsers defined in YAML without code, or command output, data files and argument-built JSON from one binary.
 
-## What jsonize does not do
+## Out of scope for jsonize
 
-- It does not query, sort, aggregate, or reshape JSON. Use `jq` for that.
-- It does not replace a command's native JSON output. Prefer native output when available.
-- It does not parse arbitrary free-form text. Input must match a known or explicitly defined format.
-- It does not guess when input is ambiguous. Specify `--parser`, or conversion fails.
-- It does not silently discard input that it cannot parse.
-- It does not fetch parser definitions or access the network during conversion.
-- It does not invoke a shell for `jz run`; shell syntax is interpreted only when you explicitly run a shell.
-
-A definition can still name lines that are not data, such as headings, `total` lines, comments and the `df:` messages printed before a table. Those lines are left out of the JSON without a message. `--explain` counts them.
+- Querying, sorting, aggregating or reshaping JSON. Use `jq`.
+- Replacing a command's native JSON output. Prefer it when there is one.
+- Extracting structure from free-form text. Command output must match a known or explicitly defined format; `--format text` and `lines` only wrap text as strings.
+- Guessing between ambiguous formats. Name one with `--parser`, or conversion fails.
+- Dropping input it cannot parse without saying so. A definition can name lines that are not data (headings, `total` lines, comments, the `df:` messages before a table); those are left out without a message, and `--explain` counts them.
+- Network access, including fetching definitions.
+- A shell for `jz run`. Shell syntax applies only when you run a shell yourself.
 
 ## Command output: jc and jz
 
@@ -48,7 +46,7 @@ A definition can still name lines that are not data, such as headings, `total` l
 | Runtime | Python 3.6 or later with ruamel.yaml, xmltodict and Pygments, or a prebuilt binary from its release page | a single static binary |
 | Integrations | Ansible filter plugin, FortiSOAR connector | none |
 
-The output of the two differs in key names, in which values are converted, and in which texts each accepts. [Coverage](../coverage/#compared-with-jc) has a fixture-by-fixture comparison. It uses jz's own fixtures, which were chosen for jz's definitions, so its counts favour jz and do not measure how often either tool is right on text in general.
+The two differ in key names, in which values are converted and in which texts each accepts. [Coverage](../coverage/#compared-with-jc) has a fixture-by-fixture comparison. It uses jz's own fixtures, which were chosen for jz's definitions, so its counts favour jz and do not measure how often either tool is right on text in general.
 
 ## JSON from arguments: jo and jz new
 
@@ -67,7 +65,7 @@ The output of the two differs in key names, in which values are converted, and i
 | Pretty output | `-p` | `-p` |
 | Program size, stripped (Linux amd64) | 39 KB, linked to the C library | 15 MB, static, the parsers included |
 
-The difference in value types is the one most likely to matter:
+The value types differ most often in practice:
 
 ```console
 $ jo version=1.10 zip=007 enabled=true note=
@@ -81,7 +79,7 @@ jo's guess saves writing `:=`. A value that looks like a number loses its spelli
 
 ## Benchmarks
 
-These are the timings of one process per call, measured with [himorime](https://github.com/nao1215/himorime) from `bench/compare/himorime.yaml` and written into this page by `make bench-docs`. They measure time, CPU time and peak memory only, not whether the JSON is correct.
+Timings of one process per call, measured with [himorime](https://github.com/nao1215/himorime) from `bench/compare/himorime.yaml` and written into this page by `make bench-docs`. They cover time, CPU time and peak memory, not whether the JSON is correct. The figures below were measured on 2026-09-17 at commit 2a3a868d, the head named under the tables, and `make bench-docs` rewrites this date and commit with the figures.
 
 jz is built as the release is built (`CGO_ENABLED=0`, `-trimpath`, `-ldflags "-s -w"`) from the commit named under the tables. jc 1.25.7 is installed from PyPI; its prebuilt binaries were not measured. jo 1.9 is built with meson and stripped.
 
