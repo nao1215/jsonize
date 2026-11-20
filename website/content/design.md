@@ -4,8 +4,7 @@ description: The decisions behind jsonize, the alternatives considered and what 
 toc: true
 ---
 
-This document records the decisions behind jsonize, the alternatives that
-were considered and what the MVP deliberately leaves out.
+The decisions behind jsonize, the alternatives that were considered and what the MVP leaves out.
 
 ## Goals
 
@@ -40,9 +39,9 @@ registry/                 the official definitions and fixtures (data) + a one-f
 e2e/atago                 end-to-end scenarios (e2e/README.md says what they guarantee where)
 ```
 
-Data flows in one direction: capture → select → parse → encode. The
-selector needs only the first lines of the text; the engine needs the
-compiled definition and the whole text; encoding never sees definitions.
+Data flows one way: capture, select, parse, encode. The selector needs only
+the first lines of the text, the engine needs the compiled definition and
+the whole text, and encoding never sees definitions.
 
 ## Decisions and trade-offs
 
@@ -50,9 +49,9 @@ compiled definition and the whole text; encoding never sees definitions.
 
 The command line has six subcommands (`run`, `new`, `list`, `test`, `completion`,
 `version`)
-and the options listed in the usage page. Every option that asked the
-user to make a decision jz should be making, or that changed the output
-contract, was removed before release:
+and the options listed in the usage page. Options that asked the user to
+make a decision jz should make, or that changed the output contract, were
+removed before release:
 
 | Removed | Why |
 |---------|-----|
@@ -64,50 +63,44 @@ contract, was removed before release:
 
 ### Definitions in YAML rather than Go plugins or a scripting language
 
-Definitions use a fixed set of parsing rules. They can split fields,
-match expressions and build nested records, including trees whose depth
-comes from the input. They cannot execute code or evaluate arbitrary
-expressions. Each definition can be reviewed and tested against captured
-output. YAML supports comments and nested structures. jz reads it with
-its own reader, which covers the part of YAML definitions use and names
-the line of every problem, including a key this build does not know.
+Definitions use a fixed set of parsing rules. They can split fields, match
+expressions and build nested records, including trees whose depth comes
+from the input, but they cannot execute code or evaluate expressions, so
+each one can be reviewed and tested against captured output. jz reads the
+YAML with its own reader, which covers the part of YAML definitions use and
+names the line of every problem, including a key this build does not know.
 
-### A handful of parse types, not a general pipeline
+### Eight parse types instead of a pipeline
 
 `table`, `csv`, `ini`, `tree`, `regex`, `kv`, `composite` and `records`
-cover the shapes the registered commands print. A composable step
-pipeline (split → map → filter …) was considered and rejected: it is
-harder to validate, harder to explain, and every real example so far fits
-one of the eight. The `input.select` block (after/until/skip/limit) plus
-`composite` gives section handling without a pipeline, `records` applies
-one description to a block that repeats, and a `composite` part may be
-`records` or `tree` so that a report with a header block above the
-repeats has a shape too. Adding a type does not change the format
-version, because an unknown type is already an error.
+cover the shapes the registered commands print. A composable step pipeline
+(split, map, filter) was rejected because it is harder to validate and
+explain, and every real example so far fits one of the eight. `input.select`
+(after/until/skip/limit) with `composite` handles sections, `records`
+applies one description to a repeating block, and a `composite` part may
+be `records` or `tree` for a report with a header above the repeats. Adding
+a type does not change the format version, because an unknown type is
+already an error.
 
-The list grew from five to eight, and each of the three broke the
-assumption the first five share, that one line is one record: a CSV value
-may contain a line break, an ini file is sections rather than lines, and
-a drawn table marks its rows with rules. That is the test a ninth would
-have to pass.
+The first five types assume one line is one record. The last three each
+break that: a CSV value may contain a line break, an ini file is sections,
+and a drawn table marks its rows with rules. A ninth type would have to
+break it in a new way.
 
 ### Data files are read by extension, not detected
 
-A CSV, TSV, LTSV, JSON Lines, JSON or YAML file is read as the format
-its extension or `--format` names, by a reader of that format rather
-than by a definition, and nothing is guessed from the text. Text with no
-format of its own is read as strings with `--format text`, `lines` or
-`nul`, which have no extension: a `.txt` file is more often a command's
-output than a list of lines, and detection keeps reading it as one.
+A CSV, TSV, LTSV, JSON Lines, JSON or YAML file is read as the format its
+extension or `--format` names, by a reader of that format, and nothing is
+guessed from the text. Text with no format of its own is read as strings
+with `--format text`, `lines` or `nul`, which have no extension, because a
+`.txt` file is more often a command's output than a list of lines.
 
-A CSV value stays text unless `--type` names its column. Guessing that
-`007` is a number, or that `1` is true, is what a data file converter is
-usually wrong about, and the conversion `--type` asks for is the one a
-definition's field does, so there is one set of rules for both. These are
-the files a pipeline hands on, and turning them into JSON is the same
-job as turning a command's output into JSON. XML, TOML, plist, x509 and
-JWT stay out: each has a specification that makes reading it a project
-of its own, and a tool whose whole job is that format.
+A CSV value stays text unless `--type` names its column. Data file
+converters usually go wrong by guessing that `007` is a number or `1` is
+true. `--type` uses the same conversions as a definition's fields, so there
+is one set of rules. XML, TOML, plist, x509 and JWT stay out: each has a
+specification that makes reading it a project of its own, and a tool whose
+whole job is that format.
 
 ### Table splitting
 
@@ -119,534 +112,386 @@ of its own, and a tool whose whole job is that format.
   cells become `null`. Needed for `lsblk` and `w`.
 - `delimiter`: a literal separator (`du`'s tab).
 
-Explicit `header.columns` is preferred in the official registry because
-derived names depend on the exact header text; derivation exists for
-quick local definitions.
+The official registry prefers explicit `header.columns`, because derived
+names depend on the exact header text. Derivation exists for quick local
+definitions.
 
 ### Variant = output format
 
-One definition per *format*, not per implementation. GNU and BusyBox `df`
-without options print the same table, so one definition covers both and
-lists them in `metadata.compatible`; `df -h` differs between them ("Avail"
-vs "Available") and gets two definitions. This keeps definitions
-honest: a definition claims exactly what its fixtures prove.
+There is one definition per output format, not per implementation. GNU and
+BusyBox `df` without options print the same table, so one definition covers
+both and lists them in `metadata.compatible`. `df -h` differs between them
+("Avail" vs "Available") and gets two definitions. A definition claims
+exactly what its fixtures prove.
 
 ### Rounded numbers stay text
 
-`df -h` steps by 1024 and `df -H` by 1000; the output records neither,
-and both round. Deriving bytes from "1.1G" would invent both a base and a
-precision, so human-readable sizes are reported exactly as printed and
-the exact forms of the same commands (`df`, `free`, `ls -l`, `lsblk -b`)
-are what produce numbers. The same reasoning removed the `ls -l` /
-`ls -lh` split: which one produced a listing is not decidable from the
-text, and with the size kept as printed it does not need to be.
+`df -h` steps by 1024 and `df -H` by 1000; the output records neither, and
+both round. Deriving bytes from "1.1G" would invent a base and a precision,
+so human-readable sizes are reported as printed, and the exact forms of the
+same commands (`df`, `free`, `ls -l`, `lsblk -b`) produce numbers. For the
+same reason there is no `ls -l` / `ls -lh` split: the text does not say
+which one produced a listing, and with the size kept as printed it does not
+need to.
 
-### The depth is input-derived, the shape is not
+### Trees: the input sets the depth, the definition sets the shape
 
-`lspci -vv` prints a device, its capabilities under it and a capability's
-flags under those. `lsusb -v` prints a device, a configuration, an
-interface, an endpoint and an endpoint's attributes. How far that goes is
-a property of the machine being described, so no definition can state it,
-and this was out of scope for exactly that reason: a definition says what
-the output looks like, and here it cannot say all of it.
+`lspci -vv` prints a device, its capabilities and each capability's flags.
+`lsusb -v` prints a device, configuration, interface, endpoint and endpoint
+attributes. How deep that goes depends on the machine, so no definition can
+state it. `type: tree` splits the question: the definition states the
+fields read from a node's line and that children go in a `children` array,
+and the input decides only how deep the nodes go.
 
-What it can say is what a node is. `type: tree` splits the two: the
-definition states the fields read from a node's line and that its
-children go in a `children` array, and the input states nothing but how
-deep the nodes go. The result has the shape the definition described,
-repeated as many times as the text nests. That is a narrower thing than
-"recursion in the format" and it is the part the earlier answer threw out
-with the rest.
-
-Every line is a node. Grouping runs of lines at one depth into a single
-node was the alternative, and it makes a node's identity depend on its
-siblings, which is a rule that cannot be stated in one sentence. With one
-line per node, a node's line is read by `node.parse` — an ordered list of
-regular expressions, or a key/value split — and the same description
-applies at every depth, since the shapes that appear at each are what the
-alternatives are for.
+Every line is one node, read by `node.parse` (an ordered list of regular
+expressions, or a key/value split), and the same description applies at
+every depth. Grouping runs of lines into one node was rejected because a
+node's identity would then depend on its siblings.
 
 Three limits keep the input from deciding more than the depth. A line
-indented two levels below the one above it has no parent and is an error
-rather than being attached to the nearest ancestor. Indentation that is
-not a whole number of the stated unit is an error rather than being
-rounded down. Depth stops at 32, which no report comes near, so a
-producer cannot make jz build an unbounded stack of objects.
+indented two levels below the one above it has no parent and is an error.
+Indentation that is not a whole number of the stated unit is an error, not
+rounded down. Depth stops at 32, so a producer cannot make jz build an
+unbounded stack of objects.
 
-`indent` states one level as it is written, and it accepts a list of the
-forms one level may take. That second half was not in the first version
-and three reports asked for it: tree(1) writes a level as one of
-`"|   "`, `"    "`, `"|-- "` and ``"`-- "``, `systemd-analyze
-critical-chain` as two spaces or a backtick and a dash, and `wpctl` as
-four spaces or a branch character. Each is a fixed width whose characters
-depend on whether anything follows, so a single string cannot count them
-and a list of alternatives can.
+`indent` states one level as written, and accepts a list of forms one level
+may take. tree(1) writes a level as one of `"|   "`, `"    "`, `"|-- "` and
+``"`-- "``, `systemd-analyze critical-chain` as two spaces or a backtick
+and a dash, and `wpctl` as four spaces or a branch character. Each is a
+fixed width whose characters depend on whether anything follows, so a list
+of alternatives counts them where a single string cannot. A `level`
+expression capturing the leading whitespace was dropped, because it still
+leaves open how much of the capture is one level.
 
-A `level` expression that captured the leading whitespace was the other
-candidate. It was dropped because it still leaves the question the width
-answers — how much of what it captured is one level — so it adds a key
-without removing a question.
-
-`tree` may be a `composite` part, which is what a report with a banner
-above the tree needs, and a `records` part, which `sensors -u` needs: it
-prints a block per chip and a two-level tree of features inside each. It
-was forbidden there at first on the grounds that a record and a tree both
-say where a line belongs; they do not say it about the same thing.
-`start` decides where a block begins and `indent` decides how deep a line
-inside one is, and neither can answer the other's question.
+`tree` may be a `composite` part (a banner above the tree) or a `records`
+part, which `sensors -u` needs for a block per chip with a two-level tree
+of features inside.
 
 ### A definition can be given instead of named
 
-jz reads output it has a definition for, and the honest answer for
-everything else was exit 4 and a suggestion to write one. That is right
-about what jz will not guess and wrong about what it will not do: the
-caller often knows the shape perfectly well and only wants this reading
-of it, once, without a registry.
+Output with no definition exits 4, but the caller often knows the shape and
+only wants this reading once, without a registry. `--define` takes the
+definition itself: a `parser.yaml` without the four keys that place it in a
+registry, leaving `parse` and optionally `input` and `fields`. Nothing is
+detected, so it cannot be combined with `--parser`. The body goes through
+the same loader and validation as a file, so an inline definition can say
+nothing a file cannot, and one worth keeping moves into a registry
+unchanged.
 
-`--define` takes the definition itself. It is a `parser.yaml` without the
-four keys that place one in a registry, so what is left is `parse` and
-optionally `input` and `fields`. Nothing is detected, which is why it
-cannot be combined with `--parser`: both are answers to a question, and
-`--define` has already answered it.
+The registry also has definitions that describe a shape rather than a
+command: `table/whitespace`, `table/aligned`, `table/box`, `csv/comma`,
+`csv/tab`, `kv/colon`, `kv/equals` and `ini/default`. They are `--define`
+under a name.
 
-It adds no expressive power. The body goes through the same loader and
-the same validation as a file, so an inline definition can say nothing a
-file cannot, and a definition that turns out to be worth keeping is
-moved into a registry unchanged.
-
-Beside it the registry gained a few definitions that describe a shape
-rather than a command: `table/whitespace`, `table/aligned`, `table/box`,
-`csv/comma`, `csv/tab`, `kv/colon`, `kv/equals` and `ini/default`. They
-are `--define` under a name, for the readings common enough to be worth
-one.
-
-Those needed a rule the registry had not needed before. A definition with
-no signature and `auto_detect: false` makes no claim about the text at
-all, so the checks that ask whether a definition reads a neighbour's
-output cannot be applied to it: it reads everything of that shape, which
-is what it is for, and running the check would report every fixture in
-the registry against `table/whitespace`. `selector.ShapeOnly` names that
-class, and the conformance runner leaves those out of the cross product
-and requires the variant to be named rather than the parser alone, since
-`table/whitespace` and `table/aligned` read the same lines two ways and
-no text can separate them.
+A definition with no signature and `auto_detect: false` makes no claim
+about the text, so the check that asks whether it reads a neighbour's
+output would flag every fixture in the registry against `table/whitespace`.
+`selector.ShapeOnly` names that class. The conformance runner leaves those
+out of the cross product and requires the variant to be named, since
+`table/whitespace` and `table/aligned` read the same lines two ways and no
+text can separate them.
 
 ### Three formats that are not line-oriented
 
-`csv`, `ini` and `table` with `split: box` were added because each one
-breaks the assumption the other parsers are built on, that one line is
-one record.
+A CSV value may contain the delimiter, a quote or a line break, so the
+lines are joined back together and read with `encoding/csv`. A streamed CSV
+holds a line back while a quote that opened a value is still open; counting
+quotes instead mistook a quote in the middle of a value for an open one and
+held every line after it. An ini file is sections of keys, so it is one
+object with no streaming form. A drawn table (`split: box`) takes its cells
+from the bars, and a value wrapped over three lines is one cell.
 
-A CSV value may contain the delimiter, a quote, or a line break, so the
-lines are joined back together and read with `encoding/csv`. A streamed
-CSV holds a line back while a quote that opened a value is still open;
-counting quotes instead took one in the middle of a value for an open
-one, and held every line after it. An ini file is sections of keys and so is one
-object with no streaming form at all. A drawn table takes its cells from
-the bars rather than from whitespace, and a value the table wrapped over
-three lines is one cell.
+MySQL, psql, `sqlite3` in box mode and `duf` draw rules only around the
+table and under the header, so every body line is a row, and a wrapped
+value's continuation has an empty first cell. A row whose first column is
+blank therefore reads as a continuation.
 
-What a drawn table does not do is mark every row with a rule. It was
-written that way first, and `duf` said otherwise: MySQL, psql, `sqlite3`
-in box mode and `duf` all draw a rule around the table and under the
-header and nowhere else, so every line of the body is a row. A wrapped
-value writes its continuation with the first cell left empty, and that is
-what separates the two. It also means a row whose first column is
-genuinely blank cannot be told from a continuation — in this format they
-are the same line.
-
-Adding them cost no new key beyond `split: box`, and each brought its own
-fuzz coverage. That found a bug older than any of them: `StripANSI` would
-take a line break as the final byte of an escape sequence, joining two
-records into one, and it did so only in the whole-document reader —
-the streaming one had already cut the line off. The two readings
-disagreed on `"\x1b\n"`. No escape sequence ends with a line break, so
-none may eat one.
+The three needed no new key beyond `split: box`. Their fuzz targets found
+that `StripANSI` in the whole-document reader took a line break as the end
+of an escape sequence (`"\x1b\n"`) and joined two records; no escape
+sequence may consume a line break now.
 
 ### A repeating report is an array of samples
 
-`iostat 1 3` prints its column header once per sample. The second one
-reached the device table as a row and failed to convert, so the whole
-report was exit 3 — the one input `iostat` is most often asked for could
-not be read at all. `mpstat` and `pidstat` had the same fault.
+`iostat 1 3` prints its column header once per sample. The second header
+used to reach the device table as a row and fail to convert, so the whole
+report exited 3. `mpstat` and `pidstat` had the same fault. These reports
+are now an array of samples: `type: records` with the sample's header line
+as `start`, and the tables inside a sample as its parts. A single run is
+the same shape with one sample. That broke what those definitions returned,
+and it makes `--stream` useful: one sample per line, written as soon as it
+is complete. No new key was needed, because inside `records` a part's table
+already takes its header from the first line of its region.
 
-Those reports are now read as an array of samples: `type: records` with
-the sample's own header line as `start`, and the tables inside a sample
-as its parts. A single-shot run is the same shape with one sample in it.
-That is a breaking change to what those definitions return, and it is
-the shape that makes `--stream` mean something here: one sample per line,
-written as soon as it is complete, which is what a command run for
-minutes is run for.
+The sysstat banner (kernel, host, CPU count) is dropped. `uname -a` and
+`nproc` print the same facts, and keeping it would mean an object for the
+banner and an array for the rest, which has no streaming form. `vmstat` and
+`sar` were left alone: they print their header once with every sample
+under it, so an interval run was already one table with a row per sample.
 
-No new key was needed. The suspicion was that a table inside a repeating
-block could not take its header from the block, which would have wanted
-something like `header.from_block: true`. It can: a part's table already
-derives its header from the first line of the part's region, and inside
-`records` that region is the block. The vocabulary that was already there
-(`records`, `composite` parts, `input.select.after`) said the whole
-thing.
-
-Two things were given up. The sysstat banner is dropped: it names the
-kernel, the host and the CPU count, which `uname -a` and `nproc` also
-print and jz also reads, and what it does not carry is a sample. Keeping
-it would mean one object for the banner and an array for the rest, which
-has no streaming form at all, so the trade is the banner against the
-option this whole change exists for.
-
-The other is that `vmstat` and `sar` were left alone. They print their
-column header once and every sample under it, so an interval run was
-already one table with one row per sample and nothing was broken. Making
-them look like the others would have been a change for symmetry, and the
-difference is in what the commands print rather than in what jz prefers.
-
-### A duration is seconds, and the rounded rule is about naming
+### A duration is seconds
 
 `ps` prints `00:04:14`, `uptime` prints `13 days, 4:22` and `w` prints
-`13:42m`. Each of those is a length of time that a consumer has to
-subtract, compare or sum, and doing any of that on the string means
-reimplementing this reading in whatever asked. `type: duration` reads
-them and reports seconds.
+`13:42m`. A consumer has to subtract, compare or sum these, so
+`type: duration` reads them and reports seconds.
 
-The one thing the text cannot settle is a bare two-part reading. `4:50`
-is four minutes fifty seconds out of `ps` and one line later `1:23` is an
-hour and twenty-three minutes out of `uptime`; nothing distinguishes
-them. So `layout` is required and says which — `h:mm` or `mm:ss` — and
-there is no default, because being wrong is a factor of sixty that
-nothing downstream would notice. A trailing unit letter settles it where
-the format prints one, which is how `w` separates `13:42m` from `13:42`.
+A bare two-part reading is ambiguous: `4:50` from `ps` is four minutes
+fifty seconds, `1:23` from `uptime` is an hour and twenty-three minutes. So
+`layout` is required (`h:mm` or `mm:ss`) with no default, because a wrong
+guess is a factor of sixty nobody downstream would notice. A trailing unit
+letter settles it where the format prints one, which is how `w` separates
+`13:42m` from `13:42`.
 
-The rule that a rounded number stays text applies here too, and working
-out what it means sharpened the rule itself. It is about what the text
-*names*, not about how coarse the value is. `1.8T` names no particular
-number of bytes until a base and a precision are chosen for it, so
-converting invents both. `13 days, 4:22` names exactly 1138920 seconds;
-the machine has been up for some seconds more, but the text is not
-ambiguous about the length it states, it just states a coarser one.
+The rounded-numbers rule is about what the text names, not how coarse the
+value is. `1.8T` names no particular number of bytes until a base and a
+precision are chosen. `13 days, 4:22` names exactly 1138920 seconds; the
+machine has been up a little longer, but the stated length is not
+ambiguous.
 
-What that does rule out is a column whose shape changes with the value.
+What the rule does exclude is a column whose shape changes with the value.
 `top`'s TIME+ prints `mmm:ss.hh` and falls back to `hhh,mm` for a
-long-running task, so one field would carry seconds for one row and
-minutes for another. It stays text, and the comma form is deliberately
-not a spelling `duration` reads: admitting a comma into the grammar would
-make every other value containing one ambiguous, to serve one column of
-one program.
+long-running task, so one field would carry seconds in one row and minutes
+in another. It stays text. `duration` does not read the comma form, because
+allowing a comma would make every other value containing one ambiguous.
 
 ### Assumptions are stated on the command line, never inferred
 
-Two things a command prints cannot be read from the text alone. `who`
-prints `Nov  4 13:17` with no year, and `date` prints `JST`, which is
-+0900 only if you carry a table of abbreviations — the same three letters
-name different offsets in different parts of the world.
-
-Until now both stayed text, and a layout without a year was a validation
-error so that nothing could be dated by accident. That was right about
-the danger and wrong about the conclusion: the caller often does know
-which year a log covers and what zone the machine was in, and jz had no
-way to be told.
-
-So the knowledge is asked for and never inferred. `--assume-year 2025`
-(or `now`) dates a field whose definition says `year: assumed`;
+`who` prints `Nov  4 13:17` with no year, and `date` prints `JST`, which is
++0900 only with a table of abbreviations; the same letters name different
+offsets in different places. The caller often knows which year a log covers
+and what zone the machine was in, so jz asks: `--assume-year 2025` (or
+`now`) dates a field whose definition says `year: assumed`, and
 `--assume-zone JST=+0900`, repeatable, gives an abbreviation an offset.
-Without them the value stays the string it was printed as, and
-`year: assumed` on its own converts nothing — it is a statement about the
-format, which is why it is in the definition, next to the claim that the
-layout is what it is.
+Without them the value stays the printed string. `year: assumed` alone
+converts nothing; it is a statement about the format, which is why it lives
+in the definition.
 
-Nothing reads a clock or a zone database on the way past. `now` is
-resolved once when the command line is read, and whatever Go made of an
-abbreviation is discarded rather than trusted, because Go resolves one
-against the running machine's own zone and the same text would then
-convert differently on two machines.
+`now` is resolved once when the command line is read, and no zone database
+is consulted: Go resolves an abbreviation against the running machine's
+zone, so the same text would convert differently on two machines.
 
-An assumption that no field in the chosen format asks for is not an
-error. It changes nothing about the output, and refusing it would mean a
-caller who writes one command line for several formats has to know which
-of them prints a bare year. That is unlike a key named to `--extract`,
-which changes the shape a consumer reads and so has to be right.
+An assumption no field asks for is not an error, so one command line can
+serve several formats without knowing which print a bare year. A key named
+to `--extract` is different: it changes the shape a consumer reads, so it
+has to be right.
 
 ### Some formats are only used when named
 
-A signature is a necessary condition, but a weak one can still be met by
-unrelated text: a number, a tab and a path is `du` output and
-`git diff --numstat` alike. Such a definition sets
+A weak signature can still be met by unrelated text: a number, a tab and a
+path is `du` output and `git diff --numstat` alike. Such a definition sets
 `detect.auto_detect: false`, which keeps it out of automatic detection
 while `--parser du` and `jz run du` still reach it, signature check
-included. The alternative, adding exclusion patterns for every other
-format that happens to look similar, is a list that can never be
-finished.
+included. Adding exclusion patterns for every lookalike format would be a
+list that never ends.
 
-A definition with no signature at all goes one step further. `ls -1` is
-one name per line, which any list of lines is, so `ls/names` makes no
-claim about the text. Under the name `ls` it sits beside the long
-listings, which do make one, and `--parser ls` on a pipe cannot tell
-`ls -1` from the output of `ls -s` that the long variants refuse: taking
-the signature-less variant then would read a size column as part of each
-name and return it with status 0. So such a variant is reached only by
-naming it (`--variant names`), or by `jz run`, where the arguments have
-already ruled out the options that put more than a name on a line.
+A definition with no signature at all goes further. `ls -1` is one name per
+line, which any list of lines is, so `ls/names` makes no claim about the
+text. `--parser ls` on a pipe cannot tell `ls -1` from `ls -s` output that
+the long variants refuse, and the signature-less variant would then read a
+size column as part of each name and exit 0. So that variant is reached
+only by naming it (`--variant names`), or by `jz run`, where the arguments
+have already ruled out options that put more than a name on a line.
 
 ### Arguments say where a value goes and what it is made from
 
 `jz new` has one grammar for what a value is (`=` text, `:=` JSON, `=@` a
-file's text, `:=@` a data file) and two for where it goes: a key, or a
-JSON Pointer with `--path`. A dotted key was the other candidate, and it
-was not taken because `app.kubernetes.io/name` is an ordinary key: a dot
-that sometimes means nesting changes what existing arguments build. RFC
-6901 already escapes the two characters a pointer needs (`~1`, `~0`).
+file's text, `:=@` a data file) and two for where it goes: a key, or a JSON
+Pointer with `--path`. A dotted key was rejected because
+`app.kubernetes.io/name` is an ordinary key. RFC 6901 already escapes the
+two characters a pointer needs (`~1`, `~0`).
 
-The pointer is a location, not an update. It creates the containers on
-its way and adds members and elements, and it stops there: a location
-given twice, a pointer into a value given whole, and an index past the
-end are refused, because each asks jz to pick a winner, change a type or
-invent the elements in between. Once a document has to be edited, it is
-jq's job.
+```console
+$ jz new --path /a/b=1 --path /a/c:=true
+{"a":{"b":"1","c":true}}
+```
+
+A pointer is a location, not an update. It creates containers on the way
+and adds members and elements. A location given twice, a pointer into a
+value given whole, and an index past the end are refused, because each
+would make jz pick a winner, change a type or invent elements. Editing a
+document is jq's job.
 
 `--string` and `--text-file` exist because a plain argument reads its
 value: `key=$VAR` becomes a file name when the variable starts with `@`.
-Each takes KEY=VALUE as one argument, like the plain forms, so the
-options keep the flag syntax every other option has and a value that
-looks like an option cannot be taken for one.
+Each takes KEY=VALUE as one argument, so a value that looks like an option
+cannot be taken for one.
 
-### A record at a time, and what a bad one means
+### A record at a time
 
-`jz new --each` is the one place `jz new` reads standard input as
-records rather than as one value: it is what lets a stream be wrapped
-while it runs, with the fixed fields a consumer needs (a host, a source)
-around each record. It stops at wrapping. A record is placed whole, and
-choosing which records to keep or computing a field from one is a job
-for a language jz does not have.
+`jz new --each` reads standard input as records rather than one value, so
+a running stream can be wrapped with fixed fields (a host, a source) around
+each record. A record is placed whole; filtering records or computing
+fields needs a language jz does not have.
 
-Every stream answers a record it cannot read the same way, whether it
-reads a command's output, a data file or plain lines: the record ends the
-stream, the records written before it stand, and the status is 3. The
-reasoning is under [a stream ends at the record it cannot
-read](#a-stream-ends-at-the-record-it-cannot-read).
+Every stream treats a record it cannot read the same way, whether it comes
+from a command, a data file or plain lines: the record ends the stream, the
+records before it stand, and the status is 3. See [a stream ends at the
+record it cannot read](#a-stream-ends-at-the-record-it-cannot-read).
 
 ### JSON is the only output
 
-jz is the step of a pipeline that makes JSON for the next one, so the
-output has one form and one contract, the schemas under `registry/schemas`.
-An earlier `--yaml` wrote the same values as YAML, and most of what it
-needed was a quoting rule, because YAML 1.1 and 1.2 readers type `yes`,
-`1:20` and `2026-09-11` differently. It was removed: a second output
-format doubled what every output option had to be tested against, and a
-YAML tool reading jz's JSON gets the same values without jz choosing how
-to quote them. `--yaml` is refused with a message that says so.
+jz makes JSON for the next step of a pipeline, so the output has one form
+and one contract, the schemas under `registry/schemas`. An earlier `--yaml`
+needed mostly a quoting rule, because YAML 1.1 and 1.2 readers type `yes`,
+`1:20` and `2026-09-11` differently. It was removed: a second format
+doubled what every output option had to be tested against, and a YAML tool
+reading jz's JSON gets the same values. `--yaml` is now refused with a
+message that says so.
 
 ### Signatures say what a format is
 
-A signature is a claim about the text: this is the output of this
-command. It is written as what must be true, and `none` is not how a
-definition earns its answer.
+A signature is a claim about the text, written as what must be true. `none`
+is not how a definition earns its answer.
 
-The alternative was tried and it does not scale. `file/posix` reads
-"path: description", which is the shape of a dozen other reports, so it
-collected an exclusion for each one it met: `blkid`, `lscpu`,
-`git stash list`, `udevadm`, `modinfo`, `nmcli`, `pip show`, a Debian
-control record, `fc-list`, `ethtool -i`. Fourteen of them, and the
-fifteenth was going to arrive with the next definition somebody added.
-A list of everything a format is not cannot be finished, and each entry
-made `file/posix` a definition other people had to edit before their own
-would pass.
+`file/posix` reads "path: description", the shape of a dozen other
+reports, and once collected an exclusion for each one it met: `blkid`,
+`lscpu`, `git stash list`, `udevadm`, `modinfo`, `nmcli`, `pip show`, a
+Debian control record, `fc-list`, `ethtool -i`, fourteen in all. Each entry
+made `file/posix` a definition other people had to edit before theirs
+would pass. The replacement says two things about file(1) output: every
+line is "path: description", which is where `apt show`, `dpkg -s`,
+`zipinfo` and `lscpu` stop resembling it, and some description names a
+kind of file from a list this definition owns. Fourteen exclusions became
+zero.
 
-What replaced it says two things about file(1) output itself. Every line
-is "path: description", which is where `apt show`, `dpkg -s`, `zipinfo`
-and `lscpu` stop resembling it; and some description names a kind of
-file, from a list this definition owns. Fourteen exclusions became zero,
-and nothing about the neighbours is mentioned at all.
+Signatures are reviewed against four rules:
 
-Four rules follow from that, and they are what a signature is reviewed
-against:
-
-- Write the shape, and write the whole of it. Anchoring both ends is
-  what separates `uptime` from `w`, which opens with the same line, and
-  `ipcs -q` from `ipcs`, which opens with the same section. `\A` and
-  `\z` do most of the work that a `none` used to.
+- Write the whole shape. Anchoring both ends separates `uptime` from `w`,
+  which opens with the same line, and `ipcs -q` from `ipcs`, which opens
+  with the same section. `\A` and `\z` do most of the work a `none` used to.
 - A signature may narrow what the definition undertakes to read.
   `git log --oneline` is read for an abbreviated hash of seven to twenty
-  digits, which leaves no room for a 32, 40 or 64 digit digest; the
-  price is `--no-abbrev`, and the definition says so. This is a decision
-  about scope, not a description of md5sum.
-- Unknown is an answer. A format jz cannot claim exits 4, and that is
-  the tool working. The failure to design against is the other one: a
-  text read confidently with the wrong definition and returned with
+  digits, which leaves no room for a 32, 40 or 64 digit digest; the price
+  is `--no-abbrev`, and the definition says so.
+- Unknown is an answer. A format jz cannot claim exits 4. The failure to
+  design against is text read with the wrong definition and returned with
   status 0.
-- `none` is a safety valve for the case where there is no positive form
-  to write, and the reason belongs beside it. One is left in the
-  registry, in `etc/hosts`: `ip neighbour` prints an address, "dev", an
-  interface and a state, and every word of that is a legal host name, so
-  nothing in the text tells the two apart.
+- `none` is for when there is no positive form to write, and the reason
+  goes beside it. One remains, in `etc/hosts`: `ip neighbour` prints an
+  address, "dev", an interface and a state, and every word of that is a
+  legal host name.
 
-Definitions have to be independent for the registry to grow. Adding one
-should need nothing but its own signature and its own fixtures; needing
-to edit a definition somebody else wrote means the two were coupled
-through an exclusion. Measuring that is one command: take a `none` out
-and run `jz test`. Of the 68 the registry had, 31 excluded nothing at
-all, 13 named another command, and 11 remain, every one of them telling
-variants of a single command apart.
+Adding a definition should need only its own signature and fixtures;
+editing someone else's means the two were coupled through an exclusion. To
+measure it, take a `none` out and run `jz test`. Of the 68 the registry
+had, 31 excluded nothing, 13 named another command, and 11 remain, each
+telling variants of a single command apart.
 
 ### Fixtures verify a signature, they do not decide it
 
-The order is: decide what the format is, write the signature, then
-capture fixtures that show it. The other order looks the same from the
-outside and is not: "no fixture misdetected, so the signature is fine"
-holds only until somebody adds a fixture, and it leaves the definition
-saying whatever happened to work rather than what was meant.
+Decide what the format is, write the signature, then capture fixtures that
+show it. "No fixture misdetected, so the signature is fine" holds only
+until someone adds a fixture. `file/posix` has one fixture line per kind
+the signature names, a listing that mixes a kind with lines file(1) could
+not read, and a listing that names no kind and is refused. Each exists
+because the signature says something.
 
-`file/posix` carries the difference. Its fixtures are one line per kind
-the signature names, a listing that mixes a kind with lines file(1)
-could not read, and a listing that names no kind at all and is refused.
-Each of the three exists because the signature says something, not the
-other way round.
+### `--raw` shows the text before conversion
 
-### `--raw` came back, for a different reason
+`--raw` was first removed as a second output shape for the same input. It
+came back for debugging: when a value is wrong, the definition either cut
+it from the wrong place or converted it wrongly, and after typing the two
+look alike. `--raw` shows the text each value was made from.
 
-`--raw` was removed before release as a second output shape for the same
-input: two answers to the same question, and the typed one is the
-contract. That reasoning was about a consumer choosing a shape, and it
-still holds for one.
+```console
+$ df -h / | jz
+[{"filesystem":"/dev/nvme1n1p2","size":"1.8T","used":"1.3T","available":"426G","use_percent":76,"mounted_on":"/"}]
+$ df -h / | jz --raw
+[{"filesystem":"/dev/nvme1n1p2","size":"1.8T","used":"1.3T","available":"426G","use_percent":"76%","mounted_on":"/"}]
+```
 
-What it missed is the other reader. When a value comes out wrong there
-are two possible causes — the definition cut it from the wrong place, or
-it converted it wrongly — and once the value is typed they look alike. A
-`use_percent` of 92 is right; `"92%"` cut down to 92 and the string `92`
-somewhere else cut down to 92 are the same 92. `--raw` shows the text
-each value was made from, so the two separate.
-
-So it is back with a narrower job. It skips the field rules and nothing
-else: no conversion, no `trim_prefix`, no `null_if`, and no `required` or
-`when_missing` either, since a shape that changed with the values in it
-would defeat the point. Every value is a string, or null for an empty
-aligned cell and a regex group that did not take part. It is not offered
-on `jz test`, which compares a fixture against the typed JSON beside it
-and has nothing to say about the untyped reading.
+It skips the field rules and nothing else: no conversion, no
+`trim_prefix`, no `null_if`, and no `required` or `when_missing`, since a
+shape that changed with the values would defeat the point. Every value is a
+string, or null for an empty aligned cell and a regex group that did not
+take part. `jz test` does not offer it, because it compares fixtures
+against the typed JSON.
 
 ### The choice is visible
 
-Making the chosen parser and the reason for it visible is one of the
-goals, and until `--explain` a successful run met none of it: the JSON
-looked the same whichever definition produced it, and the only way to
-find out was to read the registry. The selector already carried the
-answer — it counts what it scanned and records why each candidate was
-left out, because the failure messages are built from it — so what was
-missing was a way to ask on the way past.
+`--explain` writes to standard error which definition was chosen and why,
+and changes nothing about the answer, so it can be added to a working
+pipeline. It writes no timestamp, so two identical answers compare equal.
 
-Everything it writes goes to standard error and nothing about the answer
-changes, which is what lets it be added to a working pipeline. It writes
-no clock reading either: an explanation is for comparing between runs and
-pasting into a report, and a timestamp would make two identical answers
-differ.
+```console
+$ uptime | jz --explain >/dev/null
+jz: explain: chose uptime/linux from embedded
+jz: explain: scope: every definition in the registry, by its signature alone
+jz: explain: matched: signature.all[0] /\A\s*\d{1,2}:\d{2}(?::\d{2})?\s+up\s+.*,\s+load av.../
+jz: explain: rejected: systemd-analyze/blame: signature.all[1] /^[ \t]*[0-9][^\n]*[ \t]\S+\.(?:service|socket|targ.../ did not match
+jz: explain: not considered: 83 definitions only used when named
+jz: explain: read: 1 line: 1 read
+```
 
-The rejections need a rule. A search of the whole registry rejects three
-hundred definitions on the first expression of a signature, and printing
-that is not an explanation. A search scoped to one parser has a handful
-of variants and all of them are worth reading. So the line is drawn at
-whether the definition met part of what it asks for: past its first
-signature expression, or a signature that fits and an `auto_detect: false`
-holding it back. Those are the near misses, and a scoped search reports
-every variant because in that scope they all are.
+Rejections are filtered. A search of the whole registry rejects three
+hundred definitions on the first signature expression, so only near misses
+are listed: a definition past its first signature expression, or one whose
+signature fits but `auto_detect: false` held it back. A search scoped to
+one parser lists every variant.
 
-What the first version left out was everything between "which one" and
-"why that one". It said which definition was chosen and what it matched,
-and it did not say what the candidates had been (the whole registry, a
-parser named on the command line, the command `jz run` started, a file's
-path), whether several definitions had fit and which rule had settled
-it, how many definitions had taken no part because they are only used
-when named, or where the input's lines had gone. Each of those is a
-question someone debugging a wrong answer has to ask, and each answer was
-already in hand: the selector records the rule that settled a tie as it
-applies it, and the engine's ledger counts what `ignore` left out. So
-the explanation now has a line for each, and the first line says which of
-the outcomes it was: `chose`, `unidentified`, `ambiguous`, `mismatch`,
-or `defined`. No and several are different failures with different
-remedies — write or name a definition, or settle two that overlap — and
-the exit status (4 for both) does not tell them apart.
+The other lines give the scope of candidates (the whole registry, a named
+parser, the command `jz run` started, a file's path), the rule that
+settled a tie, how many definitions are only used when named, and where
+the input's lines went. The first line names the outcome: `chose`,
+`unidentified`, `ambiguous`, `mismatch` or `defined`; no match and several
+matches both exit 4 but need different fixes. There is no confidence
+score: every line names a rule that can be checked against `jz list`.
 
-There is no score. A confidence number would be one more thing to trust
-without being able to check; every line here names a rule a definition
-states or a rule of the selector, and can be checked against `jz list`.
-
-`--explain=json` is the same facts for a script, one document on one line
-that opens `jz: explain: ` like the text lines do. It goes to standard
-error, not standard output, because standard output carries the
-conversion and nothing else. The prefix is kept because `jz run` passes
-the command's own standard error through on the same stream, and a line
-a script can pick out is worth more than a stream it has to trust to be
-clean. Every key is present whatever the outcome, so a consumer reads
-every explanation the same way.
+`--explain=json` gives the same facts as one line opening `jz: explain: `,
+on standard error, because standard output carries only the conversion.
+The prefix is kept because `jz run` passes the command's own standard error
+through on the same stream. Every key is present whatever the outcome.
 
 ### A file path is evidence
 
-`jz run` narrows the variants with the command name and its arguments,
-and a pipe has nothing but the text. A file sits between the two: it has
-no argv, but it has a path, and the path says something the text does
-not.
+`jz run` narrows variants with the command name and arguments, and a pipe
+has only the text. A file has no argv, but its path says something the text
+does not. The rule: the directory names the parser, the file names the
+variant, and the pair has to exist in the registry. `/etc/fstab` and
+`/proc/meminfo` work because parsers named `etc` and `proc` exist; nothing
+in Go knows either path. This helps exactly the formats a signature cannot
+claim: `/etc/fstab` is six whitespace-separated fields, so it declares
+`auto_detect: false` and otherwise has to be named every time.
 
-The rule is one sentence and holds no list of names. The directory the
-file sits in names the parser, the file names the variant, and the pair
-has to exist in the registry. `/etc/fstab` and `/proc/meminfo` work
-because parsers named `etc` and `proc` exist, which they do because those
-formats were named after the directory they live in; a registry that
-names a parser after some other directory gets the same treatment, and
-nothing in Go knows about either path.
+```console
+$ jz --explain --file /etc/fstab >/dev/null
+jz: explain: chose etc/fstab from embedded
+jz: explain: scope: etc/fstab, from the file path /etc/fstab
+jz: explain: matched: signature.all[0] /\A(?:[ \t]*(?:#[^\n]*)?\n)*(?:/\S+|UUID=\S+|LABEL=.../
+jz: explain: read: 14 lines: 4 read, 1 blank, 9 left out by input.ignore[0] /^\s*#/
+```
 
-What it buys is exactly the formats a signature cannot claim. `/etc/fstab`
-is six whitespace-separated fields, so it declares `auto_detect: false`
-and, before this, had to be named on the command line every time — for a
-file whose path already said what it was.
+The path only adds an answer. The definition it names still has to satisfy
+its signature and read the text; failing either drops the pair and the text
+is read on its own terms. A base name containing a dot is a file name, not
+a variant, which keeps `fstab.txt` out without a list of extensions.
 
-It stays evidence and does not become an instruction. The definition it
-names has to satisfy its signature and then read the text; failing either
-drops the pair and the text is read on its own terms, so a path can only
-add an answer and never replace one. A base name containing a dot is
-treated as a file name rather than a variant name, which keeps a capture
-saved as `fstab.txt` out of it and stops the rule needing a list of
-extensions.
-
-The definitions that describe a shape are excluded. They were not at
-first, and that was the one failure this tool exists to prevent: a
-shape carries no signature, so nothing about the text can rule it out,
-and `df` output in a file called `comma` inside a directory called `csv`
-was read as CSV and returned at exit 0. The rest of the rule survives
-because every other definition makes a claim the text can refuse; a shape
-makes none, so for those the directory name would have been the whole of
-the evidence. Naming one stays a claim the caller makes rather than one
-their directory layout makes for them.
-
-The alternative considered was reading the base name as the parser
-(`df.txt` → `df`). It was rejected because it guesses where this rule
-looks up: a file called `ls` in a directory called `bin` would name a
-parser that exists, with no variant to confirm it against, and the whole
-point of the pair is that both halves have to be right.
+Shape definitions are excluded. They were not at first, and `df` output in
+a file called `comma` inside a directory called `csv` was read as CSV at
+exit 0: a shape has no signature, so the directory name was the whole of
+the evidence. Reading the base name as the parser (`df.txt` → `df`) was
+rejected too, because a file called `ls` in a directory called `bin` would
+name a real parser with no variant to confirm it.
 
 ### Selection never guesses
 
-Candidates are filtered by criteria that apply (a criterion whose input is
-unknown, such as arguments in pipe mode, neither helps nor hurts). One
-survivor is the answer; there is no ranking by how closely a definition
-fits. Several survivors are settled by `detect.priority` only when they
-are variants of the same command and one priority is strictly highest,
-which is a statement the definition author made deliberately; anything
-else is an error that names the candidates. The alternative, "first match
-wins", would silently depend on directory order.
+Candidates are filtered by criteria that apply; one whose input is unknown,
+such as arguments in pipe mode, neither helps nor hurts. One survivor is
+the answer, and there is no ranking by closeness of fit. Several survivors
+are settled by `detect.priority` only when they are variants of the same
+command and one priority is strictly highest; anything else is an error
+that names the candidates. "First match wins" would depend on directory
+order.
 
-Survivors from different registries are settled before that, by the
-layering: the definition from the earlier registry wins. This is a
-declaration rather than a guess, and it is the same declaration that
-already decides which definition of one command and variant applies. The
-alternative was to keep it an error, which meant that one definition
-someone added locally could take an official parser away from them: with
-a `^Filesystem` signature in a user registry, `df -h | jz` reported that
-the input matched several parsers and exited 4. Definitions inside one
-registry are still never ranked against each other, so a collision the
-registry owns stays an error they have to resolve. `jz test` is where
-they see it.
+Survivors from different registries are settled first by layering: the
+earlier registry wins. Otherwise a `^Filesystem` signature in a user
+registry made `df -h | jz` report several matches and exit 4. Inside one
+registry definitions are never ranked, so a collision stays an error that
+`jz test` reports.
 
-Fixtures double as selection tests: every fixture is pushed through the
-selector and must pick its own definition, and every definition is named
-explicitly on every other definition's fixtures and must refuse them, so
-adding a variant whose signature overlaps an existing one fails
-`jz test` immediately.
+Fixtures double as selection tests: each must select its own definition,
+and every other definition named explicitly on it must refuse it, so a
+variant whose signature overlaps an existing one fails `jz test`.
 
 ### Exec mode forces `LC_ALL=C`
 
@@ -659,147 +504,109 @@ prose where possible.
 ### Exit status of `jz run`
 
 A failing command's status is mirrored, and its output is still parsed
-when there is any (for example `df` exits 1 when a mount point is
-unreadable but prints the table). jz's own codes (2–5) are documented and
-distinct from 0/1 so scripts can tell them apart, but they can collide
-with a child's codes; the stderr line `jz: <cmd> exited with status N`
-disambiguates.
+when there is any (`df` exits 1 when a mount point is unreadable but prints
+the table). jz's own codes (2 to 5) are distinct from 0 and 1, but they can
+collide with a child's codes; the stderr line `jz: <cmd> exited with status
+N` tells them apart.
 
 ### Streaming is an option, not the default
 
-A command that does not end (`vmstat 1`, `iostat 5`) has no whole document to
-write, so `--stream` writes one JSON document per line as each record is
-read. It is the only option that changes the output contract: everywhere
-else standard output carries a complete document or nothing, and here
-every *line* is a complete document.
-
-That is why it is an option. Making it the default would mean giving up
-the guarantee that a failure leaves nothing behind, for every user, to
-serve the commands that need it.
+A command that does not end (`vmstat 1`, `iostat 5`) has no whole document
+to write, so `--stream` writes one JSON document per line as each record is
+read. It is the only option that changes the output contract: elsewhere
+standard output carries a complete document or nothing, and here every line
+is a complete document. Making it the default would give up, for everyone,
+the guarantee that a failure leaves nothing behind.
 
 ### A stream ends at the record it cannot read
 
 Reading a whole document, one record that does not fit means the text is
-not the format it claimed to be: nothing is written and the status is 3.
-A stream cannot take all of that view, because the records already
-written have left. It takes as much of it as it can: the record that
-cannot be read ends the stream, the records before it stand, the failure
-is named on standard error with its line number, and the status is 3.
+not the claimed format: nothing is written and the status is 3. A stream
+has already written earlier records, so the record that cannot be read ends
+it, the earlier records stand, the failure is named on standard error with
+its line number, and the status is 3.
 
-For a while a stream did the opposite. It named the record, left it out,
-and went on, so that a monitoring loop printing for hours would not lose
-everything after one odd line, and `--stop-on-error` was there for a
-caller who wanted the end instead. The trouble is what the consumer of
-the stream sees. jz writes to another program, and a stream with a gap in
-it looks exactly like a stream without one: the diagnostic went to
-standard error, which the next program in the pipeline does not read, and
-the count it works out is quietly wrong. The exit status says something
-was dropped, but only after the consumer has already read the records and
-acted on them. Between an answer that is short and says so at once, and
-an answer that is wrong and says so afterwards on another channel, jz
-owes the caller the first. With the stream ending at the record, the
-default is also the same rule everywhere: `jz` never hands on a shape the
-input does not have. `--stop-on-error` asked for what every stream now
-does, so it was removed, and a command line that still names it is
-refused with the message that says so.
+```console
+$ printf '{"a":1}\nnot json\n{"a":2}\n' > s.jsonl
+$ jz --stream --file s.jsonl
+{"a":1}
+jz: jsonl: line 2: the line is not one JSON value
+$ echo $?
+3
+```
 
-A command that really does print one odd line among thousands is not left
-without an answer: the records up to it are already written and stand, so
-a loop that wants to go on can start jz again on what follows.
+Streams once skipped the bad record and went on. But a stream with a gap
+looks like one without to the next program, which does not read standard
+error and acts on the records before the exit status arrives. So the
+stream stops, `--stop-on-error` was removed (naming it is refused with a
+message), and a loop that wants to continue past one odd line can start jz
+again on what follows.
 
-The other failures end a stream the same way, and always did. Text whose
-format cannot be identified is settled on the leading lines before
-anything is written (exit 4), a format that reads its whole output into
-one object has no streaming form at all (exit 2), and a line over the
-limit, a read error or a missing `--type` column leave no next record to
-find.
+The other failures end a stream the same way. Text whose format cannot be
+identified is settled on the leading lines before anything is written
+(exit 4), a format that reads its whole output into one object has no
+streaming form (exit 2), and a line over the limit, a read error or a
+missing `--type` column leave no next record to find.
 
-`engine.Stream` takes an `emit` and nothing else: with one answer to a
-record it cannot read, there is nothing for a library caller to choose,
-and the conformance runner gets what it needs from the same rule — a
-fixture read whole and read as a stream have to agree record for record,
-and a stream that quietly skipped one would hide the disagreement.
-
+`engine.Stream` takes only an `emit`, and the conformance runner checks
+that a fixture read whole and read as a stream agree record for record.
 When `jz run --stream` ends at a record and the command also fails, the
-command's status wins. jz has one number to return and mirrors the
-command's, which is the more useful of the two; the failure is on
-standard error either way, so only the number is given up.
+command's status wins; the failure is on standard error either way.
 
 ### Every line is accounted for
 
-"Never produce plausible-looking JSON from the wrong parser" was only half
-of the goal it came from. The other half is JSON from the right parser
-that is missing something, and until this was built nothing stood in its
-way. Two `dig` replies in one capture read as the first reply at exit 0:
-the header part matched the first header, the answers stopped at the
-first section break, and the second reply fell between the parts. `pactl
-list sinks` lost every property, port and format of every sink the same
-way, because the part that read the attributes named those lines as
+The goal of never producing JSON from the wrong parser has a second half:
+JSON from the right parser that is missing something. Two `dig` replies in
+one capture once read as the first reply at exit 0, because the second
+fell between the parts. `pactl list sinks` lost every property, port and
+format of every sink, because the attribute part named those lines as
 belonging to a sibling that did not exist. Golden files could not show
-either: they hold what a definition read, and a line it skipped leaves no
-trace in them. The ledger turned that dig capture into exit 3, which was
-the honest answer for a definition that read one reply; the definition
-now reads a reply per query, and the ledger is what said it had to.
+either, since a skipped line leaves no trace in them.
 
 So the engine keeps a ledger. A line is read when a parser turned it into
 part of the result, left out when a rule the definition states says so
-(`ignore`, a blank line, a `fold` continuation), or it is unread, and
-unread text is exit 3 with the line quoted rather than a smaller answer.
-The rule lives in the engine and not in the definitions, so a definition
-gets it without asking and cannot opt out. None of the definitions the
-registry held then had to be edited to acquire it; 37 of them failed on
-their own fixtures, most for a heading they had never stated in full, and the
-checks below found two more that only real output exposed.
+(`ignore`, a blank line, a `fold` continuation), or unread. Unread text is
+exit 3 with the line quoted. The rule lives in the engine, so no definition
+can opt out. When it arrived, 37 definitions failed on their own fixtures,
+most for a heading they had never stated in full, and the checks below
+found two more that only real output exposed. The `dig` capture became exit
+3, and the definition now reads one reply per query.
 
-The finer rules are the ones the first measurement asked for:
+The finer rules:
 
-- A pattern has to reach both ends of the line it reads. The alternative,
-  counting a line read when a pattern matched part of it, would pass
-  exactly the case the ledger is for: a trailing field nobody asked
-  about. Checking every fixture found two lines in the whole registry
-  that fell foul of it, so it costs nothing to hold.
-- The heading `select.after` matches counts as read only when the
-  expression states the whole line. `after` is written to find a
-  position, and `'^Features for '` was never a statement that the
-  interface name after it is worthless. Stating the line is.
-- A part's `ignore` hands a line to a sibling; it does not drop it. The
-  documentation already said that was its purpose and nothing enforced
-  it, which is how `pactl` lost its properties.
-- A key printed twice into an object is an error, whatever the two
-  values. An object keeps one of them, and two copies of the same value
-  are what two documents read as one look like.
-- `ignore` is the one way to leave text out on purpose, and it is
-  trusted: what it names is what the definition declares worthless. That
-  trust is checked from outside. `jz test` adds a foreign line to every
-  fixture, at the end and in the middle, and reads every fixture twice
-  over; a definition that succeeds must carry the line in its result,
-  and a list read twice must be the records of one copy twice. That
-  found `upower`'s catch-all `ignore: ['^[^:]*$']`, which had been
-  dropping the device type and the history rows of a battery, and a
-  table's second header read as a row of column names.
+- A pattern has to reach both ends of the line it reads; otherwise a
+  trailing field nobody asked about would pass. Two lines in the whole
+  registry broke this.
+- A heading `select.after` matches counts as read only when the expression
+  states the whole line. `'^Features for '` finds a position; it does not
+  say the interface name after it is worthless.
+- A part's `ignore` hands a line to a sibling; it does not drop it. That is
+  how `pactl` lost its properties.
+- A key printed twice into an object is an error, whatever the two values,
+  because two copies of a value are what two documents read as one look
+  like.
+- `ignore` is the one way to leave text out on purpose, and it is checked
+  from outside. `jz test` adds a foreign line to every fixture, at the end
+  and in the middle, and reads every fixture twice over; a definition that
+  succeeds must carry the line in its result, and a list read twice must be
+  the records of one copy twice. That found `upower`'s catch-all
+  `ignore: ['^[^:]*$']`, which dropped a battery's device type and history
+  rows, and a table's second header read as a row of column names.
 
-Blank lines are never unread. They carry no value that could be missing,
-and a definition that keeps them for a parser that wants them
-(`skip_blank: false`) should not have to name the ones it does not.
+Blank lines are never unread. They carry no value, and a definition that
+keeps them (`skip_blank: false`) should not have to name the ones it does
+not want.
 
-What this does not guarantee is a right reading. A table with explicit
+The ledger guarantees only that a successful conversion did not skip input
+without saying so, not that the reading is right. A table with explicit
 `header.columns` takes its first line as the header without checking its
-words; the signature is what checks them, and only inside its window. A
-pattern that spans lines with `[^\n]*` or `(?s).*` reads what it spans
-without reporting it; that is written into the definition, where a
-reviewer can see it, and the tampering check catches one that swallows a
-second copy of its input. The guarantee is narrower and exact: a
-successful conversion did not skip any of its input without saying so.
+words (the signature does, inside its window), and a pattern spanning lines
+with `[^\n]*` or `(?s).*` reads what it spans without reporting it.
 
-Some text is left out on purpose, and saying so is now required rather
-than implicit. The sysstat banner, `xrandr`'s Screen line and the count
-under `tree` were dropped before and still are, for the reasons given
-where each is decided; what changed is that each is stated in full, so
-what is dropped is that line and not whatever happens to open like it.
-Where the text carried something the result did not — the `dig`
-question, EDNS options and warnings, `mtr`'s host, `pactl`'s properties,
-ports and formats, `upower`'s device type and history — the definition
-now reads it.
+The sysstat banner, `xrandr`'s Screen line and the count under `tree` are
+still dropped on purpose, each matched as a whole line. The `dig` question,
+EDNS options and warnings, `mtr`'s host, `pactl`'s properties, ports and
+formats, and `upower`'s device type and history are now read.
 
 ### Registry layering and the code/data boundary
 
@@ -807,8 +614,8 @@ now reads it.
 never imports it; only `cmd/jz` and the golden test do. Moving the
 registry to its own repository means changing one import.
 
-Layering (`JSONIZE_REGISTRY_PATH` → user registry → embedded) lets a user
-fix a parser locally today and ship it upstream tomorrow with no change
+Layering (`JSONIZE_REGISTRY_PATH`, then the user registry, then embedded)
+lets a user fix a parser locally and send it upstream later with no change
 in behaviour.
 
 A command that names its parser, `jz run COMMAND` or `--parser NAME`, reads only the built-in definitions that answer to the name: those in the name's directory and those that list it among their aliases. Reading all of them was most of what a short conversion cost, about 45 ms of a `jz --parser df` run on one core, against about 5 ms for the part the name needs. Detection reads every definition, since any of them could fit the text. When a registry of the user's own is present, or no definition answers to the name, every definition is read as before, so the names jz suggests and the warnings about a disable list stay what they were.
@@ -816,61 +623,50 @@ A command that names its parser, `jz run COMMAND` or `--parser NAME`, reads only
 ### No network, ever
 
 jz reads local directories and nothing else. A release carries both the
-code and the definitions, so a given input converts to the same JSON on a
-given machine whatever the network is doing. Updating the official
-registry means installing a new jz; adding your own means pointing
+code and the definitions, so an input converts to the same JSON on a given
+machine whatever the network is doing. Updating the official registry
+means installing a new jz; adding your own means pointing
 `JSONIZE_REGISTRY_PATH` at a directory.
 
-### The output has a contract, and it is derived
+### The output schema is derived from the definition
 
-A consumer of `jz` output needs to know what it will get: which keys,
-of which types, which are always there. The definitions already say it —
-a column is a key, a named group is a key, a `type: int` field is an
-integer, `when_missing: omit` is a key that may be absent — so the schema
-is read off the definition rather than written beside it. A hand-written
-schema would be a second statement of the same facts, and the first time
-the two disagreed nobody would know which was right.
+A consumer needs to know which keys of which types will always be there.
+The definitions already say it: a column is a key, a named group is a key,
+`type: int` is an integer, `when_missing: omit` is a key that may be
+absent. So the schema is generated from the definition; a hand-written one
+would be a second statement of the same facts.
 
-What the generator derives is what the engine guarantees and nothing
-more. A key is required when every object of its kind carries it; a value
-is nullable where the engine can leave it empty; a group that can only
-match a few literals becomes an `enum`; a table that takes its column
-names from its header says so with `additionalProperties` instead of
-naming keys it cannot know. Every fixture in the registry is validated
-against its schema, by jz's own validator and by an independent one in
-CI; a disagreement is the generator and the engine disagreeing about a
-definition, and it fails the build.
+The generator derives only what the engine guarantees. A key is required
+when every object of its kind carries it, a value is nullable where the
+engine can leave it empty, a group matching only a few literals becomes an
+`enum`, and a table with header-derived names uses `additionalProperties`. Every
+fixture is validated against its schema by jz's own validator and by an
+independent one in CI, and a disagreement fails the build.
 
-The schemas are published, in `registry/schemas` and on the site at the
+The schemas are published in `registry/schemas` and on the site at the
 `$id` each states, and each carries a contract version in
-`x-jsonize.version`. That version is not `format`. `format` versions the
-language a definition is written in; the contract versions what one
-definition's output looks like. They change for unrelated reasons — the
-`iostat` rewrite changed an output from an object to an array without
-touching the language — and reusing one for the other would make both
-mean nothing.
+`x-jsonize.version`. That is separate from `format`, which versions the
+definition language. They change for unrelated reasons: the `iostat`
+rewrite changed an output from an object to an array without touching the
+language.
 
-A change is breaking when a program reading the output, or a document
-kept from before and validated against the new schema, can be broken by
-it: a key removed, a type changed (made nullable included, and an object
-become an array), a key that is no longer always there, a key that now
-always is, an `enum` value added or taken away, an element type changed.
-Each direction has a reader it breaks, so both are counted. The one change
-that breaks neither is a key that may now appear and never has to.
+A change is breaking when a program reading the output, or a document kept
+from before and validated against the new schema, can break: a key
+removed, a type changed (including made nullable, and an object become an
+array), a key no longer always present, a key now always present, an
+`enum` value added or removed, an element type changed. The one change
+that breaks neither reader is a key that may now appear and never has to.
 
-A breaking change is refused unless it is meant. `make
-registry-update-schema` rewrites the files and stops at a break;
-`BREAKING=command/variant` publishes it under the next version. CI then
-compares the schemas against the branch being merged into, so a schema
-edited by hand to match a break, with the version left alone, is caught
-there. Removing a definition ends its contract, which is said by listing
-it in `registry/schemas/retired`.
+`make registry-update-schema` rewrites the files and stops at a break;
+`BREAKING=command/variant` publishes it under the next version. CI compares
+the schemas against the branch being merged into, so a schema edited by
+hand to match a break, with the version left alone, is caught. Removing a
+definition ends its contract, which is recorded by listing it in
+`registry/schemas/retired`.
 
-The version is not written into the JSON jz prints. Every output would
-grow a key its consumers did not ask for, and the ones that compare
-documents would see every run differ from the last release's for no
-reason in the data. The definition that read the text identifies the
-contract, and `--explain` names it.
+The version is not written into the JSON jz prints, so documents compare
+equal across releases; `--explain` names the definition, which identifies
+the contract.
 
 ### Format versioning
 
@@ -881,38 +677,30 @@ that is the output contract's version, above.
 
 Until the first tag, format 1 is not frozen: keys are added, renamed and
 removed while the shape settles. After the tag, adding a key is a minor
-release and the number stays 1. An older jz meeting a definition that
-uses the new key refuses that definition with an unknown-key error saying
-a newer jz may be needed, which is the whole compatibility story: a
-definition works with the build it was written for and every later one.
-Removing a key, or changing what one means, is `format: 2`, because
+release and the number stays 1. An older jz meeting a definition that uses
+the new key refuses it with an unknown-key error saying a newer jz may be
+needed, so a definition works with the build it was written for and every
+later one. Removing a key or changing its meaning is `format: 2`, because
 neither can be told from a mistake by looking at the file.
 
-`min_jsonize` was the alternative, a version a definition could demand.
-It was removed: it asked every definition author to know which release
-introduced each key they used, and it said nothing at all when they got
-it wrong. The unknown-key error needs no such bookkeeping, and it names
-the key that is the problem.
+`min_jsonize`, a version a definition could demand, was removed: it asked
+authors to know which release introduced each key and said nothing when
+they got it wrong. The unknown-key error names the key at fault.
 
 ### Dependencies
 
 None outside the Go standard library. The YAML reader (`internal/yaml`)
 reads block and flow mappings and sequences, plain, quoted and block
-scalars, comments and one document per file, and refuses anchors,
-aliases, tags and keys that are not one scalar with a message that names
-them. Before the YAML library was dropped, the reader was held to the
-same values over every file in the registry. A golden failure shows the
-two texts.
+scalars, comments and one document per file, and refuses anchors, aliases,
+tags and keys that are not one scalar with a message that names them.
+Before the YAML library was dropped, the reader was held to the same values
+over every file in the registry. A golden failure shows the two texts.
 
 No JSON Schema library: the generator emits a small subset of draft
-2020-12, and a validator for exactly that subset is shorter than the
-dependency. CI checks the same fixtures with the Python `jsonschema`
-package, so the two agreeing is evidence rather than one piece of code
-agreeing with itself.
-
-No CLI framework: six subcommands with a handful of flags each are
-served by `flag` and a dispatch table, and the `run` subcommand needs
-"stop at the first non-flag" semantics that `flag` gives for free.
+2020-12, a validator for that subset is shorter than the dependency, and CI
+checks the same fixtures with the Python `jsonschema` package. No CLI
+framework: `flag` and a dispatch table serve six subcommands, and `flag`
+already stops at the first non-flag as `run` needs.
 
 ### Commands that share a format
 
@@ -921,7 +709,7 @@ names. `vdir` uses the `ls` definitions, `getent passwd` uses `etc/passwd`,
 and `printenv` uses `env`. An alias can replace the argument filter when
 its command line differs. See [aliases](../definition-format/#aliases).
 
-## Deliberately out of scope for the MVP
+## Out of scope for the MVP
 
 - Computed fields that combine input fields, such as subtracting used
   space from total space. Converting one duration field to seconds is
@@ -933,147 +721,99 @@ its command line differs. See [aliases](../definition-format/#aliases).
 ### A table that counts its fields
 
 A `table` with `split: whitespace` gives its last column whatever is left
-on the line. That is what `ps aux` needs, where the command and its
-arguments are one cell with spaces in it, and it is the default.
+on the line, which `ps aux` needs for a command with arguments. That also
+meant a row with N+1 fields produced N cells with two values in the last.
+`max_fields` may now be one more than the number of columns: the split
+then yields a cell with no column name, and the row is refused as too
+wide, on every row and whatever the last column's type. No key was added,
+since `max_fields` already meant the most fields the split produces.
 
-It also meant a table could not say "this row has exactly N fields": a
-row with N+1 of them produced N cells with two values in the last one.
-`max_fields` may now be one more than the number of columns, and that is
-how a definition asks for the count. The split then yields a cell the
-columns have no name for, and the row is refused as too wide, on every
-row rather than only on the ones a signature reached, and whatever the
-type of the last column is.
-
-No key was added for it. `max_fields` already meant the number of fields
-the split produces at most, and one past the columns is the number that
-makes a row too wide; anything beyond that says nothing further, since
-such a row is refused either way.
-
-`proc/diskstats` is the definition this was written for. It used to get
-its count from two places that were never designed to work together:
-inside the signature window the expression counted the fields, and past
-the window what refused a twenty-first field was that it landed in
-`flush_ms` and failed to convert to an integer. A table whose last column
-were text would have taken it silently. It now sets `max_fields: 21`.
+`proc/diskstats` needed this. Its count used to come from two places: the
+signature counted fields inside its window, and past the window a
+twenty-first field was refused only because it landed in `flush_ms` and
+failed to convert to an integer. A text last column would have taken it
+silently. It now sets `max_fields: 21`.
 
 ### The library under pkg/
 
 The six packages that read text are under `pkg/`, so another program can
-load a registry, select a definition and parse with it without going
-through the command line. `internal/` keeps what only the binary needs:
-the subcommands, the child process, the conformance runner and the
-version string.
+load a registry, select a definition and parse with it without the command
+line. `internal/` keeps what only the binary needs: the subcommands, the
+child process, the conformance runner and the version string. The
+exit-code contract, flag parsing and process handling are decisions about
+a command line, and a library caller has already made them. Fixtures and
+the checks that run them live with the conformance runner under
+`internal/`.
 
-The split is where it is because the exit-code contract, the flag parsing
-and the process handling are decisions about a command line, not about
-reading text, and a library that carried them would be answering
-questions its caller has already answered. What crosses the line is the
-registry, the definition schema, the selector, the engine, the scalar
-conversions and the ordered object: everything between a piece of text
-and the JSON for it. The fixtures beside a definition and the checks
-that run them are not part of reading text, so they live with the
-conformance runner under `internal/`.
+A `Definition` comes only from `Load`, which sets its unexported compiled
+expressions, so one built by hand or changed after loading is not read as
+written. The slice `Variants` returns belongs to the caller.
 
-A `Definition` comes out of `Load` and nothing else: its compiled
-expressions are set there and are not exported, so a definition built
-by hand, or changed after loading, is not one the engine reads as
-written. The registry hands out its entries as they are, and a caller
-reads them; the slice `Variants` returns is the caller's own.
-
-The surface is kept small deliberately: what `cmd/jz` and the tests do
-not reach is unexported, and what stays is what a caller cannot avoid
-naming. The enum vocabularies of the definition schema
-(`RecordNUL`, `UnitBinary`, `MissingNull` and their siblings) are the
-exception: they name the values a caller reads out of a `Definition`, and
-exporting half a set would be worse than exporting all of it.
+What `cmd/jz` and the tests do not reach is unexported. The enum
+vocabularies of the definition schema (`RecordNUL`, `UnitBinary`,
+`MissingNull` and their siblings) are all exported, because they name
+values a caller reads out of a `Definition` and half a set would be worse.
 
 ## Open questions
 
-Decisions that have not been made. Nothing here is implemented, and each
-is recorded because a definition in the registry works around it today.
+Nothing here is implemented; each is listed because a definition in the
+registry works around it today.
 
 ### What a shape definition does about types
 
-`table/whitespace` and its siblings convert nothing: every value comes
-out as the text it was cut from, because a shape says nothing about what
-its columns mean. That is right, and it leaves a gap. Someone naming one
-of them usually does know what the columns mean, and has no way to say
-so short of `--define` with the whole definition written out.
-
-A `--field name=int` option would close it and is not obviously worth an
-option: the same thing is one line of `jq`, and an option that converts
-values is a second place where types are decided, next to the definitions
-where they belong.
+`table/whitespace` and its siblings convert nothing, because a shape says
+nothing about what its columns mean. Someone naming one usually does know,
+and can say so only with a full `--define`. A `--field name=int` option
+would close the gap, but the same thing is one line of `jq`, and it would
+be a second place where types are decided.
 
 ### Where the sysstat banner went
 
-Reading `iostat` as an array of samples dropped the banner, which named
-the kernel, the host, the architecture and the CPU count. A composite
-could preserve it and stream it as a separate part, but that would
-change the published output schema. Keeping the context on every sample
-would need another rule. `uname -a` and `nproc` can supply system
-information separately.
-
-What would close it is a way for a definition to say that some fields
-belong to every record of a stream. Nothing in the format says that
-today, and inventing it for one report would be the wrong order.
+Reading `iostat` as an array of samples dropped the banner (kernel, host,
+architecture, CPU count). A composite could keep it as a separate part,
+but that would change the published output schema, and putting it on every
+sample would need another rule. `uname -a` and `nproc` supply the same
+information. What would close it is a way for a definition to say that
+some fields belong to every record of a stream, and inventing that for one
+report would be premature.
 
 ### Discrete field counts in a table
 
 A table states one number of columns, and `max_fields` states whether a
-row wider than that is refused, which is written up under "A table that
-counts its fields" above. Neither states a set of widths.
+wider row is refused (see "A table that counts its fields"). Neither states
+a set of widths. `/proc/diskstats` has fourteen, eighteen and twenty fields
+across kernel versions, and fifteen, sixteen, seventeen or nineteen are
+none of them. A range would accept rows no kernel wrote, and a list of
+widths would be a key with one caller.
 
-The widths a format allows are not always a range. `/proc/diskstats` has
-fourteen, eighteen and twenty fields across kernel versions, and a row of
-fifteen, sixteen, seventeen or nineteen is not any of them. A count
-written as a range would accept rows no kernel ever wrote, and a list of
-allowed widths would be a definition key with one caller.
-
-Field counts also cannot resolve every ambiguity. A twenty-field row
-truncated to eighteen is indistinguishable from a row an older kernel
-wrote, because the columns are backward compatible and the text carries
-nothing else. Splitting the shapes into separate variants does not change
-that: automatic detection would have the same two candidates and the same
-absence of evidence.
+Field counts cannot settle everything anyway: a twenty-field row truncated
+to eighteen looks like a row an older kernel wrote, and separate variants
+would not change that.
 
 ### A column that prints two layouts
 
 `ls -l` prints `Jan  5 10:11` for a file changed in the last six months
-and `Apr  9  2025` for an older one. One column, two layouts, and which
-one a row carries depends on the age of the file rather than on anything
-the definition knows.
-
-A field takes one layout, so the column stays text. `year: assumed`
-does not help: it says the format prints no year, and this one prints a
-year for some rows. Reading the value would mean either two more regex
-alternatives in a definition that already has two, splitting on a
-distinction nobody asked about, or a field that may state a list of
-layouts and tries them in order.
-
-The second is probably right and is not done, because a list of layouts
-would be the first place in the format where a field guesses, and the
-rule that keeps `--force` out of this tool is the same rule. The
-question is whether trying layouts in a stated order counts as guessing
-when the definition wrote the order down. `who`, `last` and
-`journalctl -o short` all print one layout, so nothing in the registry
-needs it today.
+and `Apr  9  2025` for an older one, so the layout depends on the file's
+age. A field takes one layout, so the column stays text; `year: assumed`
+does not help, since this format prints a year for some rows. The options
+are two more regex alternatives in a definition that already has two, or a
+field that states a list of layouts tried in order. The second is probably
+right, but it would be the first place a field guesses, and the open
+question is whether trying layouts in a stated order counts as guessing.
+`who`, `last` and `journalctl -o short` all print one layout, so nothing in
+the registry needs it today.
 
 ### Whether a definition should split a value it can
 
 A field of type `object` splits a value on a regular expression, so a
 definition can turn `1024 KB` into a number and a unit, or
-`48 bits physical, 48 bits virtual` into two numbers. That is reading
-what the text states rather than guessing at it, which is why
-`proc/loadavg` splits `4/4688` into a runnable count and a total.
-
-The registry is not consistent about when to do it. `proc/meminfo`
-separates every counter from its unit; `proc/cpuinfo-x86` reports
-`cache size`, `TLB size` and `address sizes` as the text the kernel
-wrote. Both are defensible on their own and the pair is not. What is
-missing is a rule for which values a definition takes apart and which it
-hands over whole, and until there is one, changing either would be
-trading one inconsistency for another.
+`48 bits physical, 48 bits virtual` into two numbers, as `proc/loadavg`
+splits `4/4688` into a runnable count and a total. The registry is not
+consistent about it: `proc/meminfo` separates every counter from its unit,
+while `proc/cpuinfo-x86` reports `cache size`, `TLB size` and
+`address sizes` as the kernel wrote them. Until there is a rule for which
+values to take apart, changing either would trade one inconsistency for
+another.
 
 ## Where to cut next
 
